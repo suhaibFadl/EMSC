@@ -1,0 +1,166 @@
+<!--الادارة:- عرض الدول و إضافة و تعديل و حذف دولة  -->
+
+<body>
+
+  <br><br>
+  <form>
+    <button class="btn btn-add" (click)="onAddCountry()" matTooltip="إضافة دولة"> إضافة دولة + </button>
+
+    <mat-form-field class=" d-flex" style="text-align:start">
+      <input (keyup)="applyFilter($event.target.value)" matInput placeholder="بحث ...">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <div>
+      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef > ر. </th>
+          <td mat-cell *matCellDef="let i = index"> {{i+1}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef > الدولة </th>
+          <td mat-cell *matCellDef="let c"> {{c.country}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="edit">
+          <th mat-header-cell *matHeaderCellDef> تعديل </th>
+
+          <td mat-cell *matCellDef="let c">
+            <mat-icon mat-icon-button type="button" mat-raised-button color="accent" matTooltip="تعديل الدولة" style=" color: green;" (click)="onUpdateModal(c)"><mat-icon>edit</mat-icon></mat-icon>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef> حذف </th>
+          <td mat-cell *matCellDef="let c"> <mat-icon mat-icon-button type="button" mat-raised-button color="accent" matTooltip="حذف الدولة" style=" color: #dd1818;" (click)="onDeleteModal(c)"><mat-icon>delete_forever</mat-icon></mat-icon></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+
+
+      <mat-paginator dir="rtl" class="d-flex justify-content-end" [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10"></mat-paginator>
+
+    </div>
+  </form>
+
+
+</body>
+
+
+
+
+<!--add  MODAL START-->
+<ng-template #template>
+  <form [formGroup]="addForm">
+    <div class="modal-header">
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title">إضافة دولة جديدة</h4>
+    </div>
+    <div class="modal-body text-center">
+      <p class="list-group-item active text-center text-uppercase">{{modalMessage1}}</p>
+      <ul class="list-group">
+        <li class="list-group-item" [hidden]="id">
+          <div class="form-group">
+            <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+              <mat-label> اسم الدولة</mat-label>
+              <input formControlName="country" type="text" id="country" matInput placeholder="ادخل اسم الدولة" [errorStateMatcher]="matcher">
+              <mat-error *ngIf="country.hasError('country') && !country.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <mat-error *ngIf="country.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <mat-error *ngIf="country.hasError('minlength')">
+                الحد الأدنى لإسم الدولة 3أحرف
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="modal-footer">
+      <button [disabled]="addForm.invalid" class="btn btn-primary mr-auto " (click)="onSubmit()">حفظ</button>
+      <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
+    </div>
+
+  </form>
+</ng-template>
+
+<!--edit country Modal-->
+<ng-template #editTemplate>
+  <div class="modal-header">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">تعديل الدولة </h4>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active">{{modalMessage}}</p>
+    <form [formGroup]="updateForm">
+      <ul class="list-group">
+        <li class="list-group-item" [hidden]="id">
+          <div class="form-group">
+            <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+              <mat-label> اسم الدولة</mat-label>
+              <input formControlName="country" type="text" id="country" matInput placeholder="ادخل اسم الدولة" [errorStateMatcher]="matcher">
+              <mat-error *ngIf="_country.hasError('_country') && !_country.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <mat-error *ngIf="_country.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <mat-error *ngIf="country.hasError('minlength')">
+                الحد الأدنى لإسم الدولة 3أحرف
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </li>
+        <div class="modal-footer">
+          <button [disabled]="updateForm.invalid" class="btn btn-primary mr-auto " (click)="onUpdate()">حفظ</button>
+          <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
+        </div>
+      </ul>
+    </form>
+  </div>
+</ng-template>
+
+
+
+<!--delete country MODAL START-->
+
+<ng-template #deleteTemplate>
+  <div class="modal-header">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title pull-right">حذف دولة</h4>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active">{{modalMessage2}}</p>
+    <form [formGroup]="deleteForm">
+      <ul class="list-group">
+        <li class="list-group-item" [hidden]="Did">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="id"><i class="fa fa-key"></i></span>
+            </div>
+            <input type="text" class="form-control" formControlName="id" />
+          </div>
+        </li>
+        <div class="modal-footer">
+          <button class="btn btn-primary mr-auto" (click)="onDelete()">حذف</button>
+          <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
+        </div>
+      </ul>
+    </form>
+  </div>
+</ng-template>
+

@@ -1,0 +1,56 @@
+@import '../../../styles.css';
+
+.aa::before {
+  content: "انتهاء العلاج بالكامل";
+  color: green;
+  font-weight: bold;
+}
+
+.bb::before {
+  content: "انتهاء العلاج مع وجود مراجعة";
+  color: #7aade3;
+  font-weight: bold;
+}
+
+.cc::before {
+  content: "انتهاء العلاج بالساحة مع ضرورة نقله لساحة أخرى";
+  color: #4a6b96;
+  font-weight: bold;
+}
+
+.dd::before {
+  content: "إغلاق الملف وترحيل الجريح";
+  color: #dd1818;
+  font-weight: bold;
+}
+
+
+body {
+  padding: 40px;
+}
+
+.modal-header {
+  display: flow-root;
+}
+
+.back-header {
+  border-radius: 10px;
+  background: #000046;
+}
+
+/*.btn-primary {
+  border-radius: 10px;
+  background: linear-gradient(to right, #4286f4,#000046);
+}*/
+
+.container {
+  padding-top: 80px;
+}
+
+.mat-column-add {
+  border-right: 1px solid currentColor;
+  width: 150px;
+  text-align: center;
+  padding-right: 15px;
+  padding-left: 10px;
+}

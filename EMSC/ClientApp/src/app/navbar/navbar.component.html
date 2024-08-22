@@ -1,0 +1,417 @@
+""<script>
+  // Make Dropdown Submenus possible
+  $('.dropdown-submenu a.dropdown-submenu-toggle').on("click", function (e) {
+    $('.dropdown-submenu ul').removeAttr('style');
+    $(this).next('ul').toggle();
+    e.stopPropagation();
+    e.preventDefault();
+  });
+  // Clear Submenu Dropdowns on hidden event
+  $('#bs-navbar-collapse-1').on('hidden.bs.dropdown', function () {
+    $('.navbar-nav .dropdown-submenu ul.dropdown-menu').removeAttr('style');
+  });
+</script>
+
+
+<div class="container">
+  <nav class="navbar navbar-expand-md navbar-dark" *ngIf="(LoginStatus$ | async) as LoginStatus">
+
+    <button class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#toggleMobileMenu"
+            aria-controls="toggleMobileMenu"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="toggleMobileMenu">
+      <ul class="navbar-nav" style=" background: linear-gradient(to left,#182848,#4a6b96); padding-right:65px">
+
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus &&  UserRole =='الإدارة'  || UserRole =='موظف إدخال البيانات الرئيسية' " data-toggle="dropdown" data-target="#newfirst" aria-controls="newfirst" role="button" aria-haspopup="true" aria-expanded="false">
+          <a>المدخلات الرئيسية</a>
+          <i class="fas fa-caret-down"></i>
+
+          <ul class="sub-nav dropdown-menu " id="newfirst">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/management/main-entry/countries"]'> <a>الدول</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/management/main-entry/branches"]'><a>الفروع</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/management/main-entry/clinics-inside"]'><a>المصحات بالداخل</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/management/main-entry/clinics-outside"]'><a>المصحات بالخارج</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/management/main-entry/hotels-outside"]'><a>الفنادق بالخارج</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/management/main-entry/dependency"]'><a>التبعية</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/management/main-entry/injury-events"]'><a>أحداث الإصابة</a></li>
+          </ul>
+
+        </li>
+
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus &&  UserRole =='مدير الفرع' || UserRole =='موظف إدخال الفرع' || UserRole =='الإدارة' " data-toggle="dropdown" data-target="#newsecond" aria-controls="newsecond" role="button" aria-haspopup="true" aria-expanded="false">
+          <a>بيانات الجرحى</a>
+
+          <ul class="sub-nav dropdown-menu " id="newsecond">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/branches/p-main-data"]' *ngIf="LoginStatus &&  UserRole =='مدير الفرع' || UserRole =='موظف إدخال الفرع'"><a>إضافة بيانات الجرحى</a></li>
+            <li *ngIf="LoginStatus &&   UserRole =='الإدارة' " [routerLinkActive]="'activee'" [routerLink]='["/management/all-patients-main-data"]'><a>كافة بيانات الجرحى</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/branches/add-pats-visiting-doctors"]' *ngIf="LoginStatus  && BranchName == 'فرع منطقة طرابلس' && ( UserRole =='مدير الفرع' || UserRole =='موظف إدخال الفرع')"><a>إضافة بيانات الجرحى للأطباء الزوار</a></li>
+
+          </ul>
+
+        </li>
+
+
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus &&  UserRole =='مدير الفرع' || UserRole =='موظف إدخال الفرع' " data-toggle="dropdown" data-target="#newthird" aria-controls="newthird" role="button" aria-haspopup="true" aria-expanded="false">
+          <a> رسائل علاج الجرحى</a>
+
+          <ul class="sub-nav dropdown-menu " id="newthird">
+
+            <li [routerLinkActive]="'activee'" [routerLink]='["/branches/p-letters-inside"]' *ngIf="LoginStatus &&  UserRole =='مدير الفرع' || UserRole =='موظف إدخال الفرع'">
+              <a>رسائل علاج الجرحى الصادرة من الفرع</a>
+            </li>
+
+            <li [routerLinkActive]="'activee'" *ngIf="LoginStatus && UserRole =='مدير الفرع' || UserRole =='موظف إدخال الفرع'" [routerLink]='["/branches/p-letters-outside-by-main-branch"]'><a>رسائل علاج الجرحى الصادرة من الفرع الرئيسي</a></li>
+
+
+          </ul>
+
+        </li>
+
+
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus &&  UserRole =='الإدارة' || UserRole=='الشؤون الطبية بالمركز'" data-toggle="dropdown" data-target="#newtwelve" aria-controls="newtwelve" role="button" aria-haspopup="true" aria-expanded="false">
+          <a>رسائل علاج الجرحى</a>
+
+          <ul class="sub-nav dropdown-menu " id="newtwelve">
+
+            <li [routerLinkActive]="'activee'" [routerLink]='["/branches/p-letters-inside"]' *ngIf="LoginStatus &&  UserRole =='الإدارة' ">
+              <a>رسائل علاج الجرحى الصادرة من الفرع الرئيسي</a>
+            </li>
+
+            <li *ngIf="LoginStatus && UserRole =='الإدارة' || UserRole=='الشؤون الطبية بالمركز'" [routerLinkActive]="'activee'" [routerLink]='["/management/letters-inside-incoming"]'>
+              <a>رسائل العلاج الواردة من الفروع للعلاج بالداخل</a>
+            </li>
+
+            <li *ngIf="LoginStatus && UserRole =='الإدارة' || UserRole=='الشؤون الطبية بالمركز'" [routerLinkActive]="'activee'" [routerLink]='["/management/letters-outside-incoming"]'>
+
+              <span [matBadge]="pTransOutside.length" [matBadgeHidden]="pTransOutside.length===0" matBadge="pTransOutside" class="badge badge-pill badge-danger" style="float:right;margin-bottom:-10px;margin-left:3px;padding:3px;" matBadgeColor="warn"></span>
+
+              <a>رسائل العلاج الواردة من الفروع للعلاج بالخارج</a>
+            </li>
+
+          </ul>
+        </li>
+
+
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus && UserRole =='الإدارة' || UserRole=='الشؤون الطبية بالمركز'" data-toggle="dropdown" data-target="#newforth" aria-controls="newforth" role="button" aria-haspopup="true" aria-expanded="false">
+          <a>قائمة الردود على رسائل الفروع</a>
+          <ul class="sub-nav dropdown-menu" id="newforth">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/management/replies-letters-outside"]'><a>قائمة الردود على رسائل العلاج بالخارج</a></li>
+          </ul>
+        </li>
+
+
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus && UserRole =='الإدارة'" data-toggle="dropdown" data-target="#newfourteen" aria-controls="newfourteen" role="button" aria-haspopup="true" aria-expanded="false">
+          <a> رسائل التسكين</a>
+          <ul class="sub-nav dropdown-menu" id="newfourteen">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/management/add-housing-letters"]'><a>إضافة رسائل التسكين</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/management/view-housing-letters"]'><a>عرض رسائل التسكين</a></li>
+          </ul>
+        </li>
+
+
+        <li [routerLinkActive]="'activee'" *ngIf="LoginStatus && UserRole == 'مدير الفرع' || UserRole =='موظف إدخال الفرع' " [routerLink]='["/management/view-housing-letters"]'> <a>رسائل التسكين</a></li>
+
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus && UserRole =='الإدارة' || UserRole =='مدير الفرع' || UserRole =='موظف إدخال الفرع'" data-toggle="dropdown" data-target="#newfifth" aria-controls="newfifth" role="button" aria-haspopup="true" aria-expanded="false">
+          <a>بيانات الجرحى بالساحات</a>
+          <ul class="sub-nav dropdown-menu" id="newfifth">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/countries/hotel-movements"]'><a>عرض إجراءات الدخول إلى الساحة</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/management/all-pat-in-countries"]'><a>عرض الجرحى المتواجدين بالساحات</a></li>
+          </ul>
+        </li>
+
+
+        <!-- تسفير الجرحى من الفرع الرئيسي-->
+
+        <li *ngIf="LoginStatus && UserRole == 'مسؤول التسفير'" [routerLinkActive]="'activee'" [routerLink]='["/management/letters-accepted-by-countries"]'><a>إضافة تذاكر السفر للجرحى</a></li>
+        <li *ngIf="LoginStatus && UserRole == 'مسؤول التسفير'" [routerLinkActive]="'activee'" [routerLink]='["/management/traveling-procedures"]'><a>عرض تذاكر الجرحى المسافرين</a></li>
+        <li *ngIf="LoginStatus && UserRole == 'مسؤول التسفير'" [routerLinkActive]="'activee'" [routerLink]='["/management/return-tickets-booking"]'><a>حجز تذاكر العودة</a></li>
+        <li *ngIf="LoginStatus && UserRole == 'مسؤول التسفير'" [routerLinkActive]="'activee'" [routerLink]='["/management/traveling-procedures-back"]'><a>عرض تذاكر العودة</a></li>
+
+
+        <!--حجز تذاكر السفر عن طريق موظف إدخال الفرع   لكافة الفروع-->
+        <!--حجز تذاكر السفر عن طريق موظف إدخال الفرع -  فرع المنطقة الوسطى-->
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus && UserRole =='مدير الفرع' || UserRole =='موظف إدخال الفرع'" data-toggle="dropdown" data-target="#newseventeen" aria-controls="newseventeen" role="button" aria-haspopup="true" aria-expanded="false">
+          <a>تذاكر السفر</a>
+          <ul class="sub-nav dropdown-menu" id="newseventeen">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/management/letters-accepted-by-countries"]'><a>حجز تذاكر السفر</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/management/traveling-procedures-by-user-id"]'><a>عرض تذاكر السفر</a></li>
+          </ul>
+        </li>
+
+        <!--إجراءات تسفير الجرحى التابعين للفرع-->
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus && UserRole =='الإدارة' || UserRole =='مدير الفرع' || UserRole =='موظف إدخال الفرع'" data-toggle="dropdown" data-target="#newsixth" aria-controls="newsixth" role="button" aria-haspopup="true" aria-expanded="false">
+          <a> بيانات السفر</a>
+          <ul class="sub-nav dropdown-menu" id="newsixth">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/management/traveling-procedures"]'><a>عرض تذاكر السفر للجرحى</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/management/travelers-under-procedure"]'><a>عرض الجرحى الذين قيد السفر</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/countries/travelers-back"]'><a>عرض الجرحى الذين قيد السفر</a></li>
+          </ul>
+        </li>
+
+
+
+        <!--إلحاق بيانات جرحى رئيسية ورسائل علاج عن طرق المشرف الإداري بالساحات في الخارج-->
+        <!--<li class="nav-item  active" *ngIf="LoginStatus &&  UserRole =='مشرف إداري'" data-toggle="dropdown" data-target="#newseventh" aria-controls="newseventh" role="button" aria-haspopup="true" aria-expanded="false">
+    إلحاق بيانات جرحى
+    <ul class="sub-nav dropdown-menu" id="newseventh">
+      <li [routerLink]='["/countries/append-p-main-data"]'>
+        إضافة بيانات الجرحى
+      </li>
+
+      <li [routerLink]='["/countries/append-letters-outside"]'>
+        رسائل علاج الجرحى
+      </li>
+
+    </ul>
+  </li>-->
+        <!--عرض كافة الجرحى المتواجدين بالساحة-->
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus &&  UserRole =='مشرف إداري'" data-toggle="dropdown" data-target="#neweighth" aria-controls="neweighth" role="button" aria-haspopup="true" aria-expanded="false">
+          <a>بيانات الجرحى ورسائل العلاج</a>
+          <ul class="sub-nav dropdown-menu" id="neweighth">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/countries/patients-in-countries"]'>
+              <a>كافة بيانات الجرحى الذين دخلو للساحة</a>
+            </li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/countries/add-treatment"]'><a>عرض الجرحى المتواجدين بالساحة</a></li>
+          </ul>
+        </li>
+
+
+        <!--إلحاق بيانات جرحى رئيسية ورسائل علاج عن طريق اللجان الطبية بالخارج-->
+        <li class="nav-item  active" [routerLinkActive]="'activee'" *ngIf="LoginStatus &&  UserRole =='لجنة الحصر'" data-toggle="dropdown" data-target="#newThirteen" aria-controls="newThirteen" role="button" aria-haspopup="true" aria-expanded="false">
+          <a> إلحاق بيانات جرحى</a>
+          <ul class="sub-nav dropdown-menu" id="newThirteen">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/countries/append-p-main-data"]'>
+              <a>إضافة بيانات الجرحى</a>
+            </li>
+
+            <li [routerLinkActive]="'activee'" [routerLink]='["/countries/append-letters-outside"]'>
+              <a>رسائل علاج الجرحى</a>
+            </li>
+
+          </ul>
+        </li>
+
+        <!--رسائل العلاج الواردة من الفرع الرئيسي إلى الساحات بالخارج-->
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus &&  UserRole == 'مشرف إداري'" data-toggle="dropdown" data-target="#sixth" aria-controls="sixth" role="button" aria-haspopup="true" aria-expanded="false">
+          <span [matBadge]="pTransOutside1.length" [matBadgeHidden]="pTransOutside1.length===0"
+                matBadge="pTransOutside1" class="badge badge-pill"
+                style="float:right;margin-bottom:-10px;margin-left:3px;padding:3px;" matBadgeColor="warn"></span>
+          <a>رسائل علاج الجرحى الواردة</a>
+          <ul class="sub-nav dropdown-menu" id="sixth">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/countries/patients-list-accepted"]'>
+              <span [matBadge]="pTransOutside1.length" [matBadgeHidden]="pTransOutside1.length===0" matBadge="pTransOutside1" class="badge badge-pill badge-danger" style="float:right;margin-bottom:-10px;margin-left:3px;padding:3px;" matBadgeColor="warn"></span>
+              <a> رسائل العلاج الواردة</a>
+            </li>
+
+            <li [routerLinkActive]="'activee'" [routerLink]='["/countries/reply-countries"]'>
+              <a> رسائل علاج الجرحى التي تم الرد عليها</a>
+            </li>
+
+            <li [routerLinkActive]="'activee'" [routerLink]='["/countries/pats-in-waiting-list"]'>
+              <a> رسائل علاج في قائمة الانتظار</a>
+            </li>
+          </ul>
+
+        </li>
+
+
+        <!-- عرض إجراءات الدخول للجرحى بالخارج -->
+        <li *ngIf="LoginStatus && UserRole == 'لجنة الحصر'" [routerLinkActive]="'activee'" [routerLink]='["/countries/hotel-movements"]'><a>عرض إجراءات الدخول إلى الساحة</a></li>
+
+
+        <!--عرض الملفات الطبية للجرحى بالخارج -->
+        <li *ngIf="LoginStatus && UserRole == 'لجنة الحصر'" [routerLinkActive]="'activee'" [routerLink]='["/countries/files-patients"]'><a>عرض الملفات الطبية للجرحى</a></li>
+
+
+        <!--<li *ngIf="LoginStatus && UserRole == 'شركة التسكين' || UserRole =='مشرف إداري' " [routerLink]='["/management/view-housing-letters"]'> رسائل التسكين</li>-->
+        <!--تسكين الجرحى في الساحات بالخارج-->
+        <li *ngIf="LoginStatus &&  UserRole =='مشرف إداري' " [routerLinkActive]="'activee'" [routerLink]='["/management/view-housing-letters"]'> <a>رسائل التسكين</a></li>
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus &&  UserRole =='مشرف إداري' || UserRole == 'مشرف تسكين'" data-toggle="dropdown" data-target="#newsixteen" aria-controls="newsixteen" role="button" aria-haspopup="true" aria-expanded="false">
+          <a> إجراءات الدخول</a>
+          <ul class="sub-nav dropdown-menu" id="newsixteen">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/countries/patients-housing"]'><a>إضافة بيانات الدخول إلى الساحة</a> </li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/countries/hotel-movements"]'><a>عرض إجراءات الدخول إلى الساحة</a></li>
+          </ul>
+        </li>
+
+
+        <!--إضافة وعرض الإجراءات الطبية للجرحى بالخارج -->
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus &&  UserRole =='مشرف إداري' || UserRole == 'مشرف طبي'" data-toggle="dropdown" data-target="#newtenth" aria-controls="newtenth" role="button" aria-haspopup="true" aria-expanded="false">
+          <a>الإجراءات الطبية للجرحى</a>
+          <ul class="sub-nav dropdown-menu" id="newtenth">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/countries/add-treatment"]'><a>إضافة إجراءات طبية للجرحى</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/countries/files-patients"]'><a>عرض الملفات الطبية للجرحى</a></li>
+          </ul>
+        </li>
+
+
+        <!--تذاكر المغادرة في الساحات بالخارج-->
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus &&  UserRole =='مشرف إداري' || UserRole == 'مشرف تسكين'" data-toggle="dropdown" data-target="#newfifteen" aria-controls="newfifteen" role="button" aria-haspopup="true" aria-expanded="false">
+          <a> تذاكر المغادرة</a>
+          <ul class="sub-nav dropdown-menu" id="newfifteen">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/countries/patients-transfer"]'><a>حجز تذاكر المغادرة</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/countries/travelers-back"]'><a>عرض تذاكر المغادرة</a></li>
+          </ul>
+        </li>
+
+
+        <!--حجز تذاكر السفر عن طريق المشرف الإداري - جميع الساحات-->
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus  && UserRole == 'مشرف إداري' " data-toggle="dropdown" data-target="#newseventeen" aria-controls="newseventeen" role="button" aria-haspopup="true" aria-expanded="false">
+          <a>تذاكر السفر</a>
+          <ul class="sub-nav dropdown-menu" id="newseventeen">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/management/letters-accepted-by-countries"]'><a>حجز تذاكر السفر</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/management/traveling-procedures-by-user-id"]'><a>عرض تذاكر السفر</a></li>
+          </ul>
+        </li>
+
+
+        <!--الواجهات الخاصة بالمصحات داخل ليبيا-->
+        <li [routerLinkActive]="'activee'" [routerLink]='["/hospitals/letters-inside-incoming"]' *ngIf="LoginStatus && UserRole =='مدير المصحة'  || UserRole =='موظف إدخال المصحة' "><a>رسائل العلاج الواردة</a> </li>
+        <li [routerLinkActive]="'activee'" [routerLink]='["/hospitals/replies-on-branches"]' *ngIf="LoginStatus && UserRole =='مدير المصحة' || UserRole =='موظف إدخال المصحة' "><a>رسائل العلاج التي تم الرد عليها</a></li>
+        <li [routerLinkActive]="'activee'" [routerLink]='["/hospitals/add-treatment"]' *ngIf="LoginStatus && UserRole =='مدير المصحة' || UserRole =='موظف إدخال المصحة' "><a>إضافة إجراءات طبية</a></li>
+        <li [routerLinkActive]="'activee'" [routerLink]='["/hospitals/files-pats-inside"]' *ngIf="LoginStatus && UserRole =='مدير المصحة' || UserRole =='موظف إدخال المصحة' "><a>الملفات الطبية للجرحى</a></li>
+
+
+
+
+        <!--الواجهات الخاصة بلجنة المتابعة-->
+        <!--<li [routerLinkActive]="'activee'" [routerLink]='["/follow-up-committee/all-letters-outside"]' *ngIf="LoginStatus && UserRole =='لجنة المتابعة'"><a>كافة رسائل الجرحى للعلاج بالخارج</a></li>-->
+        <li [routerLinkActive]="'activee'" [routerLink]='["/follow-up-committee/replies-main-branch-and-countries"]' *ngIf="LoginStatus && UserRole =='لجنة المتابعة'"><a>كافة رسائل الجرحى للعلاج بالخارج</a></li>
+
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus && UserRole =='لجنة المتابعة'" data-toggle="dropdown" data-target="#neweighteen" aria-controls="neweighteen" role="button" aria-haspopup="true" aria-expanded="false">
+          <a>تذاكر السفر</a>
+          <ul class="sub-nav dropdown-menu" id="neweighteen">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/follow-up-committee/all-travel-tickets"]'><a>تذاكر السفر</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/follow-up-committee/all-pending-travel-tickets"]'><a>تذاكر السفر المعلقة</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus && UserRole =='لجنة المتابعة'" data-toggle="dropdown" data-target="#newnintheen" aria-controls="newnintheen" role="button" aria-haspopup="true" aria-expanded="false">
+          <a>إجراءات الدخول</a>
+          <ul class="sub-nav dropdown-menu" id="newnintheen">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/follow-up-committee/all-entry-procedures"]'><a>إجراءات الدخول</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/follow-up-committee/all-pending-entry-procedures"]'><a>إجراءات الدخول المعلقة</a></li>
+
+          </ul>
+        </li>
+
+        <li [routerLinkActive]="'activee'" [routerLink]='["/follow-up-committee/all-treatment-procedures"]' *ngIf="LoginStatus && UserRole =='لجنة المتابعة'"><a>الإجراءات الطبية</a></li>
+        <li [routerLinkActive]="'activee'" [routerLink]='["/follow-up-committee/all-closing-files"]' *ngIf="LoginStatus && UserRole =='لجنة المتابعة'"><a>الملفات المغلقة</a></li>
+
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus && UserRole =='لجنة المتابعة'" data-toggle="dropdown" data-target="#twenty" aria-controls="twenty" role="button" aria-haspopup="true" aria-expanded="false">
+          <a>تذاكر العودة</a>
+          <ul class="sub-nav dropdown-menu" id="twenty">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/follow-up-committee/all-back-tickets"]'><a>تذاكر العودة</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/follow-up-committee/all-pending-back-tickets"]'><a>تذاكر العودة المعلقة</a></li>
+
+          </ul>
+        </li>
+
+        <!--الواجهات الخاصة بشركات التسكين في الساحات بالخارج-->
+        <li [routerLinkActive]="'activee'" [routerLink]='["/countries/housing-letters"]' *ngIf="LoginStatus && UserRole =='شركة التسكين'"><a>رسائل التسكين الواردة</a> </li>
+        <li [routerLinkActive]="'activee'" [routerLink]='["/countries/hotels-entry-procedures"]' *ngIf="LoginStatus && UserRole =='شركة التسكين'"><a>الجرحى المتواجدين في الفنادق</a></li>
+        <li [routerLinkActive]="'activee'" [routerLink]='["/countries/hotels-leaving-procedures"]' *ngIf="LoginStatus && UserRole =='شركة التسكين'"><a>إجراءات مغادرة الفنادق</a></li>
+        <li [routerLinkActive]="'activee'" [routerLink]='["/countries/all-hotels-procedures"]' *ngIf="LoginStatus && UserRole =='شركة التسكين'"><a>كافة إجراءات الفنادق</a></li>
+
+
+        <li [routerLinkActive]="'activee'" [routerLink]='["/pharmacy/add-medication"]' *ngIf="LoginStatus && UserRole =='موظف المركز_الصيدلية'"><a>إضافة الأدوية</a></li>
+        <li [routerLinkActive]="'activee'" [routerLink]='["/pharmacy/add-pharmacy"]' *ngIf="LoginStatus && UserRole =='موظف المركز_الصيدلية'"><a>الصيدليات</a></li>
+        <li [routerLinkActive]="'activee'" [routerLink]='["/pharmacy/request-medication"]' *ngIf="LoginStatus && UserRole =='موظف المركز_الصيدلية'"><a>طلب دواء</a></li>
+        <li [routerLinkActive]="'activee'" [routerLink]='["/pharmacy/all-requests"]' *ngIf="LoginStatus && UserRole =='موظف المركز_الصيدلية'"><a>طلبات الأدوية</a></li>
+        <li [routerLinkActive]="'activee'" [routerLink]='["/pharmacy/initial-offers"]' *ngIf="LoginStatus && UserRole =='موظف المركز_الصيدلية'"><a>العروض المبدئية</a></li>
+        <li [routerLinkActive]="'activee'" [routerLink]='["/pharmacy/prepared-medications"]' *ngIf="LoginStatus && UserRole =='موظف المركز_الصيدلية'"><a>الأدوية الجاهزة من الصيدلية</a></li>
+        <!--<li [routerLinkActive]="'activee'" [routerLink]='["/pharmacy/dispense-medication"]' *ngIf="LoginStatus && UserRole =='موظف المركز_الصيدلية'"><a>صرف دواء</a></li>-->
+        <li [routerLinkActive]="'activee'" [routerLink]='["/pharmacy/medications-provided-pats"]' *ngIf="LoginStatus && UserRole =='موظف المركز_الصيدلية'"><a>الأدوية المصروفة</a></li>
+        <li [routerLinkActive]="'activee'" [routerLink]='["/pharmacy/pats-files"]' *ngIf="LoginStatus && UserRole =='موظف المركز_الصيدلية'"><a>ملفات المرضى</a></li>
+
+
+        <li [routerLinkActive]="'activee'" [routerLink]='["/pharmacy/incomming-requests"]' *ngIf="LoginStatus && UserRole =='موظف الصيدلية'"><a>الطلبات المبدئية</a></li>
+        <li [routerLinkActive]="'activee'" [routerLink]='["/pharmacy/final-requests"]' *ngIf="LoginStatus && UserRole =='موظف الصيدلية'"><a>الطلبات النهائية</a></li>
+        <li [routerLinkActive]="'activee'" [routerLink]='["/pharmacy/dispensing-med-to-the-representative"]' *ngIf="LoginStatus && UserRole =='موظف الصيدلية'"><a>تسليم الدواء للمندوب</a></li>
+        <!--<li [routerLinkActive]="'activee'" [routerLink]='["/pharmacy/waiting-requests"]' *ngIf="LoginStatus && UserRole =='موظف الصيدلية'"><a>طلبات قيد الانتظار</a></li>-->
+        <li [routerLinkActive]="'activee'" [routerLink]='["/pharmacy/answered-requests"]' *ngIf="LoginStatus && UserRole =='موظف الصيدلية'"><a>طلبات تم الرد عليها</a></li>
+
+
+        <li class="nav-item active" [routerLinkActive]="'activee'" *ngIf="LoginStatus && UserRole =='موظف المركز_الصيدلية' || UserRole =='موظف الصيدلية'" data-toggle="dropdown" data-target="#twentyone" aria-controls="twentyone" role="button" aria-haspopup="true" aria-expanded="false">
+          <a>التقارير</a>
+          <ul class="sub-nav dropdown-menu" id="twentyone">
+            <li [routerLinkActive]="'activee'" [routerLink]='["/reports/all-reports"]'><a>كافة التقارير</a></li>
+
+            <li [routerLinkActive]="'activee'" [routerLink]='["/reports/medicine-dispensed-report"]' *ngIf="LoginStatus && UserRole =='موظف المركز_الصيدلية'"><a>تقرير الأدوية التي تم استلامها من الصيدلية والمصروفة من المركز</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/reports/medicine-dispensed-report"]' *ngIf="LoginStatus && UserRole =='موظف الصيدلية'"><a>تقرير الأدوية المصروفة من الصيدلية</a></li>
+
+            <!--<li [routerLinkActive]="'activee'" [routerLink]='["/reports/medicine-dis-mang-report"]'><a>تقرير الأدوية المصروفة من المركز</a></li>-->
+            <li [routerLinkActive]="'activee'" [routerLink]='["/reports/medicine-report"]' *ngIf="LoginStatus && UserRole =='موظف المركز_الصيدلية' || UserRole =='موظف الصيدلية' "><a>تقرير الدواء</a></li>
+            <li [routerLinkActive]="'activee'" [routerLink]='["/reports/pat-report"]' *ngIf="LoginStatus && UserRole =='موظف المركز_الصيدلية' || UserRole =='موظف الصيدلية'"><a>تقرير المريض</a></li>
+          </ul>
+        </li>
+
+        <!--================================================================================================================================
+  ================================================================================================================================
+  ================================================================================================================================
+  ================================================================================================================================
+  ================================================================================================================================
+  ================================================================================================================================
+  ================================================================================================================================
+  ================================================================================================================================-->
+
+      </ul>
+    </div>
+  </nav>
+  <ng-content></ng-content>
+</div>
+
+
+<mat-sidenav-container>
+  <mat-sidenav #sideNav mode="side" class="mat-elevation-z8" opened position="end" *ngIf="(LoginStatus$ | async) as LoginStatus">
+
+    <img class="avatar mat-elevation-z8" src="../../assets/img/pro.png" />
+
+
+    <div *ngIf="(LoginStatus$ | async) as LoginStatus">
+      <a class="nav-item text-white" *ngIf="(UserName$ | async) as UserName"> اسم الموظف : {{ FullName | uppercase }}</a>
+      <a class="nav-item text-white" *ngIf="(UserRole$ | async) as UserRole ">الصفة : {{  UserRole | uppercase }}</a>
+      <a class="nav-item text-white" *ngIf="(BranchName$ | async) as BranchName"> الفرع : {{  BranchName | uppercase }}</a>
+      <a class="nav-item text-white" *ngIf="(CountryName$ | async) as CountryName "> الدولة : {{  CountryName | uppercase }}</a>
+      <a class="nav-item text-white" *ngIf="(HospitalName$ | async) as HospitalName"> المصحة : {{  HospitalName | uppercase }}</a>
+      <a class="nav-item text-white" *ngIf="(PharmacyName$ | async) as HospitalName"> الصيدلية : {{  PharmacyName | uppercase }}</a>
+    </div>
+
+
+
+    <mat-divider></mat-divider>
+
+    <mat-nav-list>
+
+      <a mat-list-item routerLink="/home">
+        <mat-icon class="text-white">home</mat-icon> <span class="nav-caption text-white">الرئيسية</span>
+      </a>
+
+
+      <a *ngIf="LoginStatus &&  UserRole =='الإدارة'|| UserRole =='Admin'" mat-list-item routerLink="/management/manage-users/main-branch-users">
+        <mat-icon class="text-white">assignment_ind</mat-icon> <span class="nav-caption text-white">إدارة الحسابات</span>
+      </a>
+
+      <a mat-list-item routerLink="#" (click)="onLogout()">
+        <mat-icon class="text-white">logout</mat-icon><span class="nav-caption text-white">تسجيل الخروج </span>
+      </a>
+
+
+    </mat-nav-list>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
+

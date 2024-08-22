@@ -1,0 +1,68 @@
+.container {
+  position: relative;
+  background-position: center;
+  width: 210mm;
+  height: 297mm;
+  background-color: #fff; /* Set background color for the container */
+  background-size: cover;
+}
+
+
+.header-image {
+  width: 210mm;
+  /*  height: 297mm;
+*/ object-fit: cover; /* Adjust image resizing behavior */
+  padding-left: 20px;
+  padding-top: 20px;
+  position: relative;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  padding:10%;
+}
+
+th, td {
+  padding: 8px;
+  border: 1px solid black;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  text-align: center;
+}
+
+td {
+  text-align: center;
+}
+img {
+  vertical-align: middle;
+  border-style: none;
+  display: block;
+  cursor: pointer;
+  margin-right: 5%;
+}
+
+
+
+
+.btn-print {
+  position: relative;
+  background-position: center;
+  display: flex;
+  align-content: center;
+  background-color: white;
+  color: black;
+  border: 2px solid #BF9A56;
+  border-radius: 10px;
+  font-weight: bold;
+  margin: auto;
+}
+
+  .btn-print:hover {
+    background-color: #BF9A56;
+    color: white;
+  }
+

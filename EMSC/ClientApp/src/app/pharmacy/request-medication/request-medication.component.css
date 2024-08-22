@@ -1,0 +1,155 @@
+@import '../../../styles.css';
+
+
+.hidden-element {
+  display: none;
+}
+
+
+.container {
+  width: 210mm; /* A4 width in millimeters */
+  height: 297mm; /* A4 height in millimeters */
+  background-image: url('../../../assets/img/ReqLetter.jpeg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.mat-column-edit3 {
+  width: 40px;
+  text-align: center;
+  padding-right: 20px;
+}
+
+body {
+  padding: 40px;
+}
+
+
+.aa::before {
+  content: "حالة إنسانية";
+  color: green;
+  font-weight: bold;
+}
+
+.bb::before {
+  content: "جريح حرب";
+  color: darkred;
+  font-weight: bold;
+}
+
+.ee::before {
+  content: "----";
+  color: #4a6b96;
+  font-weight: bold;
+}
+
+.cc::before {
+  content: "مريض";
+  color: darkred;
+  font-weight: bold;
+}
+
+.dd::before {
+  content: "مرافق";
+  color: #4a6b96;
+  font-weight: bold;
+}
+
+.ee::before {
+  content: "موظف";
+  color: darkslategrey;
+  font-weight: bold;
+}
+
+img {
+  vertical-align: middle;
+  border-style: none;
+  display: block;
+  cursor: pointer;
+}
+
+.input-group {
+  position: relative;
+  display: flow-root;
+  flex-wrap: wrap;
+  align-items: stretch;
+  width: 100%;
+}
+
+.form-check {
+  position: relative;
+  display: contents;
+  padding-left: 1.25rem;
+}
+
+.mat-column-add {
+  width: 100px;
+  text-align: center;
+  padding-left: 5px;
+  padding-right: 25px;
+}
+
+.mat-column-edit2 {
+  width: 40px;
+  text-align: center;
+  padding-right: 20px;
+}
+
+.mat-column-details {
+  width: 40px;
+  text-align: center;
+  padding-right: 20px;
+  border-right: 1px solid currentColor;
+}
+
+.mat-column-delete2 {
+  width: 40px;
+  text-align: center;
+  padding-right: 20px;
+}
+
+
+
+.container {
+  padding-top: 80px;
+}
+
+.list-group-item + .list-group-item {
+  border-top-width: 0;
+  display: inline-flex;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: .5rem;
+  padding-right: 2px;
+  padding-right: 20px;
+  clear: both;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+/*.btn-primary {
+  border-radius: 10px;
+  background: linear-gradient(to right, #4286f4,#000046);
+}
+*/
+.form-control {
+  display: inline;
+  width: 100%;
+  height: calc(1.5em + 0.75rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  /* padding-left: 50%; */
+  /* padding-right: 50%; */
+  margin-top: 20px;
+  margin-right: 12px;
+}

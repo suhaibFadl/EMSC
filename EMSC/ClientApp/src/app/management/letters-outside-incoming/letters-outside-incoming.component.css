@@ -1,0 +1,33 @@
+@import '../../../styles.css';
+
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body {
+  padding: 40px;
+}
+
+.modal-header {
+  display: flow-root;
+}
+
+.back-header {
+  border-radius: 10px;
+  background: #000046;
+}
+
+/*.btn-primary {
+  border-radius: 10px;
+ background: linear-gradient(to right, #4286f4,#000046);
+}
+*/
+.container {
+  padding-top: 80px;
+}
+
+label {
+  padding-right: 15px;
+}

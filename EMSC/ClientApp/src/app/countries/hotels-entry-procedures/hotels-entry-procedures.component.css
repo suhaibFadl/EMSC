@@ -1,0 +1,71 @@
+@import '../../../styles.css';
+
+
+.tt::before {
+  content: "قيد الانتظار";
+  color: orange;
+  font-weight: bold;
+}
+
+.ff::before {
+  content: "قيد الإجراء";
+  color: green;
+  font-weight: bold;
+}
+
+.ll::before {
+  content: " تم الرفض";
+  color: #dd1818;
+  font-weight: bold;
+}
+
+
+body {
+  padding: 40px;
+}
+
+.modal-header {
+  display: flow-root;
+}
+
+.back-header {
+  border-radius: 10px;
+  background: #000046;
+}
+/*
+.btn-primary {
+
+  border-radius: 10px;
+ background: linear-gradient(to right, #4286f4,#000046);
+}
+*/
+.container {
+  padding-top: 80px;
+}
+
+
+.mat-column-leaving {
+  width: 100px;
+  text-align: center;
+  padding-left: 5px;
+  padding-right: 25px;
+}
+
+.mat-column-edit {
+  width: 40px;
+  text-align: center;
+  padding-right: 20px;
+  border-right: 1px solid currentColor;
+}
+
+.mat-column-renewal {
+  width: 100px;
+  text-align: center;
+  padding-right: 20px;
+}
+
+.mat-column-delete {
+  width: 40px;
+  text-align: center;
+  padding-right: 20px;
+}

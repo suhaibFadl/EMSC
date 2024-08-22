@@ -1,0 +1,40 @@
+export interface PTransOutside {
+  id: number;
+  patientId: number;
+  userId: string;
+  patientName: string;
+  passportNo: string;
+  letterDate: Date;
+  nationalNo: number;
+  attach: string;
+  letterDest: number;
+  letterIndexNO: string;
+  plcTreatment: number;
+  replyState: string;
+  countryId: number;
+  country: string;
+  UserDate: Date;
+  branchId: number;
+  name: string;
+  reply: string;
+  userName: string;
+  medicalDiagnosis: string;
+  ReplyState: number;
+  phoneNumber: string;
+  branchName: string;
+  notes: string;
+  fileStatus: number;
+  closingDate: Date;
+  refferId: number;
+ // tRID: number;
+  tRID: number;
+  letterIndex: string;
+  letterDateHouse: Date;
+  tRId: number;
+  entryAttach: string;
+  entryDate: Date;
+  leavingDate: Date;
+  hotelName: string;
+  hotelId: string;
+
+}

@@ -1,0 +1,32 @@
+export interface HousingLetter {
+  id: number;
+  patientId: number;
+  trid: number;
+  personType: number;
+  patType: number;
+  houLetterId: number;
+  patientName: string;
+  passportNo: string;
+  nationalNo: number;
+  hotelName: string;
+  hotelId: string;
+  entryDate: string;
+  endDate: string;
+  leavingDate: string;
+  userId: string;
+  userDate: Date;
+  phoneNumber: string;
+  attach: string;
+  entryAttach: string;
+  housingAttach: string;
+  leavingAttach: string;
+  country: string;
+  branchName: string;
+  housingDone: number;
+  letterIndex: string;
+  letterDate: Date;
+  renewalDate: Date;
+  renewalDateStart: Date;
+  renewalDateEnd: Date;
+  countRenewals: number;
+}

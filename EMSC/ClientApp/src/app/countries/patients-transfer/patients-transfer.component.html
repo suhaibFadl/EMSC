@@ -1,0 +1,507 @@
+<body>
+  <br><br>
+  <form *ngIf="(LoginStatus$ | async) as LoginStatus">
+
+    <div *ngIf="LoginStatus && UserRole =='مشرف تسكين' || UserRole =='مشرف إداري'">
+
+      <p style="text-align: center; color: #4a6b96; font-size: xx-large; font-weight: bold">حجز تذاكر المغادرة</p>
+
+      <div class="search">
+
+        <form  [formGroup]="formControl">
+
+          <mat-form-field class=" example-full-width " style="text-align: start; padding-right: 20px;">
+            <input matInput formControlName="patientName">
+            <mat-icon matSuffix class="test">search</mat-icon>
+            <mat-placeholder>اسم الجريح</mat-placeholder>
+          </mat-form-field>
+
+          <mat-form-field class=" example-full-width " style="text-align: start; padding-right: 20px;">
+            <input matInput formControlName="passportNo">
+            <mat-icon matSuffix class="test">search</mat-icon>
+            <mat-placeholder>رقم جواز السفر</mat-placeholder>
+          </mat-form-field>
+
+          <mat-form-field class=" example-full-width " style="text-align: start; padding-right: 20px;">
+            <input matInput formControlName="nationalNo">
+            <mat-icon matSuffix class="test">search</mat-icon>
+            <mat-placeholder>الرقم الوطني</mat-placeholder>
+          </mat-form-field>
+
+
+          <mat-form-field class=" example-full-width " style="text-align: start; padding-right: 20px;">
+            <mat-select placeholder="الفرع" formControlName="branchName">
+              <mat-option (click)="resetBranchesFilter()"> الكل</mat-option>
+              <mat-option *ngFor="let b of branches" [value]="b.branchName">
+                {{b.branchName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+
+          <mat-form-field class=" example-full-width " style="text-align: start; padding-right: 20px;">
+            <input #picker1 matInput [matDatepicker]="firstDatePicker" placeholder="تاريخ إغلاق الملف" readonly formControlName="closingDate">
+            <mat-icon matDatepickerToggleIcon (click)="resetClosingDate()" style=" position: absolute;padding-left:20px; float: left;  cursor: pointer; color: rgba(0, 0, 0, 0.54);">clear</mat-icon>
+            <mat-datepicker-toggle matSuffix [for]="firstDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #firstDatePicker></mat-datepicker>
+          </mat-form-field>
+
+        </form>
+
+      </div>
+
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef> ر. </th>
+          <td mat-cell *matCellDef="let i = index"> {{i+1}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="first">
+          <th mat-header-cell *matHeaderCellDef>ر. إشاري رسالة الضم</th>
+          <td mat-cell *matCellDef="let pat"> {{pat.letterIndexNO}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="second">
+          <th mat-header-cell *matHeaderCellDef> اسم الجريح </th>
+          <td mat-cell *matCellDef="let pat"> {{pat.patientName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="third">
+          <th mat-header-cell *matHeaderCellDef> رقم جواز السفر </th>
+          <td mat-cell *matCellDef="let pat"> {{pat.passportNo}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fourth">
+          <th mat-header-cell *matHeaderCellDef>الرقم الوطني </th>
+          <td mat-cell *matCellDef="let pat"> {{pat.nationalNo}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fifth">
+          <th mat-header-cell *matHeaderCellDef>تصنيف الحالة</th>
+          <td mat-cell *matCellDef="let p">
+            <div *ngIf="p.personType == 1" style="color: darkred; font-weight:bold;">
+              مريض
+            </div>
+            <div *ngIf="p.personType == 2" style="color: #4a6b96; font-weight:bold;">
+              مرافق
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="sixth">
+          <th mat-header-cell *matHeaderCellDef>حالة الملف الطبي</th>
+          <td mat-cell *matCellDef="let pat">
+            <div *ngIf="pat.personType == 1">
+
+              <div *ngIf="pat.fileStatus == 1" style="color:green; font-weight:bold">
+                انتهاء العلاج بالكامل
+              </div>
+              <div *ngIf="pat.fileStatus == 2" style="color: #7aade3; font-weight: bold">
+                انتهاء العلاج مع وجود مراجعة
+              </div>
+              <div *ngIf="pat.fileStatus == 3" style="color: #4a6b96; font-weight: bold">
+                انتهاء العلاج بالساحة مع ضرورة نقله لساحة أخرى
+              </div>
+              <div *ngIf="pat.fileStatus == 4" style="color: #dd1818; font-weight: bold">
+                إغلاق الملف وترحيل الجريح
+              </div>
+
+            </div>
+            <div *ngIf="pat.personType == 2">
+              -----
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="seventh">
+          <th mat-header-cell *matHeaderCellDef>ملاحظات</th>
+          <td mat-cell *matCellDef="let pat">
+            <div *ngIf="pat.personType == 1" (click)="ViewlNotesModal(pat)" style="cursor: pointer; color: #4a6b96;">
+
+              عرض التشخيص الطبي
+
+            </div>
+            <div *ngIf="pat.personType == 2">
+              -----
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ehigth">
+          <th mat-header-cell *matHeaderCellDef>تاريخ إغلاق الملف</th>
+          <td mat-cell *matCellDef="let pat">
+            <div *ngIf="pat.personType == 1">
+              {{pat.closingDate| date :'yyyy-MM-dd'}}
+
+            </div>
+            <div *ngIf="pat.personType == 2">
+              -----
+            </div>
+          </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="ninth">
+          <th mat-header-cell *matHeaderCellDef>الفرع التابع له</th>
+          <td mat-cell *matCellDef="let pat">{{pat.branchName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ten">
+          <th mat-header-cell *matHeaderCellDef> موظف الإدخال </th>
+          <td mat-cell *matCellDef="let pat">{{pat.phoneNumber }}</td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="add">
+          <th mat-header-cell *matHeaderCellDef>حجز تذكرة من الساحة</th>
+          <td mat-cell *matCellDef="let p">
+            <mat-icon mat-icon-button type="button" style="color: #182848; "
+                      matTooltip="  إضافة إجراء تسكين لجريح " (click)="onAddTravel(p)"><mat-icon>post_add</mat-icon></mat-icon>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="transfer">
+          <th mat-header-cell *matHeaderCellDef>إحالة المعاملة للفرع الرئيسي</th>
+          <td mat-cell *matCellDef="let p">
+            <mat-icon mat-icon-button type="button" style=" color: #dd1818;"
+                      matTooltip="إحالة المعاملة للمركز الرئيسي" (click)="onForwardTrans(p)"><mat-icon>reply</mat-icon></mat-icon>
+          </td>
+        </ng-container>
+
+
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator #paginator="matPaginator" dir="rtl" class="d-flex justify-content-end" [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="5"></mat-paginator>
+
+
+      <br /><br /><br />
+
+      <p style="text-align: center; color: #4a6b96; font-size:xx-large; font-weight: bold ">معاملات تم رفضها من قِبل مسؤول التسفير</p>
+
+
+      <table mat-table [dataSource]="dataSource2" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef> ر. </th>
+          <td mat-cell *matCellDef="let i = index"> {{i+1}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="first">
+          <th mat-header-cell *matHeaderCellDef>ر. إشاري رسالة الضم</th>
+          <td mat-cell *matCellDef="let pat"> {{pat.letterIndexNO}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="second">
+          <th mat-header-cell *matHeaderCellDef> اسم الجريح </th>
+          <td mat-cell *matCellDef="let pat"> {{pat.patientName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="third">
+          <th mat-header-cell *matHeaderCellDef> رقم جواز السفر </th>
+          <td mat-cell *matCellDef="let pat"> {{pat.passportNo}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fourth">
+          <th mat-header-cell *matHeaderCellDef>الرقم الوطني </th>
+          <td mat-cell *matCellDef="let pat"> {{pat.nationalNo}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="fifth">
+          <th mat-header-cell *matHeaderCellDef>تصنيف الحالة</th>
+          <td mat-cell *matCellDef="let p">
+            <div *ngIf="p.personType == 1" style="color: darkred; font-weight:bold;">
+              مريض
+            </div>
+            <div *ngIf="p.personType == 2" style="color: #4a6b96; font-weight:bold;">
+              مرافق
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="sixth">
+          <th mat-header-cell *matHeaderCellDef>حالة الملف الطبي</th>
+          <td mat-cell *matCellDef="let pat">
+            <div *ngIf="pat.personType == 1">
+
+              <div *ngIf="pat.fileStatus == 1" style="color:green; font-weight:bold">
+                انتهاء العلاج بالكامل
+              </div>
+              <div *ngIf="pat.fileStatus == 2" style="color: #7aade3; font-weight: bold">
+                انتهاء العلاج مع وجود مراجعة
+              </div>
+              <div *ngIf="pat.fileStatus == 3" style="color: #4a6b96; font-weight: bold">
+                انتهاء العلاج بالساحة مع ضرورة نقله لساحة أخرى
+              </div>
+              <div *ngIf="pat.fileStatus == 4" style="color: #dd1818; font-weight: bold">
+                إغلاق الملف وترحيل الجريح
+              </div>
+
+            </div>
+            <div *ngIf="pat.personType == 2">
+              -----
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="seventh">
+          <th mat-header-cell *matHeaderCellDef>سبب الرفض</th>
+          <td mat-cell *matCellDef="let pat">
+            <div (click)="ViewlNotesModal(pat)" style="cursor: pointer; color: #4a6b96;">
+              عرض  سبب الرفض
+            </div>
+
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ehigth">
+          <th mat-header-cell *matHeaderCellDef>تاريخ إغلاق الملف</th>
+          <td mat-cell *matCellDef="let pat">
+            <div *ngIf="pat.personType == 1">
+              {{pat.closingDate| date :'yyyy-MM-dd'}}
+
+            </div>
+            <div *ngIf="pat.personType == 2">
+              -----
+            </div>
+          </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="ninth">
+          <th mat-header-cell *matHeaderCellDef>الفرع التابع له</th>
+          <td mat-cell *matCellDef="let pat">{{pat.branchName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ten">
+          <th mat-header-cell *matHeaderCellDef> موظف الإدخال </th>
+          <td mat-cell *matCellDef="let pat">{{pat.phoneNumber }}</td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="add">
+          <th mat-header-cell *matHeaderCellDef>حجز تذكرة من الساحة</th>
+          <td mat-cell *matCellDef="let p">
+            <mat-icon mat-icon-button type="button" style="color: #182848; "
+                      matTooltip="  إضافة إجراء تسكين لجريح " (click)="onAddTravel(p)"><mat-icon>post_add</mat-icon></mat-icon>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="transfer">
+          <th mat-header-cell *matHeaderCellDef>إحالة المعاملة للفرع الرئيسي</th>
+          <td mat-cell *matCellDef="let p">
+            <mat-icon mat-icon-button type="button" style=" color: #dd1818;"
+                      matTooltip="إحالة المعاملة للمركز الرئيسي" (click)="onForwardTrans(p)"><mat-icon>reply</mat-icon></mat-icon>
+          </td>
+        </ng-container>
+
+
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator #paginator2="matPaginator" dir="rtl" class="d-flex justify-content-end" [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="5"></mat-paginator>
+
+    </div>
+
+
+
+  </form>
+</body>
+
+
+
+<!-- إضافة إجراء تسفير   -->
+<ng-template #template>
+  <div class="modal-header">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title"> إضافة إجراء تسفير للجريح </h4>
+
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active text-center text-uppercase">{{modalMessage}}</p>
+
+    <form [formGroup]="AddForm">
+
+      <ul class="list-group">
+        <li class="list-group-item">
+
+          <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+            <mat-label> اسم شركة الطيران</mat-label>
+            <input formControlName="AirlineName" type="text" id="AirlineName" matInput placeholder="اسم شركة الطيران " [errorStateMatcher]="matcher">
+            <mat-error *ngIf="AirlineName.hasError('AirlineName') && !AirlineName.hasError('required')">
+              الرجاء تعبئة الحقول المطلوبة
+            </mat-error>
+            <mat-error *ngIf="AirlineName.hasError('required')">
+              الرجاء تعبئة الحقول المطلوبة
+            </mat-error>
+
+          </mat-form-field>
+        </li>
+        <li class="list-group-item">
+
+          <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+            <mat-label>رقم الرحلة</mat-label>
+            <input formControlName="FlightNom" type="text" id="FlightNom" matInput placeholder="رقم الرحلة" [errorStateMatcher]="matcher">
+            <mat-error *ngIf="FlightNom.hasError('FlightNom') && !FlightNom.hasError('required')">
+              الرجاء تعبئة الحقول المطلوبة
+            </mat-error>
+            <mat-error *ngIf="FlightNom.hasError('required')">
+              الرجاء تعبئة الحقول المطلوبة
+            </mat-error>
+
+          </mat-form-field>
+        </li>
+
+
+
+
+
+        <li class="list-group-item">
+          <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+            <mat-label>موعد الرحلة</mat-label>
+            <input formControlName="FlightDate" type="datetime-local" id="FlightDate" matInput placeholder="موعد الرحلة" [errorStateMatcher]="matcher">
+            <mat-error *ngIf="FlightDate.hasError('FlightDate') && !FlightDate.hasError('required')">
+              الرجاء تعبئة الحقول المطلوبة
+            </mat-error>
+            <mat-error *ngIf="FlightDate.hasError('required')">
+              الرجاء تعبئة الحقول المطلوبة
+            </mat-error>
+          </mat-form-field>
+        </li>
+
+        <li class="list-group-item">
+          <div class="form-group">
+            <button type="button" class="form-control" placeholder="" (click)="file.click()">
+              <mat-icon style="color: #7aade3">cloud_upload</mat-icon>{{fileText}}
+            </button>
+            <input type="file"
+                   placeholder=""
+                   (change)="uploadFile(file.files)" #file style="visibility:hidden;" accept=".pdf">
+
+            <div class="col-md-4">
+              <span class="upload" *ngIf="progress > 0">
+                {{progress}}%
+              </span>
+              <span class="upload" *ngIf="message">
+                {{message}}
+              </span>
+            </div>
+            <!--<div class="errorMessage" *ngIf="fileName==''">
+              <span *ngIf="fileName==''" >يرجى تحميل المرفقات</span>
+            </div>-->
+          </div>
+        </li>
+
+        <div *ngIf="fileName == '' || progress != 100">
+          <div class="modal-footer">
+            <button class="btn btn-primary mr-auto" disabled>حفظ</button>
+            <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
+          </div>
+        </div>
+
+        <div *ngIf="fileName != '' && progress == 100">
+          <div class="modal-footer">
+            <button [disabled]="AddForm.invalid" class="btn btn-primary mr-auto" (click)="AddTravel()">حفظ</button>
+            <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
+          </div>
+        </div>
+
+
+
+
+      </ul>
+
+    </form>
+
+  </div>
+</ng-template>
+
+
+
+<!--إحالة المعاملة للفرع الرئيسي-->
+
+<ng-template #forwardtemplate>
+  <div class="modal-header">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">إحالة المعاملة للفرع الرئيسي </h4>
+
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active">{{modalMessage2}}</p>
+    <form>
+      <ul class="list-group">
+
+        <li class="list-group-item">
+          <div class="form-group">
+            <button type="button" class="form-control" placeholder="" (click)="file.click()">
+              <mat-icon style="color: #7aade3">cloud_upload</mat-icon>{{fileText}}
+            </button>
+            <input type="file"
+                   placeholder=""
+                   (change)="uploadFile(file.files)" #file style="visibility:hidden;" accept=".pdf">
+
+            <div class="col-md-4">
+              <span class="upload" *ngIf="progress > 0">
+                {{progress}}%
+              </span>
+              <span class="upload" *ngIf="message">
+                {{message}}
+              </span>
+            </div>
+          </div>
+        </li>
+
+        <div *ngIf="fileName == '' || progress != 100">
+          <div class="modal-footer">
+            <button class="btn btn-primary mr-auto" disabled>إرسال</button>
+            <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
+          </div>
+        </div>
+
+        <div *ngIf="fileName != '' && progress == 100">
+          <div class="modal-footer">
+            <button [disabled]="ReferredForm.invalid" class="btn btn-primary mr-auto" (click)="onClickYes()">إرسال</button>
+            <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
+          </div>
+        </div>
+
+
+
+        <!--<div class="modal-footer">
+          <button class="btn btn-primary mr-auto " (click)="onClickYes()">نعم</button>
+          <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
+        </div>-->
+      </ul>
+    </form>
+  </div>
+</ng-template>
+
+
+
+<!-- عرض الملاحظات  -->
+
+<ng-template #viewNotesTemplate>
+  <div class="modal-header">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title"> عرض الملاحظات </h4>
+
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active text-center text-uppercase">{{modalMessage}}</p>
+
+  </div>
+</ng-template>

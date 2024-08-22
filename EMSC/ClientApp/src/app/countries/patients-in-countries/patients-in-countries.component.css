@@ -1,0 +1,56 @@
+@import '../../../styles.css';
+
+
+.aa::before {
+  content: "موجود بالساحة";
+  color: orange;
+  font-weight: bold;
+}
+
+.bb::before {
+  content: "تمت المغادرة";
+  color: green;
+  font-weight: bold;
+}
+
+.cc::before {
+  content: "  تم إغلاق الملف الطبي";
+  color: #dd1818;
+  font-weight: bold;
+}
+
+.dd::before {
+  content: "تحت العلاج";
+  color: green;
+  font-weight: bold;
+}
+
+.ee::before {
+  content: "تم إغلاق الملف وإحالة المعاملة للفرع الرئيسي";
+  color: #dd1818;
+  font-weight: bold;
+}
+
+
+body {
+  padding: 40px;
+}
+
+.modal-header {
+  display: flow-root;
+}
+
+.back-header {
+  border-radius: 10px;
+  background: #000046;
+}
+/*
+.btn-primary {
+
+  border-radius: 10px;
+ background: linear-gradient(to right, #4286f4,#000046);
+}
+*/
+.container {
+  padding-top: 80px;
+}

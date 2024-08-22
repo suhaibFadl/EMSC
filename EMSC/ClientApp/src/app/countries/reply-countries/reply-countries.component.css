@@ -1,0 +1,54 @@
+@import '../../../styles.css';
+
+body {
+  padding: 40px;
+}
+
+.modal-header {
+  display: flow-root;
+}
+
+.back-header {
+  border-radius: 10px;
+  background: #000046;
+}
+
+.ll::before {
+  content: " تم الرفض";
+  color: #dd1818;
+  font-weight: bold;
+}
+
+.aa::before {
+  content: " تم القبول";
+  color: green;
+  font-weight: bold;
+}
+
+.bb::before {
+  content: "قائمة الانتظار";
+  color: darkred;
+  font-weight: bold;
+}
+
+
+.kk::before {
+  content: " تم إغلاق الملف";
+  color: darkred;
+  font-weight: bold;
+}
+
+
+/*.btn-primary {
+
+  border-radius: 10px;
+ background: linear-gradient(to right, #4286f4,#000046);
+}*/
+
+.container {
+  padding-top: 80px;
+}
+
+label {
+  padding-right: 15px;
+}

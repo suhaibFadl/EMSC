@@ -1,0 +1,239 @@
+<!-- مشرف طبي:- عرض الإجراءات الطبية الطبية و يمكن التعديل عليها و حذفها  -->
+<body>
+  <br><br>
+  <form *ngIf="(LoginStatus$ | async) as LoginStatus">
+
+    <div class="search">
+      <mat-form-field class="example-full-width " style="text-align: start;">
+        <input (keyup)="applyFilter2($event.target.value)" matInput placeholder="بحث ...">
+        <mat-icon matSuffix class="test">search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="LoginStatus && UserRole =='موظف إدخال المصحة' || UserRole =='مدير المصحة'" class=" example-full-width " style="text-align: start; padding-right: 20px;">
+        <mat-select [(value)]="selection" placeholder="الفرع">
+          <mat-option (click)="applyFilter3()"> الكل</mat-option>
+          <mat-option *ngFor="let b of branches" [value]="b" (click)="applyFilter(b.branchName)">
+            {{b.branchName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="LoginStatus &&  UserRole == 'مدير الفرع' || UserRole == 'موظف إدخال الفرع'" class=" example-full-width " style="text-align: start; padding-right: 20px;">
+        <mat-select [(value)]="selection" placeholder="المصحة">
+          <mat-option (click)="applyFilter3()"> الكل</mat-option>
+          <mat-option *ngFor="let b of hospitals" [value]="b" (click)="applyFilter(b.hospName)">
+            {{b.hospName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+
+    <div *ngIf="LoginStatus && UserRole =='موظف إدخال المصحة' || UserRole =='مدير المصحة' ">
+
+      <div>
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef> ر. </th>
+            <td mat-cell *matCellDef="let i = index"> {{i+1}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="first">
+            <th mat-header-cell *matHeaderCellDef>ر. إشاري رسالة الضم</th>
+            <td mat-cell *matCellDef="let pat" style="direction:ltr;"> {{pat.letterIndexNO}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="second">
+            <th mat-header-cell *matHeaderCellDef> اسم الجريح </th>
+            <td mat-cell *matCellDef="let pat"> {{pat.patientName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="third">
+            <th mat-header-cell *matHeaderCellDef> رقم جواز السفر </th>
+            <td mat-cell *matCellDef="let pat"> {{pat.passportNo}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="fourth">
+            <th mat-header-cell *matHeaderCellDef>الرقم الوطني </th>
+            <td mat-cell *matCellDef="let pat"> {{pat.nationalNo}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="fifth">
+            <th mat-header-cell *matHeaderCellDef>الفرع التابع له</th>
+            <td mat-cell *matCellDef="let pat"> {{pat.branchName}} </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="sixth">
+            <th mat-header-cell *matHeaderCellDef>تاريخ فتح الملف</th>
+            <td mat-cell *matCellDef="let pat">
+              {{pat.entryDate | date:'yyyy-MM-dd'}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="seventh">
+            <th mat-header-cell *matHeaderCellDef>حالة الملف الطبي</th>
+            <td mat-cell *matCellDef="let pat">
+              <div *ngIf="pat.fileStatus == 1" style="color: green; font-weight: bold">
+                تحت العلاج
+              </div>
+
+              <div *ngIf="pat.fileStatus == 2" style="color:darkred;font-weight:bold">
+                تم قفل الملف
+              </div>
+
+            </td>
+          </ng-container>
+
+
+
+          <ng-container matColumnDef="eighth">
+            <th mat-header-cell *matHeaderCellDef>تاريخ إغلاق الملف</th>
+            <td mat-cell *matCellDef="let pat">
+              <div *ngIf="pat.closingDate == null ">
+                لم يتم إغلاق الملف
+              </div>
+
+              <div *ngIf="pat.closingDate != null">
+                {{pat.closingDate | date:'yyyy-MM-dd'}}
+              </div>
+
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="ninth">
+            <th mat-header-cell *matHeaderCellDef>ملاحظات</th>
+            <td mat-cell *matCellDef="let pat">
+              <div *ngIf="pat.notes == null ">
+               لا يوجد
+              </div>
+
+              <div *ngIf="pat.notes != null">
+                {{pat.notes}}
+              </div>
+
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="ten">
+            <th mat-header-cell *matHeaderCellDef> المرفقات </th>
+            <td mat-cell *matCellDef="let pat">
+              <div *ngIf="pat.attach == null ">
+                -----
+              </div>
+
+              <div *ngIf="pat.attach != null ">
+                <a href="file/{{pat.attach}}" target="_blank">عرض المرفقات</a>
+              </div>
+          </ng-container>
+
+
+          <ng-container matColumnDef="details">
+            <th mat-header-cell *matHeaderCellDef>تفاصيل</th>
+            <td mat-cell *matCellDef="let pat">
+              <mat-icon mat-icon-button type="button" mat-raised-button color="accent"
+                        matTooltip="عرض الإجراءات الطبية للجريح" style=" color: darkgoldenrod;" (click)="onSelect(pat)">
+                <mat-icon>notes</mat-icon>
+              </mat-icon>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator dir="rtl" class="d-flex justify-content-end" [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10"></mat-paginator>
+      </div>
+
+    </div>
+
+    <div *ngIf="LoginStatus && UserRole =='مدير الفرع' || UserRole =='موظف إدخال الفرع'  ">
+
+      <div>
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef> ر. </th>
+            <td mat-cell *matCellDef="let i = index"> {{i+1}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="first">
+            <th mat-header-cell *matHeaderCellDef>ر. إشاري رسالة الضم</th>
+            <td mat-cell *matCellDef="let pat" style="direction:ltr;"> {{pat.letterIndexNO}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="second">
+            <th mat-header-cell *matHeaderCellDef> اسم الجريح </th>
+            <td mat-cell *matCellDef="let pat"> {{pat.patientName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="third">
+            <th mat-header-cell *matHeaderCellDef> رقم جواز السفر </th>
+            <td mat-cell *matCellDef="let pat"> {{pat.passportNo}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="fourth">
+            <th mat-header-cell *matHeaderCellDef>الرقم الوطني </th>
+            <td mat-cell *matCellDef="let pat"> {{pat.nationalNo}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="fifth">
+            <th mat-header-cell *matHeaderCellDef>الفرع التابع له </th>
+            <td mat-cell *matCellDef="let pat"> {{pat.branchName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="sixth">
+            <th mat-header-cell *matHeaderCellDef>المصحة المراد العلاج لها </th>
+            <td mat-cell *matCellDef="let pat"> {{pat.hospName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="seventh">
+            <th mat-header-cell *matHeaderCellDef>حالة الملف الطبي</th>
+            <td mat-cell *matCellDef="let pat">
+              <div *ngIf="pat.fileStatus == 1" style="color:green">
+                تحت العلاج
+              </div>
+
+              <div *ngIf="pat.fileStatus == 2" style="color:#dd1818">
+                تم قفل الملف
+              </div>
+            </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="details">
+            <th mat-header-cell *matHeaderCellDef>تفاصيل</th>
+            <td mat-cell *matCellDef="let pat">
+              <mat-icon mat-icon-button type="button" mat-raised-button color="accent"
+                        matTooltip="عرض الإجراءات الطبية للجريح" style=" color: darkgoldenrod;" (click)="onSelect(pat)">
+                <mat-icon>notes</mat-icon>
+              </mat-icon>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+        </table>
+        <mat-paginator dir="rtl" class="d-flex justify-content-end" [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10"></mat-paginator>
+      </div>
+
+    </div>
+
+  </form>
+</body>
+
+
+
+<!-- عرض التشخيص الطبي للجريح  -->
+
+<ng-template #viewmedicalTemplate>
+  <div class="modal-header">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title"> عرض الإجراء الطبي </h4>
+
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active text-center text-uppercase">{{modalMessage}}</p>
+
+  </div>
+</ng-template>

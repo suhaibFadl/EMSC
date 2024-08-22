@@ -1,0 +1,171 @@
+<!-- تسجيل الدخول -->
+
+
+<body>
+
+  <div class="container ">
+    <div class="row">
+      <div class="col-md-4 login-sec">
+        <h2 class="text-center">تسجيل الدخول</h2>
+
+        <div class="text-center mb-3 alert alert-warning alert-dismissible" *ngIf="invalidLogin" role="alert">
+          <strong>{{modalMessage}}</strong>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <!-- ALERT  WARNING END -->
+
+        <form [formGroup]="insertForm">
+
+
+          <mat-form-field class="mat-form-field" appearance="fill">
+            <mat-label> اسم المستخدم</mat-label>
+            <input formControlName="Username" type="text" matInput placeholder="اسم المستخدم..." [errorStateMatcher]="matcher">
+
+            <mat-icon class="mat-icon-color" matSuffix>account_circle</mat-icon>
+            <mat-error *ngIf="Username.hasError('Username') && !Username.hasError('isSubmitted')">
+              الرجاء تعبئة الحقول المطلوبة
+            </mat-error>
+
+          </mat-form-field>
+
+          <mat-form-field class="mat-form-field" appearance="fill">
+            <mat-label>كلمة المرور</mat-label>
+            <input id="password" formControlName="Password" type="password" matInput placeholder="كلمة المرور..." [errorStateMatcher]="matcher">
+            <mat-icon class="mat-icon-color" matSuffix>lock</mat-icon>
+            <mat-error *ngIf="Password.hasError('Password') && !Password.hasError('required')">
+              الرجاء تعبئة الحقول المطلوبة
+            </mat-error>
+          </mat-form-field>
+
+          <div class="button">
+            <button mat-button class="btn btn-login btn-block" [disabled]="insertForm.invalid" (click)="onSubmitt()">تسجيل الدخول</button>
+          </div>
+
+          <!--<p style="cursor: pointer; color: #4a6b96; display: flex; padding-top: 5px;" (click)="onResetModal()">هل نسيت كلمة المرور؟</p>-->
+
+        </form>
+
+      </div>
+
+      <div class="col-md-8 banner-sec">
+
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+          </ol>
+          <div class="carousel-inner" role="listbox">
+            <div class="carousel-item active">
+              <img class="d-block img-fluid" src="../../assets/img/addd.jpg" alt="First slide">
+              <div class="after"></div>
+              <div class="carousel-caption d-none d-md-block">
+                <div class="banner-text">
+                  <h3 class="ttt">مركز طب الطوارئ والدعم</h3>
+                  <p class="pp">نقدم أفضل الخمات على مدار 24 ساعة. </p>
+                </div>
+              </div>
+              </div>
+            <div class="carousel-item">
+              <img class="d-block img-fluid" src="../../assets/img/new.jpg" alt="First slide">
+              <div class="after"></div>
+              <div class="carousel-caption d-none d-md-block">
+                <div class="banner-text">
+                  <h3 class="ttt">مركز طب الطوارئ والدعم</h3>
+                  <p class="pp">سياراتنا على أتم الإستعداد لحالات الطوارئ.</p>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img class="d-block img-fluid" src="../../assets/img/ff.jpg" alt="First slide">
+              <div class="after"></div>
+              <div class="carousel-caption d-none d-md-block">
+                <div class="banner-text">
+                  <h3 class="ttt">مركز طب الطوارئ والدعم</h3>
+                  <p class="pp">برا وجوا. </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+
+
+
+<!---- Reset Password  MODAL START-->
+<ng-template #template>
+  <div class="modal-header">
+
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title"> إعادة تعيين كلمة المرور </h4>
+
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active text-center text-uppercase"> الرجاء تعبئة البيانات المطلوبة</p>
+
+    <form [formGroup]="resetPassForm">
+      <ul class="list-group">
+
+        <li class="list-group-item" >
+          <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+            <mat-label>  اسم المستخدم</mat-label>
+            <input formControlName="username" type="text" id="username" matInput placeholder="اسم المستخدم" [errorStateMatcher]="matcher">
+            <mat-error *ngIf="username.hasError('minlength')">
+              الحد الأدنى لإسم المستخدم 8 أحرف
+            </mat-error>
+            <mat-error *ngIf="username.hasError('maxlength')">
+              الحد الأعلى للإسم المستخدم 20 أحرف
+            </mat-error>
+          </mat-form-field>
+        </li>
+
+
+        <li class="list-group-item">
+          <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+            <mat-label> كلمة المرور</mat-label>
+            <input formControlName="password" type="password" id="password" matInput placeholder="كلمة المرور " [errorStateMatcher]="matcher">
+            <mat-error *ngIf="password.hasError('minlength')">
+              الحد الأدنى لكلمة المرور 6 أحرف
+            </mat-error>
+            <mat-error *ngIf="password.hasError('maxlength')">
+              الحد الأعلى لكلمة المرور 20 أحرف
+            </mat-error>
+          </mat-form-field>
+        </li>
+
+
+        <li class="list-group-item">
+          <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+            <mat-label> تأكيد كلمة المرور</mat-label>
+            <input formControlName="cpassword" type="password" id="cpassword" matInput placeholder="تأكيد كلمة المرور " [errorStateMatcher]="matcher">
+            <mat-error *ngIf="cpassword.hasError('minlength')">
+              الحد الأدنى لكلمة المرور6 أحرف
+            </mat-error>
+            <mat-error *ngIf="cpassword.hasError('maxlength')">
+              الحد الأعلى لكلمة المرور 20 أحرف
+            </mat-error>
+            <mat-error *ngIf="cpassword.hasError('mustMatch')">
+              كلمة المرور غير متطابقة
+            </mat-error>
+          </mat-form-field>
+        </li>
+
+
+        <div class="modal-footer">
+          <button [disabled]="resetPassForm.invalid" class="btn btn-primary mr-auto " (click)="onSubmitSave()">حفظ</button>
+          <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
+        </div>
+      </ul>
+    </form>
+
+  </div>
+</ng-template>

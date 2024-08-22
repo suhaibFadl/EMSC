@@ -1,0 +1,133 @@
+
+<body>
+  <div style=" display: flex;">
+
+    <form [formGroup]="ReportRequestsMedicationsHandling" style="width: initial;">
+      <mat-card style="width: auto; height:auto; text-align:right; margin-left: 5em;">
+        <mat-card-header>
+          <div mat-card-avatar class="example-header-image">
+
+          </div>
+          <mat-card-title style="font-weight:bold">
+            كافة تقارير طلبات الأدوية
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content style="padding-top:10px;">
+          <mat-list>
+
+            <div mat-subheader>عرض التقرير حسب:</div>
+
+            <mat-form-field class=" example-full-width " style="text-align: start; padding-right: 20px;" *ngIf="UserRole=='موظف المركز_الصيدلية'">
+              <mat-select formControlName="OrderState" placeholder="حالات الطلب">
+                <mat-option [value]="9">كافة حالات الطلب</mat-option>
+                <mat-option *ngFor="let b of orderStates" [value]="b.id">
+                  {{b.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+
+            <mat-form-field class=" example-full-width " style="text-align: start; padding-right: 20px;" *ngIf="UserRole=='موظف الصيدلية'">
+              <mat-select formControlName="OrderState" placeholder="حالات الطلب">
+                <mat-option [value]="9">كافة حالات الطلب</mat-option>
+                <mat-option *ngFor="let b of orderStatesPhar" [value]="b.id">
+                  {{b.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+
+            <mat-form-field class=" example-full-width " style="text-align: start; padding-right: 20px;">
+              <mat-select formControlName="MedId" placeholder="الأدوية">
+                <mat-option [value]="0"> كافة الأدوية</mat-option>
+                <mat-option *ngFor="let b of medications" [value]="b.id">
+                  {{b.medEnName}} - {{b.medArName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="UserRole != 'موظف الصيدلية'" class=" example-full-width " style="text-align: start; padding-right: 20px;">
+              <mat-select formControlName="PHId" placeholder="الصيدليات">
+                <mat-option [value]="0"> كافة الصيدليات</mat-option>
+                <mat-option *ngFor="let b of pharmacies" [value]="b.id">
+                  {{b.pharmacyName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <br />
+            <mat-divider></mat-divider>
+
+            <!--<mat-radio-group formControlName="DateType" style="display:inline-flex">
+    <mat-radio-button class="example-full-width mat-form-field-infix" [value]="1">
+      تاريخ الطلب
+    </mat-radio-button>
+    <mat-radio-button class="example-full-width mat-form-field-infix" [value]="2">
+      تاريخ الاستلام من الصيدلية
+    </mat-radio-button>
+  </mat-radio-group>-->
+
+
+            <div style="display:flex" *ngIf="OrderState.value != 3">
+              <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+                <mat-label>من تاريخ الطلب </mat-label>
+                <input matInput [matDatepicker]="dp" [formControl]="fromDate" id="fromDate" placeholder="من تاريخ ">
+                <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                <mat-datepicker #dp></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field style="margin-right:5%" class="example-full-width mat-form-field-infix" appearance="fill">
+                <mat-label>إلى تاريخ الطلب </mat-label>
+                <input matInput [matDatepicker]="dp2" [formControl]="toDate" id="toDate" placeholder="إلى تاريخ ">
+                <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+                <mat-datepicker #dp2></mat-datepicker>
+              </mat-form-field>
+
+
+            </div>
+
+            <div style="display:flex" *ngIf="OrderState.value == 3">
+              <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+                <mat-label>من تاريخ الاستلام</mat-label>
+                <input matInput [matDatepicker]="dp" [formControl]="fromDateD" id="fromDateD" placeholder=" من تاريخ الاستلام">
+                <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                <mat-datepicker #dp></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field style="margin-right:5%" class="example-full-width mat-form-field-infix" appearance="fill">
+                <mat-label>إلى تاريخ الاستلام</mat-label>
+                <input matInput [matDatepicker]="dp2" [formControl]="toDateD" id="toDateD" placeholder="إلى تاريخ">
+                <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+                <mat-datepicker #dp2></mat-datepicker>
+              </mat-form-field>
+
+
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div mat-subheader>تحديد الأعمدة المراد إظهارها:</div>
+            <section class="example-section" style="display: grid;">
+              <mat-checkbox class="example-margin" formControlName="patNameCol">اسم المريض</mat-checkbox>
+              <mat-checkbox class="example-margin" formControlName="natNomCol">الرقم الوطني</mat-checkbox>
+              <mat-checkbox class="example-margin" formControlName="passNomCol">رقم جواز السفر</mat-checkbox>
+              <mat-checkbox class="example-margin" formControlName="medEnMedicineCol">إسم الدواء العلمي</mat-checkbox>
+              <mat-checkbox class="example-margin" formControlName="medArMedicineCol">إسم الدواء التجاري</mat-checkbox>
+              <mat-checkbox class="example-margin" formControlName="pharmacyCol">الصيدلية</mat-checkbox>
+              <mat-checkbox class="example-margin" formControlName="requestQuantCol">الكمية المطلوبة</mat-checkbox>
+              <mat-checkbox class="example-margin" formControlName="requestDateCol">تاريخ الطلب</mat-checkbox>
+              <mat-checkbox class="example-margin" formControlName="prePriceCol">سعر الدواء</mat-checkbox>
+              <mat-checkbox class="example-margin" formControlName="preDaysCol">مدة التوفير</mat-checkbox>
+              <mat-checkbox class="example-margin" formControlName="preDateCol">تاريخ العرض</mat-checkbox>
+              <mat-checkbox class="example-margin" formControlName="dispensedQuantityCol">الكمية المصروفة</mat-checkbox>
+              <mat-checkbox class="example-margin" formControlName="dispensedDateCol">تاريخ الاستلام</mat-checkbox>
+            </section>
+          </mat-list>
+          <br />
+          <button mat-button class="btn btn-view" (click)="onCreatePDF2()">عرض التقرير</button>
+        </mat-card-content>
+      </mat-card>
+    </form>
+
+  </div>
+</body>

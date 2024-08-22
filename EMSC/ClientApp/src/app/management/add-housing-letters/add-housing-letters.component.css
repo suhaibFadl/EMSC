@@ -1,0 +1,74 @@
+@import '../../../styles.css';
+
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.aa::before {
+  content: "حالة إنسانية";
+  color: green;
+  font-weight: bold;
+}
+
+.bb::before {
+  content: "جريح حرب";
+  color: darkred;
+  font-weight: bold;
+}
+
+.ee::before {
+  content: "----";
+  color: #4a6b96;
+  font-weight: bold;
+}
+
+.cc::before {
+  content: "مريض";
+  color: darkred;
+  font-weight: bold;
+}
+
+.dd::before {
+  content: "مرافق";
+  color: #4a6b96;
+  font-weight: bold;
+}
+
+.ee::before {
+  content: "موظف";
+  color: darkslategrey;
+  font-weight: bold;
+}
+
+
+body {
+  padding: 40px;
+}
+
+.modal-header {
+  display: flow-root;
+}
+
+.back-header {
+  border-radius: 10px;
+  background: #000046;
+}
+
+/*.btn-primary {
+  border-radius: 10px;
+  background: linear-gradient(to right, #4286f4,#000046);
+}*/
+
+.container {
+  padding-top: 80px;
+}
+
+.mat-column-add {
+  border-right: 1px solid currentColor;
+  width: 150px;
+  text-align: center;
+  padding-right: 15px;
+  padding-left: 10px;
+}

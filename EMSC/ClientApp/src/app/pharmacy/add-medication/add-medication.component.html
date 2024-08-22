@@ -1,0 +1,215 @@
+<body>
+  <br><br>
+  <form>
+    <button class="btn btn-add" (click)="onAddMedicine()" matTooltip="إضافة دواء"> إضافة دواء + </button>
+
+    <mat-form-field class=" d-flex" style="text-align:start">
+      <input (keyup)="applyFilter($event.target.value)" matInput placeholder="بحث ...">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <div>
+
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef> ر. </th>
+          <td mat-cell *matCellDef="let i = index"> {{i+1}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> إسم الدواء التجاري </th>
+          <td mat-cell *matCellDef="let b"> {{b.medArName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name2">
+          <th mat-header-cell *matHeaderCellDef> إسم الدواء العلمي </th>
+          <td mat-cell *matCellDef="let b"> {{b.medEnName}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="edit">
+
+          <th mat-header-cell *matHeaderCellDef> تعديل  </th>
+          <td mat-cell *matCellDef="let b">
+              <mat-icon mat-icon-button type="button" matTooltip="تعديل الدواء" style=" color: green;" (click)="onUpdateModal(b)">
+                <mat-icon>edit</mat-icon>
+              </mat-icon>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef> حذف </th>
+          <td mat-cell *matCellDef="let b">
+              <mat-icon mat-icon-button type="button"
+                        matTooltip="حذف الدواء" style=" color: #dd1818;" (click)="onDeleteModal(b)">
+                <mat-icon>delete_forever</mat-icon>
+              </mat-icon>
+          </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+      <mat-paginator dir="rtl" class="d-flex justify-content-end" [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10"></mat-paginator>
+
+    </div>
+  </form>
+</body>
+
+
+<!---- add  MODAL START-->
+<ng-template #template>
+  <div class="modal-header">
+
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title"> إضافة دواء </h4>
+
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active text-center text-uppercase"> {{modalMessage1}}</p>
+
+    <form [formGroup]="addForm">
+      <ul class="list-group">
+
+        <li class="list-group-item">
+          <div class="form-group">
+            <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+              <mat-label> اسم الدواء التجاري</mat-label>
+              <input formControlName="MedArName" type="text" id="name" matInput placeholder="ادخل اسم الدواء">
+              <mat-error *ngIf="MedArName.hasError('MedArName') && !MedArName.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <mat-error *ngIf="MedArName.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <mat-error *ngIf="MedArName.hasError('minlength')">
+                الحد الأدنى لإسم الدواء 3أحرف
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </li>
+
+        <li class="list-group-item">
+          <div class="form-group">
+            <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+              <mat-label> اسم الدواء العلمي</mat-label>
+              <input formControlName="MedEnName" type="text" id="name" matInput placeholder="ادخل اسم الدواء">
+              <mat-error *ngIf="MedEnName.hasError('MedEnName') && !MedEnName.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <mat-error *ngIf="MedEnName.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <mat-error *ngIf="MedEnName.hasError('minlength')">
+                الحد الأدنى لإسم الدواء 3أحرف
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </li>
+
+        <div class="modal-footer">
+          <button [disabled]="addForm.invalid" class="btn btn-primary mr-auto " (click)="onSubmit()">حفظ</button>
+          <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
+        </div>
+      </ul>
+    </form>
+
+  </div>
+</ng-template>
+
+
+
+<ng-template #editTemplate>
+  <div class="modal-header">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">تعديل الدواء</h4>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active text-center text-uppercase">{{modalMessage}}</p>
+    <form [formGroup]="updateForm">
+      <ul class="list-group">
+      
+
+        <li class="list-group-item">
+          <div class="form-group">
+            <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+              <mat-label> اسم الدواء التجاري</mat-label>
+              <input formControlName="MedArName" type="text" id="name" matInput placeholder="ادخل اسم الدواء">
+              <mat-error *ngIf="_MedArName.hasError('_MedArName') && !_MedArName.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <mat-error *ngIf="_MedArName.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <mat-error *ngIf="_MedArName.hasError('minlength')">
+                الحد الأدنى لإسم الدواء 3أحرف
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </li>
+
+        <li class="list-group-item">
+          <div class="form-group">
+            <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+              <mat-label> اسم الدواء العلمي</mat-label>
+              <input formControlName="MedEnName" type="text" id="name" matInput placeholder="ادخل اسم الدواء">
+              <mat-error *ngIf="_MedEnName.hasError('_MedEnName') && !_MedEnName.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <mat-error *ngIf="_MedEnName.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <mat-error *ngIf="_MedEnName.hasError('minlength')">
+                الحد الأدنى لإسم الدواء 3أحرف
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </li>
+
+        <div class="modal-footer">
+          <button [disabled]="updateForm.invalid" class="btn btn-primary mr-auto " (click)="onUpdate()">حفظ</button>
+          <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
+        </div>
+      </ul>
+    </form>
+  </div>
+</ng-template>
+
+
+<!--delete branch MODAL START-->
+<ng-template #deleteTemplate>
+  <div class="modal-header">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">حذف الدواء</h4>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active text-center text-uppercase">{{modalMessage2}}</p>
+    <form [formGroup]="deleteForm">
+      <ul class="list-group">
+        <li class="list-group-item" [hidden]="Did">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="id"><i class="fa fa-key"></i></span>
+            </div>
+            <input type="text" class="form-control" formControlName="id" />
+          </div>
+        </li>
+        <div class="modal-footer">
+          <button class="btn btn-primary mr-auto" (click)="onDelete()">حذف</button>
+          <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
+        </div>
+      </ul>
+    </form>
+  </div>
+</ng-template>
+
+

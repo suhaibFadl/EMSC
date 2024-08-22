@@ -1,0 +1,57 @@
+@import '../../../styles.css';
+
+
+mat-icon {
+  position: relative;
+  float: left;
+  top: -3px;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.mat-datepicker-input {
+  width: 85%;
+}
+
+
+.tt::before {
+  content: "قيد الانتظار";
+  color: orange;
+  font-weight: bold;
+}
+
+.ff::before {
+  content: "قيد الإجراء";
+  color: green;
+  font-weight: bold;
+}
+
+.ll::before {
+  content: " تم الرفض";
+  color: #dd1818;
+  font-weight: bold;
+}
+
+
+body {
+  padding: 40px;
+}
+
+.modal-header {
+  display: flow-root;
+}
+
+.back-header {
+  border-radius: 10px;
+  background: #000046;
+}
+/*
+.btn-primary {
+
+  border-radius: 10px;
+ background: linear-gradient(to right, #4286f4,#000046);
+}
+*/
+.container {
+  padding-top: 80px;
+}

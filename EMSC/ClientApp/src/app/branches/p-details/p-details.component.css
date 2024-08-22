@@ -1,0 +1,126 @@
+@import '../../../styles.css';
+
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.example-card {
+  max-width: 400px;
+}
+
+.tt::before {
+  content: "قيد الانتظار";
+  color: var(--light-color);
+  font-weight: bold;
+}
+
+.ff::before {
+  content: "قيد الإجراء";
+  color: orange;
+  font-weight: bold;
+}
+
+.ll::before {
+  content: " تم الرفض";
+  color: #dd1818;
+  font-weight: bold;
+}
+
+.aa::before {
+  content: " تم القبول";
+  color: green;
+  font-weight: bold;
+}
+
+.kk::before {
+  content: " تم إغلاق الملف";
+  color: darkred;
+  font-weight: bold;
+}
+
+.vv::before {
+  content: "قائمة الانتظار";
+  color: firebrick;
+  font-weight: bold;
+}
+
+.example-header-image {
+  background-image: url('../../../assets/img/name.png');
+  background-size: cover;
+}
+
+.card {
+  float: left;
+  padding: 16px;
+  text-align: center;
+  width: 50%;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  margin-right: 2rem;
+}
+
+
+.tab1cards {
+  display: flex;
+  flex-direction: row;
+  margin-top: 2rem;
+  height:40%;
+}
+.tab2cards {
+  display: flex;
+  flex-direction: row;
+  height: 40%;
+}
+
+body {
+  padding: 40px;
+}
+
+
+
+.modal-header {
+  display: flow-root;
+}
+
+.back-header {
+  border-radius: 10px;
+  background: #000046;
+}
+/*
+.btn-primary {
+  border-radius: 10px;
+ background: linear-gradient(to right, #4286f4,#000046);
+}*/
+
+.container {
+  padding-top: 80px;
+}
+
+.form-control {
+  display: inline;
+  width: 100%;
+  height: calc(1.5em + 0.75rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  /* padding-left: 50%; */
+  /* padding-right: 50%; */
+  margin-top: 20px;
+  /*  margin-right: 12px;
+*/
+}
+
+.kk::before {
+  content: " تم إغلاق الملف";
+  color: green;
+  font-weight: bold;
+}

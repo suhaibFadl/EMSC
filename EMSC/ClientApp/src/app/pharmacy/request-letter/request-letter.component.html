@@ -1,0 +1,111 @@
+
+<body>
+
+  <br><br>
+
+  <!--<img src="../../../assets/img/add-user.png" alt="unfinished bingo card" matTooltip="تح الرسالة" (click)="createPdf()" />-->
+  <button class="btn-print" (click)="createPdf()" matTooltip="طباعة الرسالة">طباعة الرسالة</button>
+
+
+  <br />
+
+  <div *ngIf="FirstOpened == 0">
+    <div id="content" class="container" style="background-image: url('../../../assets/img/ReqLetter.jpg');">
+
+
+      <div style=" padding-top: 20%;">
+
+        <div style="display: flex; font-size: 20px; font-weight: bold;padding-right: 10%;">
+          <div style="display: flex; direction: ltr">
+            <p> {{LetterIndex}} :  </p>  <p style="margin-right:10px; "> الرقم التسلسلي </p>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div style="padding-top: 10%; font-size: 18px; font-weight: bold; float: right; text-align: right; width:100%">
+        <p style="padding-right:10%">إسم المريض: {{PatName}}</p>
+        <p style="padding-right:10%">رقم جواز السفر: {{PassportNo}}</p>
+        <p style="padding-right:10%">الرقم الوطني: {{NationalNo}}</p>
+
+      </div>
+
+
+      <div style="padding: 5%; margin-top: 35%; ">
+        <table>
+          <thead>
+            <tr>
+              <th>إسم الدواء التجاري</th>
+              <th>إسم الدواء العلمي</th>
+              <th>كمية الطلب</th>
+              <th>تاريخ الطلب</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of data">
+              <td>{{p.medArName}}</td>
+              <td>{{p.medEnName}}</td>
+              <td>{{p.requestedQuantity}}</td>
+              <td>{{p.requestDate | date:'yyyy-MM-dd'}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div *ngIf="FirstOpened == 1">
+    <div id="content" class="container" style="background-image: url('../../../assets/img/ReqLetterCopy.jpg');">
+
+
+      <div style=" padding-top: 20%;">
+
+        <div style="display: flex; font-size: 20px; font-weight: bold;padding-right: 10%;">
+          <div style="display: flex; direction: ltr">
+            <p> {{LetterIndex}} :  </p>  <p style="margin-right:10px; "> الرقم التسلسلي </p>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div style="padding-top: 10%; font-size: 18px; font-weight: bold; float: right; text-align: right; width:100%">
+        <p style="padding-right:10%">إسم المريض: {{PatName}}</p>
+        <p style="padding-right:10%">رقم جواز السفر: {{PassportNo}}</p>
+        <p style="padding-right:10%">الرقم الوطني: {{NationalNo}}</p>
+
+      </div>
+
+
+      <div style="padding: 5%; margin-top: 35%; ">
+        <table>
+          <thead>
+            <tr>
+              <th>إسم الدواء بالعربي</th>
+              <th>إسم الدواء بالإنجليزي</th>
+              <th>كمية الطلب</th>
+              <th>تاريخ الطلب</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of data">
+              <td>{{p.medArName}}</td>
+              <td>{{p.medEnName}}</td>
+              <td>{{p.requestedQuantity}}</td>
+              <td>{{p.requestDate | date:'yyyy-MM-dd'}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+    </div>
+  </div>
+
+
+</body>

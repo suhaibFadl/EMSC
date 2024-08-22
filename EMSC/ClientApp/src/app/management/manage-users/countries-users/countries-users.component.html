@@ -1,0 +1,311 @@
+<!-- Show supervisors in countries to the main management -->
+
+<nav mat-tab-nav-bar>
+  <a mat-tab-link style="width:50%"
+     *ngFor="let link of navLinks"
+     [routerLink]="link.link"
+     routerLinkActive #rla="routerLinkActive"
+     [active]="rla.isActive">
+    {{link.label}}
+  </a>
+</nav>
+
+<body>
+
+  <br><br>
+  <form>
+
+    <!-- button for add new user -->
+    <img src="../../../assets/img/add-user.png" alt="unfinished bingo card" matTooltip="إضافة مستخدم جديد" (click)="onAddUser()" />
+    <br />
+    <mat-form-field class=" d-flex" style="text-align:start">
+      <input (keyup)="applyFilter($event.target.value)" matInput placeholder="بحث ...">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <div>
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef> ر. </th>
+          <td mat-cell *matCellDef="let i = index"> {{i+1}} </td>
+        </ng-container>
+        <!--<ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> id  </th>
+          <td mat-cell *matCellDef="let u"> {{u.id}} </td>
+        </ng-container>-->
+        <ng-container matColumnDef="first">
+          <th mat-header-cell *matHeaderCellDef> إسم المستخدم </th>
+          <td mat-cell *matCellDef="let u"> {{u.userName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="second">
+          <th mat-header-cell *matHeaderCellDef>اسم الموظف بالكامل </th>
+          <td mat-cell *matCellDef="let u"> {{u.phoneNumber}} </td>
+        </ng-container>
+        <ng-container matColumnDef="third">
+          <th mat-header-cell *matHeaderCellDef> الصفة  </th>
+          <td mat-cell *matCellDef="let u"> {{u.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="fourth">
+          <th mat-header-cell *matHeaderCellDef> الدولة</th>
+          <td mat-cell *matCellDef="let u"> {{u.country}} </td>
+        </ng-container>
+
+
+
+        <ng-container matColumnDef="block">
+          <th mat-header-cell *matHeaderCellDef> إيقاف الحساب </th>
+
+          <td mat-cell *matCellDef="let c">
+            <div *ngIf="c.accessFailedCount == '1'">
+              <section class="example-section">
+                <mat-icon mat-icon-button type="button" mat-raised-button color="accent" matTooltip="إيقاف حساب المستخدم " style=" color: silver;" (click)="onBlockModal(c)"><mat-icon>block</mat-icon></mat-icon>
+              </section>
+            </div>
+
+            <div *ngIf="c.accessFailedCount == '0'">
+              <section class="example-section">
+                <mat-icon mat-icon-button type="button" mat-raised-button color="accent" matTooltip="تفعيل حساب المستخدم " style=" color: red;" (click)="onBlockModall(c)"><mat-icon>block</mat-icon></mat-icon>
+              </section>
+            </div>
+
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef> حذف </th>
+          <td mat-cell *matCellDef="let c"> <mat-icon mat-icon-button type="button" mat-raised-button color="accent" matTooltip="حذف المستخدم" style=" color: #dd1818;" (click)="onDeleteModal(c)"><mat-icon>delete_forever</mat-icon></mat-icon></td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+
+
+      <mat-paginator dir="rtl" class="d-flex justify-content-end" [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10"></mat-paginator>
+
+    </div>
+  </form>
+
+
+</body>
+
+
+<!--user account disabled  MODAL START-->
+<ng-template #blockTemplate>
+  <div class="modal-header">
+    <button type="button" class="close pull-right " aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+
+    </button>
+    <h4 class="modal-title pull-right"> إيقاف حساب المستخدم</h4>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active">{{modalMessage2}}</p>
+    <form [formGroup]="BlockForm">
+      <ul class="list-group">
+        <li class="list-group-item" [hidden]="Did">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="id"><i class="fa fa-key"></i></span>
+            </div>
+            <input type="text" class="form-control" formControlName="id" />
+          </div>
+        </li>
+        <div class="modal-footer">
+          <button class="btn btn-primary mr-auto" (click)="onBlock()">إيقاف الحساب</button>
+          <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
+        </div>
+      </ul>
+    </form>
+  </div>
+</ng-template>
+
+
+<!-- activate user account MODAL START-->
+<ng-template #unblockTemplate>
+  <div class="modal-header">
+    <button type="button" class="close pull-right " aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+
+    </button>
+    <h4 class="modal-title pull-right"> تفعيل حساب المستخدم</h4>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active">{{modalMessage3}}</p>
+    <form [formGroup]="BlockForm">
+      <ul class="list-group">
+        <li class="list-group-item" [hidden]="Did">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="id"><i class="fa fa-key"></i></span>
+            </div>
+            <input type="text" class="form-control" formControlName="id" />
+          </div>
+        </li>
+        <div class="modal-footer">
+          <button class="btn btn-primary mr-auto" (click)="onBlock()">تفعيل الحساب</button>
+          <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
+        </div>
+      </ul>
+    </form>
+  </div>
+</ng-template>
+
+
+
+<!--delete user account MODAL START-->
+<ng-template #deleteTemplate>
+  <div class="modal-header">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title pull-right">حذف المستخدم</h4>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active">{{modalMessage2}}</p>
+    <form [formGroup]="deleteForm">
+      <ul class="list-group">
+        <li class="list-group-item" [hidden]="UID">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="id"><i class="fa fa-key"></i></span>
+            </div>
+            <input type="text" class="form-control" formControlName="id" />
+          </div>
+        </li>
+        <div class="modal-footer">
+          <button class="btn btn-primary mr-auto" (click)="onDelete()">حذف</button>
+          <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
+        </div>
+      </ul>
+    </form>
+  </div>
+</ng-template>
+
+
+<!--add user MODAL START-->
+<ng-template #template>
+  <div class="modal-header">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title"> إضافة مستخدم جديد </h4>
+
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active text-center text-uppercase">{{modalMessage}}</p>
+    <form [formGroup]="insertForm">
+      <ul class="list-group">
+
+        <li class="list-group-item" [hidden]="id">
+          <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+            <mat-label>  اسم المستخدم</mat-label>
+            <input formControlName="username" type="text" id="username" matInput placeholder="اسم المستخدم" [errorStateMatcher]="matcher">
+            <mat-error *ngIf="username.hasError('minlength')">
+              الحد الأدنى لإسم المستخدم 8 أحرف
+            </mat-error>
+            <mat-error *ngIf="username.hasError('maxlength')">
+              الحد الأعلى للإسم المستخدم 20 أحرف
+            </mat-error>
+          </mat-form-field>
+        </li>
+
+        <li class="list-group-item">
+          <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+            <mat-label>  اسم الموظف بالكامل</mat-label>
+            <input formControlName="PhoneNumber" type="text" id="PhoneNumber" matInput placeholder="اسم الموظف بالكامل" [errorStateMatcher]="matcher">
+
+            <mat-error *ngIf="PhoneNumber.hasError('minlength')">
+              الحد الأدنى لإسم المستخدم 8 أحرف
+            </mat-error>
+            <mat-error *ngIf="PhoneNumber.hasError('maxlength')">
+              الحد الأعلى للإسم المستخدم 20 أحرف
+            </mat-error>
+          </mat-form-field>
+        </li>
+
+        <li class="list-group-item">
+          <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+            <mat-label> كلمة المرور</mat-label>
+            <input formControlName="password" type="password" id="password" matInput placeholder="كلمة المرور " [errorStateMatcher]="matcher">
+            <mat-error *ngIf="password.hasError('minlength')">
+              الحد الأدنى لكلمة المرور 6 أحرف
+            </mat-error>
+            <mat-error *ngIf="password.hasError('maxlength')">
+              الحد الأعلى لكلمة المرور 15 أحرف
+            </mat-error>
+          </mat-form-field>
+        </li>
+
+
+        <li class="list-group-item">
+          <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+            <mat-label> تأكيد كلمة المرور</mat-label>
+            <input formControlName="cpassword" type="password" id="cpassword" matInput placeholder="تأكيد كلمة المرور " [errorStateMatcher]="matcher">
+            <mat-error *ngIf="cpassword.hasError('minlength')">
+              الحد الأدنى لكلمة المرور 6 أحرف
+            </mat-error>
+            <mat-error *ngIf="cpassword.hasError('maxlength')">
+              الحد الأعلى لكلمة المرور 15 أحرف
+            </mat-error>
+            <mat-error *ngIf="cpassword.hasError('mustMatch')">
+              كلمة المرور غير متطابقة
+            </mat-error>
+          </mat-form-field>
+        </li>
+
+
+        <li class="list-group-item">
+          <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+            <mat-label>الصفة</mat-label>
+            <mat-select formControlName="Role" [(ngModel)]="Role">
+              <mat-option *ngFor="let r of roles" [value]="r.name">
+                {{r.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </li>
+
+
+        <li class="list-group-item">
+          <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+            <mat-label>الدولة</mat-label>
+            <mat-select formControlName="CountryId" [(ngModel)]="CountryId">
+              <mat-option *ngFor="let h of countries" [value]="h.id">
+                {{h.country}}
+              </mat-option>
+            </mat-select>
+
+          </mat-form-field>
+        </li>
+
+
+        <div class="modal-footer">
+          <button [disabled]="insertForm.invalid" class="btn btn-primary mr-auto" (click)="modalRef.hide();onSubmit()">إنشاء الحساب</button>
+          <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
+        </div>
+      </ul>
+    </form>
+  </div>
+</ng-template>
+
+
+<!--confirm adding user MODAL START-->
+<ng-template #modalSuccededtemplate>
+  <div class="modal-header">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title pull-left">إضافة حساب للمستخدم</h4>
+
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active"> {{modalMessage}}</p>
+
+    <ul class="list-group" *ngFor="let erro of errorList">
+      <li class="list-group-item">{{erro}}</li>
+    </ul>
+
+  </div>
+</ng-template>
