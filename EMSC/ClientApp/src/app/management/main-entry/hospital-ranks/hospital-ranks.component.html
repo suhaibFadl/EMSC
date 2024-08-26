@@ -1,10 +1,8 @@
-<!--الادارة:- عرض الدول و إضافة و تعديل و حذف دولة  -->
 
 <body>
-
   <br><br>
   <form>
-    <button class="btn btn-add" (click)="onAddInjuryEvent()" matTooltip="إضافة حدث إصابة"> إضافة حدث إصابة + </button>
+    <button class="btn btn-add" (click)="onAddHospitalRank()" matTooltip="إضافة تصنيف"> إضافة تصنيف + </button>
 
     <mat-form-field class=" d-flex" style="text-align:start">
       <input (keyup)="applyFilter($event.target.value)" matInput placeholder="بحث ...">
@@ -17,11 +15,11 @@
         <ng-container matColumnDef="index">
           <th mat-header-cell *matHeaderCellDef> ر. </th>
           <td mat-cell *matCellDef="let i = index"> {{i+1}} </td>
-        </ng-container>F
+        </ng-container>
 
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> حدث الإصابة </th>
-          <td mat-cell *matCellDef="let c"> {{c.event}} </td>
+          <th mat-header-cell *matHeaderCellDef> التصنيفات </th>
+          <td mat-cell *matCellDef="let c"> {{c.rankName}} </td>
         </ng-container>
 
 
@@ -29,13 +27,13 @@
           <th mat-header-cell *matHeaderCellDef> تعديل </th>
 
           <td mat-cell *matCellDef="let c">
-            <mat-icon mat-icon-button type="button" mat-raised-button color="accent" matTooltip="تعديل حدث الإصابة" style=" color: green;" (click)="onUpdateModal(c)"><mat-icon>edit</mat-icon></mat-icon>
+            <mat-icon mat-icon-button type="button" mat-raised-button color="accent" matTooltip="تعديل تصنيف" style=" color: green;" (click)="onUpdateModal(c)"><mat-icon>edit</mat-icon></mat-icon>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="delete">
           <th mat-header-cell *matHeaderCellDef> حذف </th>
-          <td mat-cell *matCellDef="let c"> <mat-icon mat-icon-button type="button" mat-raised-button color="accent" matTooltip="حذف حدث الإصابة" style=" color: #dd1818;" (click)="onDeleteModal(c)"><mat-icon>delete_forever</mat-icon></mat-icon></td>
+          <td mat-cell *matCellDef="let c"> <mat-icon mat-icon-button type="button" mat-raised-button color="accent" matTooltip="حذف تصنيف" style=" color: #dd1818;" (click)="onDeleteModal(c)"><mat-icon>delete_forever</mat-icon></mat-icon></td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -55,14 +53,14 @@
 
 
 
-<!--add  MODAL START-->
+<!--Add  MODAL START-->
 <ng-template #template>
   <form [formGroup]="addForm">
     <div class="modal-header">
       <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
         <span aria-hidden="true">&times;</span>
       </button>
-      <h4 class="modal-title">إضافة حدث إصابة جديد</h4>
+      <h4 class="modal-title">إضافة اسم تصنيف جديد</h4>
     </div>
     <div class="modal-body text-center">
       <p class="list-group-item active text-center text-uppercase">{{modalMessage1}}</p>
@@ -70,16 +68,32 @@
         <li class="list-group-item" [hidden]="id">
           <div class="form-group">
             <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
-              <mat-label> اسم حدث الإصابة</mat-label>
-              <input formControlName="Event" type="text" id="Event" matInput placeholder="ادخل اسم حدث الإصابة" [errorStateMatcher]="matcher">
-              <mat-error *ngIf="Event.hasError('Event') && !Event.hasError('required')">
+              <mat-label> اسم تصنيف</mat-label>
+              <input formControlName="rankName" type="text" id="rankName" matInput placeholder="أدخل اسم تصنيف" [errorStateMatcher]="matcher">
+              <mat-error *ngIf="rankControl.hasError('rankName') && !rankControl.hasError('required')">
                 الرجاء تعبئة الحقول المطلوبة
               </mat-error>
-              <mat-error *ngIf="Event.hasError('required')">
+              <mat-error *ngIf="rankControl.hasError('required')">
                 الرجاء تعبئة الحقول المطلوبة
               </mat-error>
-              <mat-error *ngIf="Event.hasError('minlength')">
-                الحد الأدنى لإسم حدث الإصابة 3أحرف
+              <!--<mat-error *ngIf="rankControl.hasError('minlength')">
+                الحد الأدنى لإسم تصنيف 3أحرف
+              </mat-error>-->
+            </mat-form-field>
+          </div>
+        </li>
+        <li class="list-group-item" [hidden]="id">
+          <div class="form-group">
+            <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+              <mat-label> نسبة التصنيف</mat-label>
+              <input formControlName="rankPer" type="text" id="rankPerControl" matInput placeholder="أدخل نسبة التصنيف" [errorStateMatcher]="matcher">
+              <mat-error *ngIf="rankPerControl.hasError('rankPer') && !rankPerControl.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <mat-error *ngIf="rankPerControl.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error><mat-error *ngIf="rankPerControl.hasError('pattern')">
+                الرجاء إدخال قيم رقمية
               </mat-error>
             </mat-form-field>
           </div>
@@ -94,13 +108,13 @@
   </form>
 </ng-template>
 
-<!--edit event Modal-->
+<!--edit Rank Control Modal-->
 <ng-template #editTemplate>
   <div class="modal-header">
     <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
-    <h4 class="modal-title">تعديل حدث الإصابة </h4>
+    <h4 class="modal-title">تعديل تصنيف </h4>
   </div>
   <div class="modal-body text-center">
     <p class="list-group-item active">{{modalMessage}}</p>
@@ -109,17 +123,34 @@
         <li class="list-group-item" [hidden]="id">
           <div class="form-group">
             <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
-              <mat-label> اسم حدث الإصابة</mat-label>
-              <input formControlName="Event" type="text" id="Event" matInput placeholder="ادخل اسم حدث الإصابة" [errorStateMatcher]="matcher">
-              <mat-error *ngIf="_Event.hasError('_event') && !_Event.hasError('required')">
+              <mat-label> اسم التصنيف</mat-label>
+              <input formControlName="rankName" type="text" id="_rankControl" matInput placeholder="ادخل اسم تصنيف" [errorStateMatcher]="matcher">
+              <mat-error *ngIf="_rankControl.hasError('_event') && !_rankControl.hasError('required')">
                 الرجاء تعبئة الحقول المطلوبة
               </mat-error>
-              <mat-error *ngIf="_Event.hasError('required')">
+              <mat-error *ngIf="_rankControl.hasError('required')">
                 الرجاء تعبئة الحقول المطلوبة
               </mat-error>
-              <mat-error *ngIf="_Event.hasError('minlength')">
-                الحد الأدنى لإسم حدث الإصابة 3أحرف
+              <!--<mat-error *ngIf="_rankControl.hasError('minlength')">
+                الحد الأدنى لإسم تصنيف 3أحرف
+              </mat-error>-->
+            </mat-form-field>
+          </div>
+        </li>
+        <li class="list-group-item" [hidden]="id">
+          <div class="form-group">
+            <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+              <mat-label> نسبة التصنيف</mat-label>
+              <input formControlName="rankPer" type="text" id="_rankPer" matInput placeholder="ادخل اسم تصنيف" [errorStateMatcher]="matcher">
+              <mat-error *ngIf="_rankPerControl.hasError('_event') && !_rankPerControl.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
               </mat-error>
+              <mat-error *ngIf="_rankPerControl.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <!--<mat-error *ngIf="_rankControl.hasError('minlength')">
+                الحد الأدنى لإسم تصنيف 3أحرف
+              </mat-error>-->
             </mat-form-field>
           </div>
         </li>
@@ -134,14 +165,14 @@
 
 
 
-<!--delete event MODAL START-->
+<!--delete Rank Control MODAL START-->
 
 <ng-template #deleteTemplate>
   <div class="modal-header">
     <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
-    <h4 class="modal-title pull-right">حذف حدث الإصابة</h4>
+    <h4 class="modal-title pull-right">حذف تصنيف</h4>
   </div>
   <div class="modal-body text-center">
     <p class="list-group-item active">{{modalMessage2}}</p>
@@ -163,4 +194,3 @@
     </form>
   </div>
 </ng-template>
-

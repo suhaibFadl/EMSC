@@ -91,6 +91,18 @@
             </mat-form-field>
           </div>
         </li>
+        <li class="list-group-item" [hidden]="id">
+          <div class="form-group">
+            <mat-form-field appearance="fill">
+              <mat-label>تصنيف المصحة</mat-label>
+              <mat-select  formControlName ="rank" name="rank">
+                <mat-option *ngFor="let rank of hospitalRanks" [value]="rank.id">
+                  {{rank.rankName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </li>
         <div class="modal-footer">
           <button [disabled]="addForm.invalid" class="btn btn-primary mr-auto " (click)="onSubmit()">حفظ</button>
           <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
@@ -115,6 +127,9 @@
     <form [formGroup]="updateForm">
       <ul class="list-group">
         <li class="list-group-item" [hidden]="_id">
+          <div class="form-group">
+
+          </div>
         </li>
         <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
           <mat-label> اسم المصحة</mat-label>
@@ -128,6 +143,19 @@
           <mat-error *ngIf="_hospName.hasError('minlength')">
             الحد الأدنى لإسم المصحة 3أحرف
           </mat-error>
+        </mat-form-field>
+        <li class="list-group-item" [hidden]="_id">
+          <div class="form-group">
+
+          </div>
+        </li>
+        <mat-form-field appearance="fill">
+          <!--<mat-label>تصنيف المصحة</mat-label>-->
+          <mat-select formControlName="rank" name="_rank">
+            <mat-option *ngFor="let rank of hospitalRanks" [value]="rank.id">
+              {{rank.rankName}}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
         <div class="modal-footer">
           <button [disabled]="updateForm.invalid" class="btn btn-primary mr-auto " (click)="onUpdate()">حفظ</button>

@@ -1,59 +1,52 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy, TemplateRef, ElementRef, Input, Directive } from '@angular/core';
-import { AccountService } from '../../../services/account.service';
-import { Observable, Subject } from 'rxjs';
+import { ChangeDetectorRef, Component, Directive, ElementRef, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators, NgForm } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { DataTableDirective } from 'angular-datatables';
-import { Hospital } from '../../../interfaces/hospital';
-import { HospitalService } from '../../../services/hospital.service';
-import * as $ from 'jquery';
 import { MatTableDataSource, } from '@angular/material/table';
+import { HospitalRank } from '../../../interfaces/hospital-ranks';
+import { HospitalRanksService } from './../../../services/hospital-ranks.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
+import { AccountService } from '../../../services/account.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatInput } from '@angular/material/input';
 import { AppComponent } from '../../../app.component';
-import { HospitalRanksComponent } from '../hospital-ranks/hospital-ranks.component';
-import { HospitalRanksService } from '../../../services/hospital-ranks.service';
-import { HospitalRank } from '../../../interfaces/hospital-ranks';
+
+
 
 @Directive({
   selector: '[errorStateMatcherDirective]'
 })
-
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
 }
-@Component({
-  selector: 'app-clinics-inside',
-  templateUrl: './clinics-inside.component.html',
-  styleUrls: ['./clinics-inside.component.css']
-})
-export class ClinicsInsideComponent implements OnInit {
 
-  dataSource!: MatTableDataSource<Hospital>;
-  hospitalRanks!: HospitalRank[];
+@Component({
+  selector: 'app-hospital-ranks',
+  templateUrl: './hospital-ranks.component.html',
+  styleUrls: ['./hospital-ranks.component.css']
+})
+export class HospitalRanksComponent implements OnInit {
+  dataSource!: MatTableDataSource<HospitalRank>;
+
+
   displayedColumns: string[] = ['index', 'name', 'edit', 'delete'];
-  clickedRows = new Set<Hospital>();
-  @Input() input!: MatInput;
-  @Input() matcher!: ErrorStateMatcher;
 
   addForm!: FormGroup;
-  hospName!: FormControl;
-  rank!: FormControl;
+  rankControl!: FormControl;
+  rankPerControl!: FormControl;
 
 
 
   updateForm!: FormGroup;
   _id!: FormControl;
-  _hospName!: FormControl;
-  _rank!: FormControl;
+  _rankControl!: FormControl;
+  _rankPerControl!: FormControl;
 
 
   deleteForm!: FormGroup;
@@ -64,6 +57,8 @@ export class ClinicsInsideComponent implements OnInit {
   UserId!: string;
   UserRole!: string;
   id!: number;
+  @Input() input!: MatInput;
+  @Input() matcher!: ErrorStateMatcher;
 
   // add Modal
   @ViewChild('addTemplate') addmodal!: TemplateRef<any>;
@@ -77,53 +72,51 @@ export class ClinicsInsideComponent implements OnInit {
   @ViewChild('filter', { static: false }) filter!: ElementRef;
 
 
-
   constructor(
     private formbulider: FormBuilder,
-    private hos: HospitalService,
+    private hospitalRankServices: HospitalRanksService,
     private fb: FormBuilder,
     private chRef: ChangeDetectorRef,
     private router: Router,
     private modalService: BsModalService,
     private rout: ActivatedRoute,
     private acct: AccountService,
-    private hospitalRankServices: HospitalRanksService,
     private app: AppComponent,
-
-  ) {
-
-  }
-
-
+  ) { }
   modalRef!: BsModalRef;
   modalMessage!: string;
-  modalMessage2!: string;
   modalMessage1!: string;
+  modalMessage2!: string;
+
 
   ngOnInit(): void {
+    this.acct.currentuserid.subscribe(result => { this.UserId = result });
+    this.acct.currentUserRole.subscribe(result => { this.UserRole = result });
 
     this.acct.currentuserid.subscribe(result => { this.UserId = result });
     this.acct.currentUserRole.subscribe(result => { this.UserRole = result });
-    //=======================  add form
-    this.hospName = new FormControl('', [Validators.required, Validators.minLength(3)]);
-    this.rank = new FormControl('', [Validators.required]);
-    this.addForm = this.fb.group({
-      'hospName': this.hospName,
-      'rank': this.rank,
-    });
 
+
+    //=======================  add form
+    this.rankControl = new FormControl('', [Validators.required]);
+    this.rankPerControl = new FormControl('', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]);
+
+    this.addForm = this.fb.group({
+      'rankName': this.rankControl,
+      'rankPer': this.rankPerControl,
+    });
 
 
     //======================= update form
     this._id = new FormControl('', [Validators.required]);
-    this._hospName = new FormControl('', [Validators.required, Validators.minLength(3)]);
-    this._rank = new FormControl('', [Validators.required]);
+    this._rankControl = new FormControl('', [Validators.required]);
+    this._rankPerControl = new FormControl('', [Validators.required]);
 
 
     this.updateForm = this.fb.group({
       'id': this._id,
-      'hospName': this._hospName,
-      'rank': this._rank,
+      'rankName': this._rankControl,
+      'rankPer': this._rankPerControl,
     });
 
     //=======================  delete form
@@ -133,114 +126,106 @@ export class ClinicsInsideComponent implements OnInit {
         'id': this.Did,
       });
 
+    //this.matcher = new MyErrorStateMatcher();
 
-    this.matcher = new MyErrorStateMatcher();
 
-    this.loadAllHospitals();
     this.loadAllHospitalRanks();
-
   }
 
-  loadAllHospitals() {
-    this.hos.GetHospitals().subscribe(data => {
-      console.log(data)
+  loadAllHospitalRanks() {
+    this.hospitalRankServices.GetHospitalRanks().subscribe(data => {
+      console.log(data);
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
   }
 
-  loadAllHospitalRanks() {
-    this.hospitalRankServices.GetHospitalRanks().subscribe(data => {
-      this.hospitalRanks = data;
-    });
-  }
-  //add modal hospital
 
-  onAddHospital() {
-    this.modalMessage1 = "الرجاء إدخال اسم المصحة ";
+  //add modal Hospita lRank
+  onAddHospitalRank() {
+    this.modalMessage1 = "الرجاء إدخال اسم تصنيف ";
+
     this.modalRef = this.modalService.show(this.modal);
   }
 
   onSubmit() {
-    let newHospital = this.addForm.value;
-    console.log(newHospital);
-    this.hos.AddHospital(newHospital).subscribe(
+    let newHospitalRank: HospitalRank = this.addForm.value;
+    newHospitalRank.userId = this.UserId;
+    newHospitalRank.userDate = new Date();
+    this.hospitalRankServices.AddHospitalRank(newHospitalRank).subscribe(
       result => {
-        this.hos.clearCache();
-        this.loadAllHospitals();
+        this.hospitalRankServices.clearCache();
+        this.loadAllHospitalRanks();
         this.modalRef.hide();
         this.addForm.reset();
-        this.app.showToasterSuccess();      },
-      error => this.modalMessage1 = "تم إضافة هذه المصحة من قبل"
+        this.app.showToasterSuccess();
+      },
+      error => this.modalMessage1 = "تم إضافة هذا التصنيف من قبل"
     )
 
   }
 
-  //hospital update modal
-  onUpdateModal(edithospital: Hospital): void {
-    this.modalMessage = "الرجاء ادخال اسم المصحة الجديد ";
-    this._id.setValue(edithospital.id);
-    this._hospName.setValue(edithospital.hospName);
-    this._rank.setValue(edithospital.rank);
+  //Hospital Rank update modal
+  onUpdateModal(editrankControl: HospitalRank): void {
+    this.modalMessage = "الرجاء ادخال اسم التصنيف الجديد ";
+    this._id.setValue(editrankControl.id);
+    this._rankControl.setValue(editrankControl.rankName);
+    this._rankPerControl.setValue(editrankControl.rankPer);
     this.updateForm.setValue({
       'id': this._id.value,
-      'hospName': this._hospName.value,
-      'rank': this._rank.value,
+      'rankName': this._rankControl.value,
+      'rankPer':  this._rankPerControl.value
     });
 
     this.modalRef = this.modalService.show(this.editmodal);
   }
 
-
   onUpdate() {
-    let edithospital = this.updateForm.value;
-    this.hos.updatehospital(edithospital.id, edithospital).subscribe(
+    let editrankControl = this.updateForm.value;
+    console.log(editrankControl);
+    this.hospitalRankServices.updateHospitalRank(editrankControl.id, editrankControl).subscribe(
       result => {
-        this.hos.clearCache();
-        this.loadAllHospitals();
+        this.hospitalRankServices.clearCache();
+        this.loadAllHospitalRanks();
         this.modalRef.hide();
         this.updateForm.reset();
         this.app.showToasterSuccess();
       },
-      error => this.modalMessage = "اسم المصحة موجود من قبل"
+      error => this.modalMessage = "اسم تصنيف موجود من قبل"
+
     )
+
   }
 
-  //hospital delete modal
-  onDeleteModal(hospitaldelete: Hospital) {
+  // delete modal country
+  onDeleteModal(deleteRankControl: HospitalRank) {
+
     this.modalMessage2 = "هل أنت متأكد من عملية الحذف ؟";
-    this.Did.setValue(hospitaldelete.id);
+    this.Did.setValue(deleteRankControl.id);
     this.deleteForm.setValue({
       'id': this.Did.value
     });
 
     this.modalRef = this.modalService.show(this.deletemodal);
   }
-  onDelete(): void {
-    let deletecountry = this.deleteForm.value;
 
-    this.hos.DeleteHospital(deletecountry.id).subscribe(result => {
-      this.hos.clearCache();
-      this.loadAllHospitals();
+  onDelete(): void {
+    let deletedRank = this.deleteForm.value;
+    console.log(deletedRank);
+    this.hospitalRankServices.DeleteHospitalRank(deletedRank.id).subscribe(result => {
+      this.hospitalRankServices.clearCache();
+      this.loadAllHospitalRanks ();
       this.modalRef.hide();
       this.deleteForm.reset();
-  
-
       this.app.showToasterSuccess();
-
-
     },
-      error => this.modalMessage2 = "لا يمكن حذف المصحة لارتباطها ببيانات أخرى"
+      error => this.modalMessage2 = "لا يمكن حذف تصنيف لإرتباطها ببيانات أخرى"
+
     )
   }
-
-
-
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-
-
 }

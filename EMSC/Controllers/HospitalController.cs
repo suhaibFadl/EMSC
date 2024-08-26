@@ -33,7 +33,8 @@ namespace EMSC.Controllers
         }
 
         //============================ ADD Hospital ==============================
-        [Authorize(Policy = "RequireEmployeeManagementRole")]
+        //[Authorize(Policy = "RequireEmployeeManagementRole")]
+        [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> AddHospital([FromBody] Hospitals formdata)
         {
@@ -41,7 +42,8 @@ namespace EMSC.Controllers
 
             var newHospital = new Hospitals
             {
-                HospName = formdata.HospName
+                HospName = formdata.HospName,
+                Rank = formdata.Rank
 
             };
             bool HospitalExists = _db.Hospitals.Any(x => x.HospName == newHospital.HospName);
@@ -83,6 +85,7 @@ namespace EMSC.Controllers
 
             // If the mail was found
             findHospital.HospName = fromdata.HospName;
+            findHospital.Rank = fromdata.Rank;
             _db.Entry(findHospital).State = EntityState.Modified;
 
             await _db.SaveChangesAsync();

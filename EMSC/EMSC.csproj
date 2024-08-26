@@ -76,6 +76,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Remove="clientapp\src\app\interfaces\hospital-ranks.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="ClientApp\src\app\branches\" />
     <Folder Include="ClientApp\src\app\countries\" />
     <Folder Include="ClientApp\src\app\follow-up-committee\" />

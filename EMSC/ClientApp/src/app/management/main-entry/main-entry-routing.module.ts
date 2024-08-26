@@ -8,6 +8,7 @@ import { HotelsOutsideComponent } from './hotels-outside/hotels-outside.componen
 import { AuthGuardService } from '../../guards/auth-guard.service';
 import { DependencyComponent } from './dependency/dependency.component';
 import { InjuryEventsComponent } from './injury-events/injury-events.component';
+import { HospitalRanksComponent } from './hospital-ranks/hospital-ranks.component';
 
 const routes: Routes = [
   { path: 'branches', component: BranchesComponent, canActivate: [AuthGuardService] },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'clinics-outside', component: ClinicsOutsideComponent, canActivate: [AuthGuardService] },
   { path: 'hotels-outside', component: HotelsOutsideComponent, canActivate: [AuthGuardService] },
   { path: 'dependency', component: DependencyComponent, canActivate: [AuthGuardService] },
+  { path: 'hospital-ranks', component: HospitalRanksComponent, canActivate: [AuthGuardService] },
   { path: 'injury-events', component: InjuryEventsComponent, canActivate: [AuthGuardService] },
 ];
 

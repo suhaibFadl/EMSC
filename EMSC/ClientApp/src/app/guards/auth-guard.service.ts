@@ -66,6 +66,7 @@ export class AuthGuardService implements CanActivate {
         case '/management/main-entry/hotels-outside':
         case '/management/main-entry/dependency':
         case '/management/main-entry/injury-events':
+        case '/management/main-entry/hospital-ranks':
           {
             if (localStorage.getItem("userRole") === "Admin" || "الإدارة") {
               return true;

@@ -41,8 +41,9 @@ import { NotificationService } from '../../notification.service';
 import { ToastrModule } from 'ngx-toastr';
 import { DependencyComponent } from './dependency/dependency.component';
 import { InjuryEventsComponent } from './injury-events/injury-events.component';
+import { HospitalRanksComponent } from './hospital-ranks/hospital-ranks.component';
 @NgModule({
-  declarations: [BranchesComponent, CountriesComponent, ClinicsInsideComponent, ClinicsOutsideComponent, HotelsOutsideComponent, DependencyComponent, InjuryEventsComponent],
+  declarations: [BranchesComponent, CountriesComponent, ClinicsInsideComponent, ClinicsOutsideComponent, HotelsOutsideComponent, DependencyComponent, InjuryEventsComponent, HospitalRanksComponent],
   imports: [
     CommonModule,
     MainEntryRoutingModule,

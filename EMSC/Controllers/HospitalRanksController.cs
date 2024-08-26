@@ -24,7 +24,8 @@ namespace EMSC.Controllers
         }
 
         //============================ ADD Hospital Rank ==============================
-        [Authorize(Policy = "RequireEmployeeManagementRole")]
+        //[Authorize(Policy = "RequireEmployeeManagementRole")]
+        [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> AddHospitalRank([FromBody] HospitalRanks formdata)
         {
@@ -38,7 +39,7 @@ namespace EMSC.Controllers
                 UserDate = DateTime.UtcNow,
 
             };
-            bool isHospitalRankExists = _db.HospitalRanks.Any(x => x.RankName == newHospitalRank.RankName);
+            bool isHospitalRankExists = _db.HospitalRanks.Any(hr => hr.RankName == newHospitalRank.RankName);
 
             if (!isHospitalRankExists)
             {
@@ -51,7 +52,8 @@ namespace EMSC.Controllers
 
             else
             {
-                return BadRequest(new JsonResult("The Hospital Rank is already exist"));
+                var HospitalRank = _db.HospitalRanks.FirstOrDefault(hr => hr.RankName == newHospitalRank.RankName);
+                return BadRequest(new JsonResult($"The Hospital Rank is already exist"));
             }
 
         }
@@ -70,9 +72,9 @@ namespace EMSC.Controllers
                          orderby hr.RankName ascending
                          select new
                          {
+                             hr.Id,
                              hr.RankName,
-                             hr.Id
-
+                             hr.RankPer
                          }
                              ).ToList();
 
