@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Directive, ElementRef, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators, NgForm } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators, NgForm} from '@angular/forms';
 import { MatTableDataSource, } from '@angular/material/table';
 import { HospitalRank } from '../../../interfaces/hospital-ranks';
 import { HospitalRanksService } from './../../../services/hospital-ranks.service';
