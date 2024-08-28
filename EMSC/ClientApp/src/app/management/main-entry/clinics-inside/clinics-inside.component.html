@@ -27,6 +27,21 @@
           <td mat-cell *matCellDef="let h"> {{h.hospName}} </td>
         </ng-container>
 
+        <ng-container matColumnDef="rankName">
+          <th mat-header-cell *matHeaderCellDef> التصنيف </th>
+          <td mat-cell *matCellDef="let h"> {{h.rankName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="rankPer">
+          <th mat-header-cell *matHeaderCellDef> نسبة خصم التصنيف </th>
+          <td mat-cell *matCellDef="let h"> {{h.rankPer}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="priceslist">
+          <th mat-header-cell *matHeaderCellDef> كراسة الأسعار </th>
+          <td mat-cell *matCellDef="let h"> {{h.listName}} </td>
+        </ng-container>
+
 
         <ng-container matColumnDef="edit">
           <th mat-header-cell *matHeaderCellDef> تعديل </th>
@@ -103,6 +118,18 @@
             </mat-form-field>
           </div>
         </li>
+        <li class="list-group-item" [hidden]="id">
+          <div class="form-group">
+            <mat-form-field appearance="fill">
+              <mat-label> كراسة الأسعار</mat-label>
+              <mat-select  formControlName ="listId" name="listId">
+                <mat-option *ngFor="let list of pricesLists" [value]="list.id">
+                  {{list.listName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </li>
         <div class="modal-footer">
           <button [disabled]="addForm.invalid" class="btn btn-primary mr-auto " (click)="onSubmit()">حفظ</button>
           <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
@@ -157,6 +184,16 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
+        
+            <mat-form-field appearance="fill">
+              <mat-select formControlName="listId" name="_listId">
+                <mat-option *ngFor="let list of pricesLists" [value]="list.id">
+                  {{list.listName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+        
+       
         <div class="modal-footer">
           <button [disabled]="updateForm.invalid" class="btn btn-primary mr-auto " (click)="onUpdate()">حفظ</button>
           <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>

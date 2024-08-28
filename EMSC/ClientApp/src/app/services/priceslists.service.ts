@@ -14,6 +14,7 @@ export class PriceslistsService {
   constructor(private http: HttpClient, private router: Router) { }
 
   private baseUrlGet: string = "/api/Priceslists/GetPricesLists";
+  private baseUrlGetById: string = "/api/Priceslists/GetPricesListById";
   private baseUrlAdd: string = "/api/Priceslists/AddList";
   private baseUrlUpdate: string = "/api/Priceslists/UpdatePricesList/";
   private baseUrlDelete: string = "/api/Priceslists/DeletePricesList/";
@@ -54,6 +55,15 @@ export class PriceslistsService {
 
   }
 
+  //// Get PricesList
+  //GetPicesListById(listId: number): Observable<Priceslists> {
+  //  this.clearCache();
+
+   
+
+  //  return this.http.get<Priceslists[]>(listId).pipe(shareReplay());;
+
+  //}
   updatePriceList(id: number, editpricelist: Priceslists): Observable<Priceslists> {
     return this.http.put<Priceslists>(this.baseUrlUpdate + id, editpricelist);
   }

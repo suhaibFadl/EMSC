@@ -28,13 +28,32 @@ namespace EMSC.Controllers
         [HttpGet("[action]")]
         public IActionResult GetHospitals()
         {
-            return Ok(_db.Hospitals.ToList());
+
+            var output = (
+                              from hc in _db.Hospitals
+                              from r in _db.HospitalRanks
+                              from pl in _db.PricesLists
+                              where hc.Rank == r.Id && hc.ListId == pl.Id
+                              select new
+                              {
+                                  hc.Id,
+                                  hc.HospName,
+                                  hc.Rank,
+                                  r.RankName,
+                                  r.RankPer,
+                                  pl.ListName,
+                                  hc.ListId
+                              }
+                        ).ToList();
+            //return Ok(_db.Hospitals.ToList());
+
+            return Ok( output );    
+
 
         }
 
         //============================ ADD Hospital ==============================
-        //[Authorize(Policy = "RequireEmployeeManagementRole")]
-        [AllowAnonymous]
+        [Authorize(Policy = "RequireEmployeeManagementRole")]
         [HttpPost("[action]")]
         public async Task<IActionResult> AddHospital([FromBody] Hospitals formdata)
         {
@@ -43,8 +62,8 @@ namespace EMSC.Controllers
             var newHospital = new Hospitals
             {
                 HospName = formdata.HospName,
-                Rank = formdata.Rank
-
+                Rank = formdata.Rank,
+                ListId = formdata.ListId
             };
             bool HospitalExists = _db.Hospitals.Any(x => x.HospName == newHospital.HospName);
 

@@ -35,7 +35,7 @@ export class HospitalRanksComponent implements OnInit {
   dataSource!: MatTableDataSource<HospitalRank>;
 
 
-  displayedColumns: string[] = ['index', 'name', 'edit', 'delete'];
+  displayedColumns: string[] = ['index', 'name', 'rankPer','edit', 'delete'];
 
   addForm!: FormGroup;
   rankControl!: FormControl;
@@ -110,7 +110,7 @@ export class HospitalRanksComponent implements OnInit {
     //======================= update form
     this._id = new FormControl('', [Validators.required]);
     this._rankControl = new FormControl('', [Validators.required]);
-    this._rankPerControl = new FormControl('', [Validators.required]);
+    this._rankPerControl = new FormControl('', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]);
 
 
     this.updateForm = this.fb.group({

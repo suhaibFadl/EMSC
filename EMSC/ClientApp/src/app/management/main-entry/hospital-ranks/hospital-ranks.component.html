@@ -20,12 +20,16 @@
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> التصنيفات </th>
           <td mat-cell *matCellDef="let c"> {{c.rankName}} </td>
+         </ng-container>
+
+        <ng-container matColumnDef="rankPer">
+          <th mat-header-cell *matHeaderCellDef> نسبة التصنيف </th>
+          <td mat-cell *matCellDef="let c"> {{c.rankPer}} </td>
         </ng-container>
 
 
         <ng-container matColumnDef="edit">
           <th mat-header-cell *matHeaderCellDef> تعديل </th>
-
           <td mat-cell *matCellDef="let c">
             <mat-icon mat-icon-button type="button" mat-raised-button color="accent" matTooltip="تعديل تصنيف" style=" color: green;" (click)="onUpdateModal(c)"><mat-icon>edit</mat-icon></mat-icon>
           </td>
@@ -149,9 +153,10 @@
               <mat-error *ngIf="_rankPerControl.hasError('required')">
                 الرجاء تعبئة الحقول المطلوبة
               </mat-error>
-              <!--<mat-error *ngIf="_rankControl.hasError('minlength')">
-                الحد الأدنى لإسم تصنيف 3أحرف
-              </mat-error>-->
+              <mat-error *ngIf="_rankPerControl.hasError('pattern')">
+                الرجاء إدخال قيم رقمية
+              </mat-error>
+              
             </mat-form-field>
           </div>
         </li>

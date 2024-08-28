@@ -19,6 +19,8 @@ import { AppComponent } from '../../../app.component';
 import { HospitalRanksComponent } from '../hospital-ranks/hospital-ranks.component';
 import { HospitalRanksService } from '../../../services/hospital-ranks.service';
 import { HospitalRank } from '../../../interfaces/hospital-ranks';
+import { PriceslistsService } from '../../../services/priceslists.service';
+import { Priceslists } from '../../../interfaces/priceslists';
 
 @Directive({
   selector: '[errorStateMatcherDirective]'
@@ -39,7 +41,8 @@ export class ClinicsInsideComponent implements OnInit {
 
   dataSource!: MatTableDataSource<Hospital>;
   hospitalRanks!: HospitalRank[];
-  displayedColumns: string[] = ['index', 'name', 'edit', 'delete'];
+  pricesLists!: Priceslists[];
+  displayedColumns: string[] = ['index', 'name', 'rankName', 'rankPer', 'priceslist','edit', 'delete'];
   clickedRows = new Set<Hospital>();
   @Input() input!: MatInput;
   @Input() matcher!: ErrorStateMatcher;
@@ -47,6 +50,7 @@ export class ClinicsInsideComponent implements OnInit {
   addForm!: FormGroup;
   hospName!: FormControl;
   rank!: FormControl;
+  listId!: FormControl;
 
 
 
@@ -54,6 +58,7 @@ export class ClinicsInsideComponent implements OnInit {
   _id!: FormControl;
   _hospName!: FormControl;
   _rank!: FormControl;
+  _listId!: FormControl;
 
 
   deleteForm!: FormGroup;
@@ -88,6 +93,7 @@ export class ClinicsInsideComponent implements OnInit {
     private rout: ActivatedRoute,
     private acct: AccountService,
     private hospitalRankServices: HospitalRanksService,
+    private pricesListsService: PriceslistsService,
     private app: AppComponent,
 
   ) {
@@ -107,9 +113,11 @@ export class ClinicsInsideComponent implements OnInit {
     //=======================  add form
     this.hospName = new FormControl('', [Validators.required, Validators.minLength(3)]);
     this.rank = new FormControl('', [Validators.required]);
+    this.listId = new FormControl('', [Validators.required]);
     this.addForm = this.fb.group({
       'hospName': this.hospName,
       'rank': this.rank,
+      'listId': this.listId,
     });
 
 
@@ -118,12 +126,14 @@ export class ClinicsInsideComponent implements OnInit {
     this._id = new FormControl('', [Validators.required]);
     this._hospName = new FormControl('', [Validators.required, Validators.minLength(3)]);
     this._rank = new FormControl('', [Validators.required]);
+    this._listId = new FormControl('', [Validators.required]);
 
 
     this.updateForm = this.fb.group({
       'id': this._id,
       'hospName': this._hospName,
       'rank': this._rank,
+      'listId': this._listId,
     });
 
     //=======================  delete form
@@ -138,7 +148,7 @@ export class ClinicsInsideComponent implements OnInit {
 
     this.loadAllHospitals();
     this.loadAllHospitalRanks();
-
+    this.loadAllPricesLists();
   }
 
   loadAllHospitals() {
@@ -153,6 +163,12 @@ export class ClinicsInsideComponent implements OnInit {
   loadAllHospitalRanks() {
     this.hospitalRankServices.GetHospitalRanks().subscribe(data => {
       this.hospitalRanks = data;
+    });
+  }
+
+  loadAllPricesLists() {
+    this.pricesListsService.GetPricesLists().subscribe(data => {
+      this.pricesLists = data;
     });
   }
   //add modal hospital
@@ -180,13 +196,16 @@ export class ClinicsInsideComponent implements OnInit {
   //hospital update modal
   onUpdateModal(edithospital: Hospital): void {
     this.modalMessage = "الرجاء ادخال اسم المصحة الجديد ";
+    console.log(edithospital)
     this._id.setValue(edithospital.id);
     this._hospName.setValue(edithospital.hospName);
     this._rank.setValue(edithospital.rank);
+    this._listId.setValue(edithospital.listId);
     this.updateForm.setValue({
       'id': this._id.value,
       'hospName': this._hospName.value,
       'rank': this._rank.value,
+      'listId': this._listId.value,
     });
 
     this.modalRef = this.modalService.show(this.editmodal);
@@ -209,6 +228,7 @@ export class ClinicsInsideComponent implements OnInit {
 
   //hospital delete modal
   onDeleteModal(hospitaldelete: Hospital) {
+    console.log(hospitaldelete)
     this.modalMessage2 = "هل أنت متأكد من عملية الحذف ؟";
     this.Did.setValue(hospitaldelete.id);
     this.deleteForm.setValue({

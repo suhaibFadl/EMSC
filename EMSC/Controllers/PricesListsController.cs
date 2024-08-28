@@ -30,7 +30,7 @@ namespace EMSC.Controllers
         //====================================================================================
         //====================================================================================
         //============================ ADD List ==============================
-      //  [Authorize(Policy = "RequireEmployeeManagementRole")]
+        [Authorize(Policy = "RequireEmployeeManagementRole")]
         [HttpPost("[action]")]
         public async Task<IActionResult> AddList([FromBody] PricesLists formdata)
         {
@@ -79,7 +79,6 @@ namespace EMSC.Controllers
                              c.Id,
                             u.PhoneNumber,
                              c.UserDate
-
                          }
                              ).ToList();
 
@@ -88,12 +87,29 @@ namespace EMSC.Controllers
 
             //  return Ok(_db.Countries.ToList());
 
-        }
+        } 
+        
+        //================================Get List By Id=============================
 
-     
+        //[AllowAnonymous]
+        //[HttpGet("[action]")]
+
+        //public IActionResult GetPricesListById([FromRoute] int id)
+        //{
+        //    var findPriceList = _db.PricesLists.FirstOrDefault(c => c.Id == fromdata.Id);
+
+        //    if (findPriceList == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(findPriceList);
+
+        //}
+
+
 
         //=================================UPDATE List===============================
-     //   [Authorize(Policy = "RequireEmployeeManagementRole")]
+        //   [Authorize(Policy = "RequireEmployeeManagementRole")]
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> UpdatePricesList([FromRoute] int id, [FromBody] PricesLists fromdata)
         {
