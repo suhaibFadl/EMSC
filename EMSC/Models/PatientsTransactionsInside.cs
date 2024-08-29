@@ -9,7 +9,7 @@ namespace EMSC.Models
     {
         public int Id { get; set; }
         public int PatientId { get; set; }
-        public string Attach { get; set; }
+        //public string Attach { get; set; }
         public int LetterDest { get; set; }
         public string LetterIndexNO { get; set; }
         public DateTime? LetterDate { get; set; }

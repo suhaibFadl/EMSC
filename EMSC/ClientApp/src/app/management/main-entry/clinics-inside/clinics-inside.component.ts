@@ -153,7 +153,6 @@ export class ClinicsInsideComponent implements OnInit {
 
   loadAllHospitals() {
     this.hos.GetHospitals().subscribe(data => {
-      console.log(data)
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -171,8 +170,8 @@ export class ClinicsInsideComponent implements OnInit {
       this.pricesLists = data;
     });
   }
-  //add modal hospital
 
+  //add modal hospital
   onAddHospital() {
     this.modalMessage1 = "الرجاء إدخال اسم المصحة ";
     this.modalRef = this.modalService.show(this.modal);
@@ -180,7 +179,6 @@ export class ClinicsInsideComponent implements OnInit {
 
   onSubmit() {
     let newHospital = this.addForm.value;
-    console.log(newHospital);
     this.hos.AddHospital(newHospital).subscribe(
       result => {
         this.hos.clearCache();
@@ -196,7 +194,6 @@ export class ClinicsInsideComponent implements OnInit {
   //hospital update modal
   onUpdateModal(edithospital: Hospital): void {
     this.modalMessage = "الرجاء ادخال اسم المصحة الجديد ";
-    console.log(edithospital)
     this._id.setValue(edithospital.id);
     this._hospName.setValue(edithospital.hospName);
     this._rank.setValue(edithospital.rank);
@@ -228,7 +225,6 @@ export class ClinicsInsideComponent implements OnInit {
 
   //hospital delete modal
   onDeleteModal(hospitaldelete: Hospital) {
-    console.log(hospitaldelete)
     this.modalMessage2 = "هل أنت متأكد من عملية الحذف ؟";
     this.Did.setValue(hospitaldelete.id);
     this.deleteForm.setValue({

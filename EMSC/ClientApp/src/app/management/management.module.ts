@@ -46,9 +46,11 @@ import { ViewHousingLettersComponent } from './view-housing-letters/view-housing
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { TravelingProceduresByUserIdComponent } from './traveling-procedures-by-user-id/traveling-procedures-by-user-id.component';
+//import { AllPDataInsideComponent } from './all-p-data-inside/all-p-data-inside.component';
+import { AllPMainDataInsideComponent } from './all-p-main-data-inside/all-p-main-data-inside.component';
 
 @NgModule({
-  declarations: [ ReplyInsideComponent, TreatmentMovmentComponent, AllPatientsMainDataComponent, LettersOutsideIncomingComponent, LettersAcceptedByCountriesComponent, TravelingProceduresComponent, RepliesLettersOutsideComponent, LettersInsideIncomingComponent, TrvelingProceduresBackComponent, PatientsInHospitalsComponent, TravelersUnderProcedureComponent, AllPatInCountriesComponent, ReturnTicketsBookingComponent, AddHousingLettersComponent, ViewHousingLettersComponent, TravelingProceduresByUserIdComponent],
+  declarations: [ ReplyInsideComponent, TreatmentMovmentComponent, AllPatientsMainDataComponent, LettersOutsideIncomingComponent, LettersAcceptedByCountriesComponent, TravelingProceduresComponent, RepliesLettersOutsideComponent, LettersInsideIncomingComponent, TrvelingProceduresBackComponent, PatientsInHospitalsComponent, TravelersUnderProcedureComponent, AllPatInCountriesComponent, ReturnTicketsBookingComponent, AddHousingLettersComponent, ViewHousingLettersComponent, TravelingProceduresByUserIdComponent, AllPMainDataInsideComponent],
   imports: [
     CommonModule,
     ManagementRoutingModule,

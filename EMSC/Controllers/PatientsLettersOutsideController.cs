@@ -42,7 +42,7 @@ namespace EMSC.Controllers
                 var PatTranInside = new PatientsTransactionsInside
                 {
                     PatientId = formdata.PatientId,
-                    Attach = formdata.Attach,
+                   // Attach = formdata.Attach,
                     LetterDest = formdata.LetterDest,
                     LetterIndexNO = formdata.LetterIndexNO,
                     LetterDate = formdata.LetterDate,
@@ -380,7 +380,7 @@ namespace EMSC.Controllers
             var PatTranInside = new PatientsTransactionsInside
             {
                 PatientId = formdata.PatientId,
-                Attach = formdata.Attach,
+               // Attach = formdata.Attach,
                 LetterDest = formdata.LetterDest,
                 LetterIndexNO = formdata.LetterIndexNO,
                 LetterDate = formdata.LetterDate,
@@ -456,7 +456,7 @@ namespace EMSC.Controllers
             var PatTranInside = new PatientsTransactionsInside
             {
                 PatientId = formdata.PatientId,
-                Attach = formdata.Attach,
+              //  Attach = formdata.Attach,
                 LetterDest = formdata.LetterDest,
                 LetterIndexNO = formdata.LetterIndexNO,
                 LetterDate = formdata.LetterDate,
@@ -1095,23 +1095,32 @@ namespace EMSC.Controllers
 
         //===================================Check Reply State Trans Outside==========================================         
 
-        [Authorize(Policy = "RequireAddPMainDataAndLettersRole")]
+       // [Authorize(Policy = "RequireAddPMainDataAndLettersRole")]
         [HttpGet("[action]/{id}")]
         public IActionResult CheckReplyStateTransOutside([FromRoute] int id)
         {
+            //var output = (
+            //              from pt in _db.PatientsTransactions
+            //              from br in _db.PatientsData
+            //              from b in _db.Branches
+            //              from u in _db.Users
+            //              where pt.PatientId == id && pt.PatientId == br.Id && pt.LetterDest == b.Id &&
+            //              pt.UserId == u.Id &&
+            //              (pt.ReplyState == 0 || pt.ReplyState == 2 || pt.ReplyState == 3 || pt.ReplyState == 6)                        
+            //              && pt.PersonType == 1
+            //              // pt.UserId == u.Id
+            //              select
+            //              pt.ReplyState
+            //                  );
             var output = (
-                          from pt in _db.PatientsTransactions
-                          from br in _db.PatientsData
-                          from b in _db.Branches
-                          from u in _db.Users
-                          where pt.PatientId == id && pt.PatientId == br.Id && pt.LetterDest == b.Id &&
-                          pt.UserId == u.Id &&
-                          (pt.ReplyState == 0 || pt.ReplyState == 2 || pt.ReplyState == 3 || pt.ReplyState == 6)                        
+                         from pt in _db.PatientsTransactions
+                         where
+                          (pt.ReplyState == 0 || pt.ReplyState == 2 || pt.ReplyState == 3 || pt.ReplyState == 6)
                           && pt.PersonType == 1
-                          // pt.UserId == u.Id
-                          select
-                          pt.ReplyState
-                              );
+                         // pt.UserId == u.Id
+                         select
+                         pt.ReplyState
+                             );
 
             return Ok(output);
         }

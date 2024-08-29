@@ -25,13 +25,13 @@ namespace EMSC.Controllers
         }
         //============================ ADD Patient Trans==============================
 
-        
+
         [HttpPost("[action]")]
         public async Task<IActionResult> AddPatientTransManagement([FromBody] PatientsTransactionsModel formdata)
         {
             List<string> ErrorList = new List<string>();
 
-          
+
 
             bool PatExist = _db.PatientsTransactions.Any(x => x.PatientId == formdata.PatientId &&
             x.LetterIndexNO == formdata.LetterIndexNO && x.LetterDate == formdata.LetterDate && x.ReplyState == 0);
@@ -41,7 +41,7 @@ namespace EMSC.Controllers
                 var PatTranInside = new PatientsTransactionsInside
                 {
                     PatientId = formdata.PatientId,
-                    Attach = formdata.Attach,
+                  //  Attach = formdata.Attach,
                     LetterDest = formdata.LetterDest,
                     LetterIndexNO = formdata.LetterIndexNO,
                     LetterDate = formdata.LetterDate,
@@ -68,7 +68,7 @@ namespace EMSC.Controllers
                 return Ok(new JsonResult("The Patient was Added Successfully"));
 
             }
-           
+
             if (formdata.PlcTreatment == 2)
             {
                 if (!PatExist)
@@ -252,6 +252,52 @@ namespace EMSC.Controllers
 
             }
             return null;
+        }
+
+
+        //=========================================add transaction inside
+
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> AddPatientTransManagementInside([FromBody] PatientsTransactionsModel formdata)
+        {
+            List<string> ErrorList = new List<string>();
+
+
+
+            //bool PatExist = _db.PatientsTransactions.Any(x => x.PatientId == formdata.PatientId &&
+            //x.LetterIndexNO == formdata.LetterIndexNO && x.LetterDate == formdata.LetterDate && x.ReplyState == 0);
+
+                var PatTranInside = new PatientsTransactionsInside
+                {
+                    PatientId = formdata.PatientId,
+                   // Attach = formdata.Attach,
+                    LetterDest = formdata.LetterDest,
+                    LetterIndexNO = formdata.LetterIndexNO,
+                    LetterDate = formdata.LetterDate,
+                    UserId = formdata.UserId,
+                    ReplyState = 0,
+                    HospitalId = formdata.HospitalId,
+                    UserDate = DateTime.UtcNow,
+                    MedicalDiagnosis = formdata.MedicalDiagnosis,
+                    Approved = 0,
+                    UserApproved = "0"
+                };
+
+                await _db.PatientsTransactionsInside.AddAsync(PatTranInside);
+                await _db.SaveChangesAsync();
+
+                //var re = new RepliesHospitals
+                //{
+                //    TRId = PatTranInside.Id,
+                //    PatientId = PatTranInside.PatientId,
+                //};
+
+                //await _db.RepliesHospitals.AddAsync(re);
+                //await _db.SaveChangesAsync();
+                return Ok(new JsonResult("The Patient was Added Successfully"));
+
+            
         }
 
         [HttpPost("[action]")]

@@ -211,6 +211,7 @@ export class AuthGuardService implements CanActivate {
         case '/management/patient-data':
         case '/management/patient-data/' +id:
         case '/management/all-patients-main-data':
+        case '/management/all-p-main-data-inside':
         case '/management/letters-outside-incoming':
         case '/management/letters-inside-incoming':
         case '/management/letters-accepted-by-countries':

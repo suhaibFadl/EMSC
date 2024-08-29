@@ -17,6 +17,7 @@ export class PatientsService {
 
   private baseUrlGetPatientsByHospitalId: string = "/api/Patients/GetPatientsByHospitalId/";
   private baseUrlAddPatientTransManagement: string = "/api/Patients/AddPatientTransManagement";
+  private baseUrlAddPatientTransManagementInside: string = "/api/Patients/AddPatientTransManagementInside";
   private baseUrlAddAttendantTransByManag: string = "/api/Patients/AddAttendantTransByManag";
  
 
@@ -35,6 +36,9 @@ export class PatientsService {
 
   AddPatientTransManagement(newpatients: PatientTrans): Observable<PatientTrans> {
     return this.http.post<PatientTrans>(this.baseUrlAddPatientTransManagement, newpatients);
+  }
+  AddPatientTransManagementInside(newpatients: PatientTrans): Observable<PatientTrans> {
+    return this.http.post<PatientTrans>(this.baseUrlAddPatientTransManagementInside, newpatients);
   }
 
  AddAttendantTransByManag(newpatients: PatientTrans): Observable<PatientTrans> {

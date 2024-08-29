@@ -16,6 +16,7 @@ import { ReturnTicketsBookingComponent } from './return-tickets-booking/return-t
 import { AddHousingLettersComponent } from './add-housing-letters/add-housing-letters.component';
 import { ViewHousingLettersComponent } from './view-housing-letters/view-housing-letters.component';
 import { TravelingProceduresByUserIdComponent } from './traveling-procedures-by-user-id/traveling-procedures-by-user-id.component';
+import { AllPMainDataInsideComponent } from './all-p-main-data-inside/all-p-main-data-inside.component';
 
 const routes: Routes = [
   { path: 'main-entry', loadChildren: './main-entry/main-entry.module#MainEntryModule' },
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'p-reply-inside', component: ReplyInsideComponent, canActivate: [AuthGuardService] },
   { path: 'treatment-movment', component: TreatmentMovmentComponent, canActivate: [AuthGuardService] },
   { path: 'all-patients-main-data', component: AllPatientsMainDataComponent, canActivate: [AuthGuardService] },
+  { path: 'all-p-main-data-inside', component: AllPMainDataInsideComponent, canActivate: [AuthGuardService] },
   { path: 'letters-outside-incoming', component: LettersOutsideIncomingComponent, canActivate: [AuthGuardService] },
   { path: 'letters-inside-incoming', component: LettersInsideIncomingComponent, canActivate: [AuthGuardService] },
   { path: 'letters-accepted-by-countries', component: LettersAcceptedByCountriesComponent, canActivate: [AuthGuardService] },

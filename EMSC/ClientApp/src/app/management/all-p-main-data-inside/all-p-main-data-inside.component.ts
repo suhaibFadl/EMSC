@@ -35,6 +35,7 @@ import { map, startWith } from 'rxjs/operators';
 import { AppComponent } from '../../app.component';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 
+
 interface PersonType {
   name: string;
   id: number;
@@ -64,11 +65,10 @@ export const MY_FORMATS = {
   },
 };
 
-
 @Component({
-  selector: 'app-all-patients-main-data',
-  templateUrl: './all-patients-main-data.component.html',
-  styleUrls: ['./all-patients-main-data.component.css'],
+  selector: 'app-all-p-main-data-inside',
+  templateUrl: './all-p-main-data-inside.component.html',
+  styleUrls: ['./all-p-main-data-inside.component.css'],
   providers: [
     {
       provide: DateAdapter,
@@ -79,7 +79,7 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
-export class AllPatientsMainDataComponent implements OnInit {
+export class AllPMainDataInsideComponent implements OnInit {
 
   public formControl!: FormGroup;
 
@@ -99,7 +99,7 @@ export class AllPatientsMainDataComponent implements OnInit {
     private http: HttpClient,
     private app: AppComponent,
     private router: Router,
-    private formBuilder: FormBuilder 
+    private formBuilder: FormBuilder
   ) { }
 
 
@@ -170,7 +170,7 @@ export class AllPatientsMainDataComponent implements OnInit {
   pAttenData$!: Observable<PatientData[]>;
 
   //====================================تحديد عدد الأعمدة في الجدول
-  displayedColumns1: string[] = ['index', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth','ten','details','edit3','delete2', 'add'];
+  displayedColumns1: string[] = ['index', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'ten', 'details', 'edit3', 'delete2', 'add'];
   columnsToDisplay: string[] = this.displayedColumns1.slice();
 
   allBranches!: Observable<Branch[]>;
@@ -215,7 +215,7 @@ export class AllPatientsMainDataComponent implements OnInit {
   PID!: FormControl;
   BRID!: FormControl;
   LetterDate!: FormControl;
-  Attach!: FormControl;
+  //Attach!: FormControl;
   LetterIndexNO!: FormControl;
   PlcTreatment!: FormControl;
   CountryId!: FormControl;
@@ -239,9 +239,9 @@ export class AllPatientsMainDataComponent implements OnInit {
   favoriteSeason: number = 2;
 
 
-  values2 = [{ value: 1, title: 'جريح' },
-  { value: 2, title: 'مرافق' }];
-  countValues: number = 2;
+  //values2 = [{ value: 1, title: 'جريح' },
+  //{ value: 2, title: 'مرافق' }];
+  //countValues: number = 2;
 
 
   fileToUpload!: File;
@@ -386,9 +386,9 @@ export class AllPatientsMainDataComponent implements OnInit {
     //=======================initial add form Transaction
     this.PID = new FormControl('', [Validators.required]);
     this.LetterDate = new FormControl(moment().format("dddd, MMMM Do YYY,"));
-    this.Attach = new FormControl();
+    //this.Attach = new FormControl();
     this.LetterIndexNO = new FormControl('', [Validators.required]);
-    this.PlcTreatment = new FormControl('', [Validators.required]);
+    //this.PlcTreatment = new FormControl('', [Validators.required]);
     this.CountryId = new FormControl();
     this.HospitalId = new FormControl();
     this.MedicalDiagnosis = new FormControl('', [Validators.required]);
@@ -405,11 +405,11 @@ export class AllPatientsMainDataComponent implements OnInit {
     this.AddtraForm = this.fb.group({
       'PatientId': this.PID,
       'LetterDate': this.LetterDate,
-      'Attach': this.Attach,
+      //'Attach': this.Attach,
       'LetterDest': this.BranchUserId,
       'LetterIndexNO': this.LetterIndexNO,
-      'PlcTreatment': this.PlcTreatment,
-      'CountryId': this.CountryId,
+      //'PlcTreatment': this.PlcTreatment,
+      //'CountryId': this.CountryId,
       'HospitalId': this.HospitalId,
       'UserId': this.UserId,
       'UserDate': this.UserDate,
@@ -417,7 +417,7 @@ export class AllPatientsMainDataComponent implements OnInit {
       'PatientName': this.PatientName.value,
       'PassportNo': this.PassportNo,
       'NationalNo': this.NationalNo,
-      'Select': this.Select,
+      //'Select': this.Select,
       'DepenId': "",
       'EventId': "",
       'PatType': "",
@@ -474,14 +474,14 @@ export class AllPatientsMainDataComponent implements OnInit {
     this.branches$ = this.br.GetBranches();
     this.branches$.subscribe(result => {
       this.branches = result;
-    //  this.versions = result;
+      //  this.versions = result;
     });
 
     this.Select.setValue(1);
     this.PersonType.setValue(1);
     this.DepenId.setValue(null);
     this.EventId.setValue(null);
-    this.countValues = 1;
+    //this.countValues = 1;
 
   }
 
@@ -768,47 +768,47 @@ export class AllPatientsMainDataComponent implements OnInit {
   //إضافة رسالة ضم للجريح
   onSubmittra() {
 
-    if (this.Select.value == 1 && (this.PatientName.value == null || this.PassportNo.value == null || this.NationalNo.value == null)) {
+    if ( (this.PatientName.value == null || this.PassportNo.value == null || this.NationalNo.value == null)) {
       this.app.FillAllFieldsPlease()
     }
 
-    if (this.Select.value == 1 && (this.PatientName.value != null && this.PassportNo.value != null && this.NationalNo.value != null)) {
+    //if (this.Select.value == 1 && (this.PatientName.value != null && this.PassportNo.value != null && this.NationalNo.value != null)) {
 
+    //  this.AddtraForm.setValue({
+    //    'PatientId': this.PID.value,
+    //    'LetterDate': this.LetterDate.value,
+    //    'Attach': this.fileName,
+    //    'PersonType': 1,
+    //    'LetterDest': this.BranchUserId,
+    //    'LetterIndexNO': this.LetterIndexNO.value,
+    //    'PlcTreatment': this.PlcTreatment.value,
+    //    'CountryId': this.CountryId.value,
+    //    'HospitalId': this.HospitalId.value,
+    //    'UserId': this.UserId,
+    //    'UserDate': this.UserDate,
+    //    'MedicalDiagnosis': this.MedicalDiagnosis.value,
+
+    //    'PatientName': this.PatientName.value,
+    //    'PassportNo': this.PassportNo.value,
+    //    'NationalNo': this.NationalNo.value,
+    //    'PatType': 0,
+    //    'DepenId': 99,
+    //    'EventId': 12,
+
+    //    'Select': this.Select.value,
+    //  });
+    //}
+
+    console.log(this.BranchUserId);
       this.AddtraForm.setValue({
         'PatientId': this.PID.value,
         'LetterDate': this.LetterDate.value,
-        'Attach': this.fileName,
+        //'Attach': this.fileName,
         'PersonType': 1,
         'LetterDest': this.BranchUserId,
         'LetterIndexNO': this.LetterIndexNO.value,
-        'PlcTreatment': this.PlcTreatment.value,
-        'CountryId': this.CountryId.value,
-        'HospitalId': this.HospitalId.value,
-        'UserId': this.UserId,
-        'UserDate': this.UserDate,
-        'MedicalDiagnosis': this.MedicalDiagnosis.value,
-
-        'PatientName': this.PatientName.value,
-        'PassportNo': this.PassportNo.value,
-        'NationalNo': this.NationalNo.value,
-        'PatType': 0,
-        'DepenId': 99,
-        'EventId': 12,
-
-        'Select': this.Select.value,
-      });
-    }
-
-    else if (this.Select.value == false) {
-      this.AddtraForm.setValue({
-        'PatientId': this.PID.value,
-        'LetterDate': this.LetterDate.value,
-        'Attach': this.fileName,
-        'PersonType': 1,
-        'LetterDest': this.BranchUserId,
-        'LetterIndexNO': this.LetterIndexNO.value,
-        'PlcTreatment': this.PlcTreatment.value,
-        'CountryId': this.CountryId.value,
+        //'PlcTreatment': this.PlcTreatment.value,
+       // 'CountryId': this.CountryId.value,
         'HospitalId': this.HospitalId.value,
         'UserId': this.UserId,
         'UserDate': this.UserDate,
@@ -821,34 +821,33 @@ export class AllPatientsMainDataComponent implements OnInit {
         'DepenId': 0,
         'EventId': 0,
 
-        'Select': 2,
       });
-    }
+    
     let newpatients = this.AddtraForm.value;
+    console.log(newpatients);
+    this.pa.AddPatientTransManagementInside(newpatients).subscribe(
+      result => {
+        this.pa.clearCache();
+        this.AddtraForm.reset();
+        this.modalRef.hide();
+        this.Select.setValue(1)
+        this.PatientName.setValue("");
+        this.PassportNo.setValue("");
+        this.NationalNo.setValue("");
+        this.fileName = ""
 
-    this.pa.AddPatientTransManagement(newpatients).subscribe(
-        result => {
-          this.pa.clearCache();
-          this.AddtraForm.reset();
-          this.modalRef.hide();
-          this.Select.setValue(1)
-          this.PatientName.setValue("");
-          this.PassportNo.setValue("");
-          this.NationalNo.setValue("");
-          this.fileName = ""
+        this.fileText = "إرفاق ملف pdf";
+        this.message = "";
+        this.progress = 0
 
-          this.fileText = "إرفاق ملف pdf";
-          this.message = "";
-          this.progress = 0
+        this.GetAllAttends();
+        this.GetAllPats();
+        this.GetAllPatientsMainData();
 
-          this.GetAllAttends();
-          this.GetAllPats();
-          this.GetAllPatientsMainData();
+      },
+      error => this.modalMessage = "يرجى المحاولة لاحقا"
 
-        },
-        error => this.modalMessage = "يرجى المحاولة لاحقا"
-
-      )
+    )
 
   }
 
@@ -883,158 +882,24 @@ export class AllPatientsMainDataComponent implements OnInit {
     let newpatients = this.AddtraForm.value;
 
     this.pa.AddAttendantTransByManag(newpatients).subscribe(
-        result => {
-          this.pa.clearCache();
-          this.AddtraForm.reset();
-          this.modalRef.hide();
-          this.GetAllAttends();
-          this.GetAllPats();
-          this.GetAllPatientsMainData();
+      result => {
+        this.pa.clearCache();
+        this.AddtraForm.reset();
+        this.modalRef.hide();
+        this.GetAllAttends();
+        this.GetAllPats();
+        this.GetAllPatientsMainData();
 
-          this.fileName = ""
+        this.fileName = ""
 
-          this.fileText = "إرفاق ملف pdf";
-          this.message = "";
-          this.progress = 0
+        this.fileText = "إرفاق ملف pdf";
+        this.message = "";
+        this.progress = 0
 
-        },
-        error => this.modalMessage = "الرقم الإشاري موجود مسبقا"
-      )
+      },
+      error => this.modalMessage = "الرقم الإشاري موجود مسبقا"
+    )
   }
-
-  ////إضافة رسالة ضم للجريح
-  //onSubmittra() {
-
-  //  if (this.Select.value == 1 && (this.PatientName.value == null || this.PassportNo.value == null || this.NationalNo.value == null)) {
-  //    this.app.FillAllFieldsPlease()
-  //  }
-
-  //  if (this.Select.value == 1 && (this.PatientName.value != null && this.PassportNo.value != null && this.NationalNo.value != null)) {
-
-  //    this.AddtraForm.setValue({
-  //      'PatientId': this.PID.value,
-  //      'LetterDate': this.LetterDate.value,
-  //      'Attach': this.fileName,
-  //      'LetterDest': this.BranchUserId,
-  //      'LetterIndexNO': this.LetterIndexNO.value,
-  //      'PlcTreatment': this.PlcTreatment.value,
-  //      'CountryId': this.CountryId.value,
-  //      'HospitalId': this.HospitalId.value,
-  //      'UserId': this.UserId,
-  //      'UserDate': this.UserDate,
-  //      'MedicalDiagnosis': this.MedicalDiagnosis.value,
-
-  //      'PatientName': this.PatientName.value,
-  //      'PassportNo': this.PassportNo.value,
-  //      'NationalNo': this.NationalNo.value,
-  //      'PatType': 0,
-  //      'DepenId': 99,
-  //      'EventId': 12,
-
-  //      'Select': this.Select.value,
-  //    });
-  //  }
-
-  //  else if (this.Select.value == false) {
-  //    this.AddtraForm.setValue({
-  //      'PatientId': this.PID.value,
-  //      'LetterDate': this.LetterDate.value,
-  //      'Attach': this.fileName,
-  //      'LetterDest': this.BranchUserId,
-  //      'LetterIndexNO': this.LetterIndexNO.value,
-  //      'PlcTreatment': this.PlcTreatment.value,
-  //      'CountryId': this.CountryId.value,
-  //      'HospitalId': this.HospitalId.value,
-  //      'UserId': this.UserId,
-  //      'UserDate': this.UserDate,
-  //      'MedicalDiagnosis': this.MedicalDiagnosis.value,
-
-  //      'PatientName': "",
-  //      'PassportNo': "",
-  //      'NationalNo': "",
-  //      'PatType': 0,
-  //      'DepenId': 0,
-  //      'EventId': 0,
-
-  //      'Select': 2,
-  //    });
-  //  }
-  //  let newpatients = this.AddtraForm.value;
-  //  console.log(newpatients);
-
-  //    this.pa.AddPatientTransManagement(newpatients).subscribe(
-  //      result => {
-  //        this.pa.clearCache();
-  //        this.AddtraForm.reset();
-  //        this.modalRef.hide();
-  //        this.Select.setValue(1)
-  //        this.fileName = ""
-  //        this.PatientName.setValue("");
-  //        this.PassportNo.setValue("");
-  //        this.NationalNo.setValue("");
-
-  //        this.fileText = "إرفاق ملف pdf";
-  //        this.message = "";
-  //        this.progress = 0
-
-  //        this.GetAllAttends();
-  //        this.GetAllPats();
-  //        this.GetAllPatientsMainData();
-  //      },
-  //      error => this.modalMessage = "يرجى المحاولة لاحقا"
-
-  //    )
-  //}
-
-
-  ////إضافة رسالة ضم للمرافق
-  //onSubmitAdd() {
-
-  //  this.AddtraForm.setValue({
-  //    'PatientId': this.PID.value,
-  //    'LetterDate': this.LetterDate.value,
-  //    'Attach': this.fileName,
-  //    'LetterDest': this.BranchUserId,
-  //    'LetterIndexNO': this.LetterIndexNO.value,
-  //    'PlcTreatment': this.PlcTreatment.value,
-  //    'CountryId': this.CountryId.value,
-  //    'HospitalId': this.HospitalId.value,
-  //    'UserId': this.UserId,
-  //    'UserDate': this.UserDate,
-  //    'MedicalDiagnosis': "www",
-
-  //    'PatientName': this.PatientName.value,
-  //    'PassportNo': "",
-  //    'NationalNo': "",
-  //    'Select': 0,
-  //    'DepenId': 0,
-  //    'EventId': 0,
-  //    'PatType': 0,
-
-  //  });
-
-  //  let newpatients = this.AddtraForm.value;
-
-  //    this.pa.AddAttendantTransByManag(newpatients).subscribe(
-  //      result => {
-  //        this.pa.clearCache();
-  //        this.AddtraForm.reset();
-  //        this.modalRef.hide();
-
-  //        this.GetAllAttends();
-  //        this.GetAllPats();
-  //        this.GetAllPatientsMainData();
-
-  //        this.fileText = "إرفاق ملف pdf";
-  //        this.message = "";
-  //        this.progress = 0;
-  //        this.fileName=""
-  //      },
-  //      error => this.modalMessage = "الرقم الإشاري موجود مسبقا"
-
-  //    )
-  //}
-
 
 
 
@@ -1062,9 +927,9 @@ export class AllPatientsMainDataComponent implements OnInit {
 
   //إضافة بيانات الجريح والمرافق الرئيسية
   onSubmit() {
-
+    console.log(this.addForm)
     //إضافة مرافق
-    if (this.PersonType.value == 2 || this.PersonType.value == 3 ) {
+    if (this.PersonType.value == 2 || this.PersonType.value == 3) {
       this.addForm.setValue({
         'PatientName': this.PatientName.value,
         'PassportNo': this.PassportNo.value,
@@ -1115,12 +980,12 @@ export class AllPatientsMainDataComponent implements OnInit {
           this.PMDS.clearCache();
           this.GetAllPatientsMainData();
           this.GetAllAttends();
-        //  this.GetAllAttendByBranchId();
+          //  this.GetAllAttendByBranchId();
 
           this.addForm.reset();
           this.modalRef.hide();
           this.PersonType.setValue(1);
-          this.countValues = 1;
+          //this.countValues = 1;
           this.PatientName.setValue("");
           this.PassportNo.setValue("");
           this.NationalNo.setValue("");
@@ -1149,8 +1014,8 @@ export class AllPatientsMainDataComponent implements OnInit {
     this.PMDS.DeletePatientData(patiantdelete.id).subscribe(result => {
       this.PMDS.clearCache();
       this.GetAllPatientsMainData()
-    //  this.GetAllPatByBranchId()
-    //  this.GetAllAttendByBranchId()
+      //  this.GetAllPatByBranchId()
+      //  this.GetAllAttendByBranchId()
 
       this.modalRef.hide();
       this.modalMessage2 = "هل أنت متأكد من حذف البيانات"
@@ -1237,11 +1102,12 @@ export class AllPatientsMainDataComponent implements OnInit {
 
 
 
-  resetBranchesFilter() {this.formControl.controls['branchName'].setValue(null);}
-  resetCountriesFilter() {this.formControl.controls['dependencyType'].setValue(null);}
-  resetLetterDate() {this.formControl.controls['event'].setValue(null);}
-  resetUserDate() {this.formControl.controls['userDate'].setValue(null);}
-  resetPersonType() {this.formControl.controls['personType'].setValue(null);}
-  resetPatType() {this.formControl.controls['patType'].setValue(null);}
+  resetBranchesFilter() { this.formControl.controls['branchName'].setValue(null); }
+  resetCountriesFilter() { this.formControl.controls['dependencyType'].setValue(null); }
+  resetLetterDate() { this.formControl.controls['event'].setValue(null); }
+  resetUserDate() { this.formControl.controls['userDate'].setValue(null); }
+  resetPersonType() { this.formControl.controls['personType'].setValue(null); }
+  resetPatType() { this.formControl.controls['patType'].setValue(null); }
+
 
 }
