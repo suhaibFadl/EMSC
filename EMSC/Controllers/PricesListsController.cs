@@ -174,7 +174,8 @@ namespace EMSC.Controllers
                 return NotFound();
             }
 
-            bool findServices = _db.ServicesLists.Any(SC => SC.ListId == id);
+            bool findServices = _db.ServicesLists.Any(SC => SC.ListId == id)
+                                || _db.Hospitals.Any(h => h.ListId == id);
 
             if (findServices)
                 return BadRequest(new JsonResult("لا يمكن حذف كراسة الأسعار لارتباطها ببيانات أخرى"));

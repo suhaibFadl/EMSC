@@ -105,6 +105,7 @@ namespace EMSC.Controllers
             // If the mail was found
             findHospital.HospName = fromdata.HospName;
             findHospital.Rank = fromdata.Rank;
+            findHospital.ListId = fromdata.ListId;
             _db.Entry(findHospital).State = EntityState.Modified;
 
             await _db.SaveChangesAsync();
