@@ -96,14 +96,14 @@ namespace EMSC.Controllers
         }
 
 
-        //================================Get Patient File In Hospital If Exist=============================
+        //================================open new claim In Hospital If file Exist=============================
 
         [AllowAnonymous]
         [HttpGet("[action]")]
 
         public async Task<IActionResult> GetPatientFileInHospital([FromBody] PatientHosp formdata)
         {
-            var findList = _db.PatientHosps.FirstOrDefault(c => c.PatientId == formdata.PatientId && c.HospitalId == formdata.HospitalId);
+            var findFile = _db.PatientHosps.FirstOrDefault(c => c.PatientId == formdata.PatientId && c.HospitalId == formdata.HospitalId);
 
 
 
@@ -142,13 +142,46 @@ namespace EMSC.Controllers
             await _db.SaveChangesAsync();
 
 
-            return Ok(findList);
+            return Ok(findFile);
 
             //  return Ok(_db.Countries.ToList());
 
         }
 
-        //============================ Open File In Hospital  ==============================
+        
+        //================================Get Patient File if exist=============================
+
+        [AllowAnonymous]
+        [HttpGet("GetPatientHospitalFileId/{patientId}/{hospitalId}")]
+
+        public async Task<IActionResult> GetPatientHospitalFileId([FromRoute] int patientId, [FromRoute] int hospitalId)
+        {
+            var findFile = _db.PatientHosps.FirstOrDefault(c => c.PatientId == patientId && c.HospitalId == hospitalId);
+
+            //if(findFile != null)
+                 return Ok(findFile);
+            //else
+            //    return Ok("hello");
+            //  return Ok(_db.Countries.ToList());
+
+        }  
+        
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+
+        public  async Task<IActionResult> GetPatientHospitals()
+        {
+            var findFile = await _db.PatientHosps.ToListAsync();
+
+            //if(findFile != null)
+                 return Ok(findFile);
+            //else
+            //    return Ok("hello");
+            //  return Ok(_db.Countries.ToList());
+
+        }
+
+        //============================ Add Claim Services  ==============================
         //  [Authorize(Policy = "RequireEmployeeManagementRole")]
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> AddServicesToCLaims([FromRoute] int id ,[FromBody] ClaimsServices formdata)

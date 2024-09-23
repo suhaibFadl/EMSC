@@ -191,6 +191,10 @@ export class AuthGuardService implements CanActivate {
         case '/hospitals/treatment-move-inside':
         case '/hospitals/treatment-move-inside/' + id:
         case '/hospitals/files-pats-inside':
+        case '/hospitals/incomming-patients':
+        case '/hospitals/patients-files':
+        case '/hospitals/add-claim/'+id:
+        case '/hospitals/add-claim':
 
           {
             if (localStorage.getItem("userRole") === "Admin" || "مدير المصحة" || "موظف إدخال المصحة") {

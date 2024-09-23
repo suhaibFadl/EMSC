@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { shareReplay, flatMap, first } from 'rxjs/operators';
 import { Claimsservices } from '../interfaces/claimsservices';
 import { Claim } from '../interfaces/claim';
+import { PTransInside } from '../interfaces/p-trans-inside';
+import { Patienthosp } from '../interfaces/patienthosp';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +17,8 @@ export class ClaimsService {
   private baseUrlAdd: string = "/api/Claims/AddServicesToCLaims/";
   private baseUrlGetClaim: string = "/api/Claims/GetClaimDetails/";
   private baseUrlDeletePatientData: string = "/api/Claims/DeleteServicesFromClaims/";
+
+  private baseUrlGetPatientHospitalFileId: string = "/api/Claims/GetPatientHospitalFileId";
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -35,7 +39,6 @@ export class ClaimsService {
 
   AddServiceToClaim(id: number, fromdata: Claimsservices): Observable<Claimsservices> {
     return this.http.post<Claimsservices>(this.baseUrlAdd + id, fromdata);
-
   }
 
 
@@ -54,6 +57,11 @@ export class ClaimsService {
   DeleteClaimService(id: number): Observable<any> {
     return this.http.delete(this.baseUrlDeletePatientData + id);
 
+  }
+
+  GetPatientHospitalFileId(patientId: number, hospitalId: number): Observable<Patienthosp | null> {
+    console.log(`${this.baseUrlGetPatientHospitalFileId} / ${patientId} / ${hospitalId}`);
+    return this.http.get<Patienthosp | null>(`${ this.baseUrlGetPatientHospitalFileId }/${ patientId }/${ hospitalId }`);
   }
   // Clear Cache
   clearCache() {

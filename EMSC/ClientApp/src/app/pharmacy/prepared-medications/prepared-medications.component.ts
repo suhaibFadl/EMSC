@@ -89,6 +89,7 @@ export class PreparedMedicationsComponent implements OnInit {
 
   UserId!: string;
   UserRole!: string;
+  BranchUserId!: string;
 
   LoginStatus$!: Observable<boolean>;
   dataSource!: MatTableDataSource<Pharmacy>;
@@ -97,6 +98,7 @@ export class PreparedMedicationsComponent implements OnInit {
     this.LoginStatus$ = this.acct.isloggesin;
     this.acct.currentuserid.subscribe(result => { this.UserId = result });
     this.acct.currentUserRole.subscribe(result => { this.UserRole = result });
+    this.acct.currentUserBranchId.subscribe(result => { this.BranchUserId = result });
 
     this.MangDispensDate = new FormControl('', [Validators.required]);
     this.MangDispensedAttach = new FormControl();
@@ -129,7 +131,7 @@ export class PreparedMedicationsComponent implements OnInit {
 
   GetALLMedcationsPreparedFromPharmacy() {
     this.phar.clearCache();
-    this.phar.GetALLMedcationsPreparedFromPharmacy().subscribe(data => {
+    this.phar.GetALLMedcationsPreparedFromPharmacy(this.BranchUserId).subscribe(data => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
 

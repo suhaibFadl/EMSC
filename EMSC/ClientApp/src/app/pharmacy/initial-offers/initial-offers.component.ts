@@ -80,6 +80,7 @@ export class InitialOffersComponent implements OnInit {
 
   UserId!: string;
   UserRole!: string;
+  BranchUserId!: string;
 
   LoginStatus$!: Observable<boolean>;
   dataSource!: MatTableDataSource<Pharmacy>;
@@ -89,6 +90,7 @@ export class InitialOffersComponent implements OnInit {
     this.LoginStatus$ = this.acct.isloggesin;
     this.acct.currentuserid.subscribe(result => { this.UserId = result });
     this.acct.currentUserRole.subscribe(result => { this.UserRole = result });
+    this.acct.currentUserBranchId.subscribe(result => { this.BranchUserId = result });
 
     this.OrderState = new FormControl('',Validators.required);
     this.Id = new FormControl();
@@ -118,7 +120,7 @@ export class InitialOffersComponent implements OnInit {
 
   GetALLPreOffersRequestes() {
     this.phar.clearCache();
-    this.phar.GetALLPreOffersRequestes(5).subscribe(data => {
+    this.phar.GetALLPreOffersRequestes(5, this.BranchUserId).subscribe(data => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
 

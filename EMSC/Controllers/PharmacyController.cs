@@ -390,19 +390,20 @@ namespace EMSC.Controllers
 
         }
         //================================Get All Patients Files عرض ملفات المرضى الذين تم صرف دواء لهم ==============================
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetALlPatsFiles()
+        [HttpGet("[action]/{id}")]
+        public async Task<IActionResult> GetALlPatsFiles([FromRoute] int id)
         {
-            var output = await (
+ 
+               var  output = await (
                          from pd in _db.PatientsData
                          from dm in _db.DispensingMedication
                          from br in _db.Branches
-                         where pd.Id == dm.PatientId 
+                         where pd.Id == dm.PatientId
+                         && (id == 13 || pd.BranchId == id)
                          && br.Id == pd.BranchId
                          orderby dm.RequestDate descending
                          select new
                          {
-
                              dm.Id,
                              pd.PatientName,
                              pd.PassportNo,
@@ -418,7 +419,7 @@ namespace EMSC.Controllers
                              br.BranchName
                          }
                              ).ToListAsync();
-
+            
                 var data = output.GroupBy(x => x.PatientId).Select(y => y.FirstOrDefault()).ToList();
 
 
@@ -1017,8 +1018,8 @@ namespace EMSC.Controllers
         //===============================================================
 
         //=================================Get All Requests عرض كافة طلبات الدواء لموظف المركز===================================
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetALlRequests()
+        [HttpGet("[action]/{id}")]
+        public async Task<IActionResult> GetALlRequests([FromRoute] int id)
         {
             var output = await (
                          from pd in _db.PatientsData
@@ -1026,8 +1027,10 @@ namespace EMSC.Controllers
                          from dm in _db.DispensingMedication
                          from us in _db.Users
                          from ph in _db.Pharmacies
+                         from ub in _db.BranchesUsers
                          where pd.Id == dm.PatientId && md.Id == dm.MedId && us.Id == dm.UserId
                          && ph.Id == dm.PHId
+                         && ub.UserId == dm.UserId && ub.BranchId == id
                          orderby dm.RequestDate descending
                          select new
                          {
@@ -1113,8 +1116,8 @@ namespace EMSC.Controllers
         //=================================Get All Requests عرض كافة العروض المبدئية للمركز===================================
         //=================================Get All Requests عرض الذي تم توفيره من الصيدلية لموظف للمركز===================================
         //=================================Get All Requests عرض الذي تم صرفه من الصيدلية لموظف للمركز===================================
-        [HttpGet("[action]/{orderstate}")]
-        public IActionResult GetALLPreOffersRequestes([FromRoute] int orderstate)
+        [HttpGet("[action]/{orderstate}/{id}")]
+        public IActionResult GetALLPreOffersRequestes([FromRoute] int orderstate,int id)
         {
             var output = (
                          from pd in _db.PatientsData
@@ -1122,10 +1125,12 @@ namespace EMSC.Controllers
                          from dm in _db.DispensingMedication
                          from us in _db.Users
                          from ph in _db.Pharmacies
+                         from ub in _db.BranchesUsers
                          where
                          dm.OrderState == orderstate && pd.Id == dm.PatientId && md.Id == dm.MedId 
                          && us.Id == dm.UserId
                          && ph.Id == dm.PHId
+                         && ub.UserId == dm.UserId && ub.BranchId == id
                          orderby dm.RequestDate descending
                          select new
                          {
@@ -1156,8 +1161,8 @@ namespace EMSC.Controllers
 
         }
 
-        [HttpGet("[action]")]
-        public IActionResult GetALLMedcationsPreparedFromPharmacy()
+        [HttpGet("[action]/{id}")]
+        public IActionResult GetALLMedcationsPreparedFromPharmacy([FromRoute] int id)
         {
             var output = (
                          from pd in _db.PatientsData
@@ -1165,10 +1170,12 @@ namespace EMSC.Controllers
                          from dm in _db.DispensingMedication
                          from us in _db.Users
                          from ph in _db.Pharmacies
+                         from ub in _db.BranchesUsers
                          where
                          (dm.OrderState == 3 || dm.OrderState == 8) && pd.Id == dm.PatientId && md.Id == dm.MedId
                          && us.Id == dm.UserId
                          && ph.Id == dm.PHId
+                         && ub.UserId == dm.UserId && ub.BranchId == id
                          orderby dm.RequestDate descending
                          select new
                          {
@@ -1289,8 +1296,8 @@ namespace EMSC.Controllers
 
 
         //============================عرض الأدوية المصروفة للمستفيد من قبل المركز==============================
-        [HttpGet("[action]")]
-        public IActionResult GetMedicationsProvidedToPatients()
+        [HttpGet("[action]/{id}")]
+        public IActionResult GetMedicationsProvidedToPatients([FromRoute] int id)
         {
             var output = (
                          from pd in _db.PatientsData
@@ -1298,8 +1305,11 @@ namespace EMSC.Controllers
                          from dm in _db.DispensingMedication
                          from us in _db.Users
                          from ph in _db.Pharmacies
+                         from ub in _db.BranchesUsers
                          where dm.OrderState == 4 && pd.Id == dm.PatientId && md.Id == dm.MedId && us.Id == dm.UserId
                          && ph.Id == dm.PHId
+                         && ub.UserId == dm.UserId
+                         && (id == 13 || ub.BranchId == id)
                          orderby dm.RequestDate descending
                          select new
                          {

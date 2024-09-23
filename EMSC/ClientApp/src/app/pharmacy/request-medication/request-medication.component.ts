@@ -113,6 +113,7 @@ export class RequestMedicationComponent implements OnInit {
 
 
   inputType = 'number';
+  BranchUserId!: string;
 
   LoginStatus$!: Observable<boolean>;
   dataSource!: MatTableDataSource<PatientData>;
@@ -153,7 +154,7 @@ export class RequestMedicationComponent implements OnInit {
 
 
   UserId!: string;
-  UserRole!: string;
+  UserRole!: string; 
 
 
   modalRef!: BsModalRef;
@@ -215,6 +216,7 @@ export class RequestMedicationComponent implements OnInit {
 
     this.acct.currentuserid.subscribe(result => { this.UserId = result });
     this.acct.currentUserRole.subscribe(result => { this.UserRole = result });
+    this.acct.currentUserBranchId.subscribe(result => { this.BranchUserId = result });
 
 
     // this.MedId = new FormControl('', [Validators.required, Validators.minLength(1)]);
@@ -324,7 +326,12 @@ export class RequestMedicationComponent implements OnInit {
 
 
     //==============================================================================
-    this.GetAllPats();
+    if (this.UserRole == "الإدارة") {
+      this.GetAllPats();
+    }
+    else {
+      this.GetAllPMainDataByBranchId();
+    }
     this.GetAllDependencies();
     this.GetAllInjuryEvents();
     this.GetMedications();
@@ -630,7 +637,7 @@ export class RequestMedicationComponent implements OnInit {
   }
 
   GetALlRequests() {
-    this.reqs$ = this.phar.GetALlRequests();
+    this.reqs$ = this.phar.GetALlRequests(this.BranchUserId);
     this.reqs$.subscribe(result => {
       this.reqs = result;
     });
@@ -713,25 +720,37 @@ export class RequestMedicationComponent implements OnInit {
   }
 
 
-    //uploadFile() {
-
-  //  this.uploadForm.setValue({
-  //    'Id': this.Id.value,
-  //    'ReqestLetter': this.ReqestLetter.value,
-  //  });
-
-  //  let newData = this.uploadForm.value;
+  GetAllPMainDataByBranchId() {
+    this.PMDS.clearCache();
+    this.PMDS.GetAllPatientsMainDataByBranchId(this.BranchUserId.toString()).subscribe(data => {
+      this.dataSource = new MatTableDataSource(data);
+      this.dataSource.paginator = this.paginator;
 
 
-  //  this.http.put('/api/Pharmacy/UploadRequestLetter', newData).subscribe(
-  //    result => {
-  //      this.phar.clearCache();
-  //      this.uploadForm.reset();
-  //    },
-  //    error =>
-  //      this.app.showToasterError()
-  //  );
-  //}
+      this.dataSource.filterPredicate = ((data, filter) => {
+        const a = !filter.patientName || data.patientName.toLowerCase().includes(filter.patientName);
+        const b = !filter.passportNo || data.passportNo.toLowerCase().includes(filter.passportNo)
+          || data.passportNo.toUpperCase().includes(filter.passportNo);
+        const c = !filter.nationalNo || data.nationalNo.toLowerCase().includes(filter.nationalNo);
+        const d = !filter.branchName || data.branchName.toLowerCase().includes(filter.branchName);
+        const e = !filter.dependencyType || data.dependencyType.toLowerCase().includes(filter.dependencyType);
+        const f = !filter.event || data.event.toLowerCase().includes(filter.event);
+        const g = !filter.userDate || moment(data.userDate).format('yyyy-MM-DD').toLowerCase().includes(moment(filter.userDate).format('yyyy-MM-DD'));
+        const h = !filter.phoneNumber || data.phoneNumber.toLowerCase().includes(filter.phoneNumber);
+        const j = !filter.personType || data.personType.toString().toLowerCase().includes(filter.personType);
+        const i = !filter.patType || data.patType.toString().toLowerCase().includes(filter.patType);
+
+        return a && b && c && d && e && f && g && h && j && i;
+      }) as (PeriodicElement, string) => boolean;
+
+
+      this.formControl.valueChanges.subscribe(value => {
+        const filter = { ...value, patientName: value.patientName.trim().toLowerCase() } as string;
+        this.dataSource.filter = filter;
+      });
+    });
+  }
+
 
 }
 

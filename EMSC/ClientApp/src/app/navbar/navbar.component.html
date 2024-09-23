@@ -54,7 +54,8 @@
           <ul class="sub-nav dropdown-menu " id="newsecond">
             <li [routerLinkActive]="'activee'" [routerLink]='["/branches/p-main-data"]' *ngIf="LoginStatus &&  UserRole =='مدير الفرع' || UserRole =='موظف إدخال الفرع'"><a>إضافة بيانات الجرحى</a></li>
             <li *ngIf="LoginStatus &&   UserRole =='الإدارة' " [routerLinkActive]="'activee'" [routerLink]='["/management/all-patients-main-data"]'><a>كافة بيانات الجرحى</a></li>
-            <li [routerLinkActive]="'activee'" [routerLink]='["/branches/add-pats-visiting-doctors"]' *ngIf="LoginStatus  && BranchName == 'فرع منطقة طرابلس' && ( UserRole =='مدير الفرع' || UserRole =='موظف إدخال الفرع')"><a>إضافة بيانات الجرحى للأطباء الزوار</a></li>
+            <li *ngIf="LoginStatus &&   UserRole =='الإدارة' " [routerLinkActive]="'activee'" [routerLink]='["/management/all-p-main-data-inside"]'><a>كافة بيانات الجرحى للعلاج بالداخل</a></li>
+            <!--<li [routerLinkActive]="'activee'" [routerLink]='["/branches/add-pats-visiting-doctors"]' *ngIf="LoginStatus  && BranchName == 'فرع منطقة طرابلس' && ( UserRole =='مدير الفرع' || UserRole =='موظف إدخال الفرع')"><a>إضافة بيانات الجرحى للأطباء الزوار</a></li>-->
 
           </ul>
 
@@ -276,10 +277,10 @@
 
 
         <!--الواجهات الخاصة بالمصحات داخل ليبيا-->
-        <li [routerLinkActive]="'activee'" [routerLink]='["/hospitals/letters-inside-incoming"]' *ngIf="LoginStatus && UserRole =='مدير المصحة'  || UserRole =='موظف إدخال المصحة' "><a>رسائل العلاج الواردة</a> </li>
-        <li [routerLinkActive]="'activee'" [routerLink]='["/hospitals/replies-on-branches"]' *ngIf="LoginStatus && UserRole =='مدير المصحة' || UserRole =='موظف إدخال المصحة' "><a>رسائل العلاج التي تم الرد عليها</a></li>
-        <li [routerLinkActive]="'activee'" [routerLink]='["/hospitals/add-treatment"]' *ngIf="LoginStatus && UserRole =='مدير المصحة' || UserRole =='موظف إدخال المصحة' "><a>إضافة إجراءات طبية</a></li>
-        <li [routerLinkActive]="'activee'" [routerLink]='["/hospitals/files-pats-inside"]' *ngIf="LoginStatus && UserRole =='مدير المصحة' || UserRole =='موظف إدخال المصحة' "><a>الملفات الطبية للجرحى</a></li>
+        <li [routerLinkActive]="'activee'" [routerLink]='["/hospitals/incomming-patients"]' *ngIf="LoginStatus && UserRole =='مدير المصحة'  || UserRole =='موظف إدخال المصحة' "><a>رسائل العلاج الواردة</a> </li>
+        <!--<li [routerLinkActive]="'activee'" [routerLink]='["/hospitals/replies-on-branches"]' *ngIf="LoginStatus && UserRole =='مدير المصحة' || UserRole =='موظف إدخال المصحة' "><a>رسائل العلاج التي تم الرد عليها</a></li>-->
+        <li [routerLinkActive]="'activee'" [routerLink]='["/hospitals/patients-files"]' *ngIf="LoginStatus && UserRole =='مدير المصحة' || UserRole =='موظف إدخال المصحة' "><a>إضافة الإجراءات الطبية للحالات</a></li>
+        <!--<li [routerLinkActive]="'activee'" [routerLink]='["/hospitals/files-pats-inside"]' *ngIf="LoginStatus && UserRole =='مدير المصحة' || UserRole =='موظف إدخال المصحة' "><a>الملفات الطبية للجرحى</a></li>-->
 
 
 

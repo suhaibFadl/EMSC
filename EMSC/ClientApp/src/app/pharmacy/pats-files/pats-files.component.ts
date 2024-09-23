@@ -124,6 +124,7 @@ export class PatsFilesComponent implements OnInit {
 
   UserId!: string;
   UserRole!: string;
+  BranchUserId!: string;
 
   ngOnInit(): void {
 
@@ -131,6 +132,7 @@ export class PatsFilesComponent implements OnInit {
 
     this.acct.currentuserid.subscribe(result => { this.UserId = result });
     this.acct.currentUserRole.subscribe(result => { this.UserRole = result });
+    this.acct.currentUserBranchId.subscribe(result => { this.BranchUserId = result });
 
     this.MedId = new FormControl('', [Validators.required, Validators.minLength(1)]);
     this.Id = new FormControl();
@@ -165,7 +167,7 @@ export class PatsFilesComponent implements OnInit {
 
   GetALlPatsFiles() {
     this.phar.clearCache();
-    this.phar.GetALlPatsFiles().subscribe(data => {
+    this.phar.GetALlPatsFiles(this.BranchUserId).subscribe(data => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
 

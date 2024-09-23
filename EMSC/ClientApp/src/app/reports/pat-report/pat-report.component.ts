@@ -108,6 +108,7 @@ export class PatReportComponent implements OnInit {
   UserId!: string;
   UserRole!: string;
   PharmacyId!: string;
+  BrachUserId!: string;
 
 
 
@@ -120,6 +121,7 @@ export class PatReportComponent implements OnInit {
     this.acct.currentuserid.subscribe(result => { this.UserId = result });
     this.acct.currentUserRole.subscribe(result => { this.UserRole = result });
     this.acct.currentUserPharmacyId.subscribe(result => { this.PharmacyId = result });
+    this.acct.currentUserBranchId.subscribe(result => { this.BrachUserId = result });
 
 
 
@@ -187,7 +189,7 @@ export class PatReportComponent implements OnInit {
 
   GetAllPats() {
     this.PMDS.clearCache();
-    this.phar.GetALlPatsFiles().subscribe(data => {
+    this.phar.GetALlPatsFiles(this.BrachUserId).subscribe(data => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
 

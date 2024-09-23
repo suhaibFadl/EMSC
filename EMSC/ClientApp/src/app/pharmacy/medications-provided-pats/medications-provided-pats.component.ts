@@ -117,6 +117,7 @@ export class MedicationsProvidedPatsComponent implements OnInit {
 
   UserId!: string;
   UserRole!: string;
+  BranchUserId!: string;
 
   fileToUpload!: File;
   fileText!: string;
@@ -132,6 +133,7 @@ export class MedicationsProvidedPatsComponent implements OnInit {
 
     this.acct.currentuserid.subscribe(result => { this.UserId = result });
     this.acct.currentUserRole.subscribe(result => { this.UserRole = result });
+    this.acct.currentUserBranchId.subscribe(result => { this.BranchUserId = result });
 
 
     this.Id = new FormControl();
@@ -167,7 +169,7 @@ export class MedicationsProvidedPatsComponent implements OnInit {
 
   GetMedicationsProvidedToPatients() {
     this.phar.clearCache();
-    this.phar.GetMedicationsProvidedToPatients().subscribe(data => {
+    this.phar.GetMedicationsProvidedToPatients(this.BranchUserId).subscribe(data => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
 

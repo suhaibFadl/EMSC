@@ -216,7 +216,7 @@
           <div class="form-group">
             <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
               <mat-label> رقم الملف بالمصحة</mat-label>
-              <input formControlName="FileNo" type="text" id="FileNo" matInput placeholder="ادخل رقم ملف المريض بالمصحة" [errorStateMatcher]="matcher">
+              <input formControlName="FileNo" type="text" id="FileNo" matInput placeholder="ادخل رقم ملف المريض بالمصحة" [errorStateMatcher]="matcher" [readonly]="isHospitalFileNoExist">
               <mat-error *ngIf="FileNo.hasError('FileNo') && !FileNo.hasError('required')">
                 الرجاء تعبئة الحقول المطلوبة
               </mat-error>

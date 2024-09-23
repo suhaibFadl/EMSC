@@ -135,6 +135,7 @@ export class AllRequestsComponent implements OnInit {
 
   UserId!: string;
   UserRole!: string;
+  BranchUserId!: string;
 
   ngOnInit(): void {
 
@@ -142,6 +143,7 @@ export class AllRequestsComponent implements OnInit {
 
     this.acct.currentuserid.subscribe(result => { this.UserId = result });
     this.acct.currentUserRole.subscribe(result => { this.UserRole = result });
+    this.acct.currentUserBranchId.subscribe(result => { this.BranchUserId = result });
 
     this.MedId = new FormControl('', [Validators.required, Validators.minLength(1)]);
     this.Id = new FormControl();
@@ -181,7 +183,7 @@ export class AllRequestsComponent implements OnInit {
 
   GetALlRequests() {
     this.phar.clearCache();
-    this.phar.GetALlRequests().subscribe(data => {
+    this.phar.GetALlRequests(this.BranchUserId).subscribe(data => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
 

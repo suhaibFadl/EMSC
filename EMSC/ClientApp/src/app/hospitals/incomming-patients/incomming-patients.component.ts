@@ -23,6 +23,7 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { ReplyHospitalService } from '../../services/reply-hospital.service';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatInput } from '@angular/material/input';
+import { ClaimsService } from '../../services/claims.service';
 
 
 
@@ -58,7 +59,7 @@ export class IncommingPatientsComponent implements OnInit {
   UserDate!: string;
   BRID!: number;
 
-
+  isHospitalFileNoExist: boolean = false;
 
   UserId!: string;
   UserRole!: string;
@@ -106,6 +107,7 @@ export class IncommingPatientsComponent implements OnInit {
     private rh: ReplyHospitalService,
     private count: CountryService,
     private br: BranchService,
+    private cs: ClaimsService,
     private datepipe: DatePipe,
     private http: HttpClient
   ) {
@@ -193,7 +195,18 @@ export class IncommingPatientsComponent implements OnInit {
 
   //reply modal
   onReplyModal(rpid: PTransInside): void {
+    this.replayForm.reset();
+    this.isHospitalFileNoExist = false;
+
     this.modalMessage = "الرجاء تعبئة البيانات المطلوبة";
+
+
+    this.cs.GetPatientHospitalFileId(rpid.patientId, rpid.hospitalId).subscribe(data => {
+      if (data != null) {
+        this.isHospitalFileNoExist = data.fileNo ? true : false ;
+        this.FileNo.setValue(data.fileNo);
+      }
+    });
 
     this.PatientId.setValue(rpid.patientId);
     this.TRID.setValue(rpid.id);

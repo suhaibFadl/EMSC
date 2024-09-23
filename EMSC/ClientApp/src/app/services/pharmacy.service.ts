@@ -33,10 +33,10 @@ export class PharmacyService {
   private baseUrlUpdateMedicationDispensedByPharmacy: string = "/api/Pharmacy/UpdateMedicationDispensedByPharmacy/";
   private baseUrlUpdateMedicationDispensedByManag: string = "/api/Pharmacy/UpdateMedicationDispensedByManag/";
   private baseUrlDispenseMedicationByManagement: string = "/api/Pharmacy/DispenseMedicationByManagement/";
-  private baseUrlGetALlRequests: string = "/api/Pharmacy/GetALlRequests";
-  private baseUrlGetALlPatsFiles: string = "/api/Pharmacy/GetALlPatsFiles";
+  private baseUrlGetALlRequests: string = "/api/Pharmacy/GetALlRequests/";
+  private baseUrlGetALlPatsFiles: string = "/api/Pharmacy/GetALlPatsFiles/";
   private baseUrlGetALlPatsFilesByPharmacy: string = "/api/Pharmacy/GetALlPatsFilesByPharmacy/";
-  private baseUrlGetMedicationsProvidedToPatients: string = "/api/Pharmacy/GetMedicationsProvidedToPatients";
+  private baseUrlGetMedicationsProvidedToPatients: string = "/api/Pharmacy/GetMedicationsProvidedToPatients/";
   private baseUrlGetNotResponsedRequests: string = "/api/Pharmacy/GetNotResponsedRequests/";
   private baseUrlGetResponsedRequestForDispensing: string = "/api/Pharmacy/GetResponsedRequestForDispensing";
   private baseUrlGetResponsedRequests: string = "/api/Pharmacy/GetResponsedRequests/";
@@ -48,7 +48,7 @@ export class PharmacyService {
 
 
   private baseUrlGetALLPreOffersRequestes: string = "/api/Pharmacy/GetALLPreOffersRequestes/";
-  private baseUrlGetALLMedcationsPreparedFromPharmacy: string = "/api/Pharmacy/GetALLMedcationsPreparedFromPharmacy";
+  private baseUrlGetALLMedcationsPreparedFromPharmacy: string = "/api/Pharmacy/GetALLMedcationsPreparedFromPharmacy/";
   private baseUrlGetALLAcceptedOffersRequestes: string = "/api/Pharmacy/GetALLAcceptedOffersRequestes/";
 
   private baseUrlReplyManagementOnPharmacy: string = "/api/Pharmacy/ReplyManagementOnPharmacy/";
@@ -152,20 +152,20 @@ export class PharmacyService {
   }
 
 
-  GetALlRequests(): Observable<Pharmacy[]> {
+  GetALlRequests(branchid: string): Observable<Pharmacy[]> {
     this.clearCache();
 
     if (!this.pData$) {
-      this.pData$ = this.http.get<Pharmacy[]>(this.baseUrlGetALlRequests).pipe(shareReplay());
+      this.pData$ = this.http.get<Pharmacy[]>(this.baseUrlGetALlRequests + branchid).pipe(shareReplay());
     }
     return this.pData$;
   }
 
-  GetALlPatsFiles(): Observable<Pharmacy[]> {
+  GetALlPatsFiles(BranchUserId : string): Observable<Pharmacy[]> {
     this.clearCache();
 
     if (!this.pData$) {
-      this.pData$ = this.http.get<Pharmacy[]>(this.baseUrlGetALlPatsFiles).pipe(shareReplay());
+      this.pData$ = this.http.get<Pharmacy[]>(this.baseUrlGetALlPatsFiles + BranchUserId).pipe(shareReplay());
     }
     return this.pData$;
   }
@@ -180,11 +180,11 @@ export class PharmacyService {
   }
 
 
-  GetMedicationsProvidedToPatients(): Observable<Pharmacy[]> {
+  GetMedicationsProvidedToPatients(BranchUserId : string): Observable<Pharmacy[]> {
     this.clearCache();
 
     if (!this.pData$) {
-      this.pData$ = this.http.get<Pharmacy[]>(this.baseUrlGetMedicationsProvidedToPatients).pipe(shareReplay());
+      this.pData$ = this.http.get<Pharmacy[]>(this.baseUrlGetMedicationsProvidedToPatients + BranchUserId).pipe(shareReplay());
     }
     return this.pData$;
   }
@@ -249,19 +249,19 @@ export class PharmacyService {
   }
 
 
-  GetALLPreOffersRequestes(id: number): Observable<Pharmacy[]> {
+  GetALLPreOffersRequestes(id: number, branchid: string): Observable<Pharmacy[]> {
     this.clearCache();
 
     if (!this.pData$) {
-      this.pData$ = this.http.get<Pharmacy[]>(this.baseUrlGetALLPreOffersRequestes + id).pipe(shareReplay());
+      this.pData$ = this.http.get<Pharmacy[]>(this.baseUrlGetALLPreOffersRequestes + id + "/" + branchid).pipe(shareReplay());
     }
     return this.pData$;
   }
-  GetALLMedcationsPreparedFromPharmacy(): Observable<Pharmacy[]> {
+  GetALLMedcationsPreparedFromPharmacy(branchid: string): Observable<Pharmacy[]> {
     this.clearCache();
 
     if (!this.pData$) {
-      this.pData$ = this.http.get<Pharmacy[]>(this.baseUrlGetALLMedcationsPreparedFromPharmacy ).pipe(shareReplay());
+      this.pData$ = this.http.get<Pharmacy[]>(this.baseUrlGetALLMedcationsPreparedFromPharmacy +branchid).pipe(shareReplay());
     }
     return this.pData$;
   }
