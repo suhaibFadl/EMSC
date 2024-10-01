@@ -310,6 +310,7 @@ namespace EMSC.Controllers
 
         public IActionResult GetMedicalServicesByListId([FromRoute] int ListId)
         {
+
             var output = (
                          from ms in _db.ServicesLists
                          join c in _db.MedicalServices on ms.ServId equals c.Id
@@ -338,7 +339,50 @@ namespace EMSC.Controllers
 
         }
 
-         
+
+        //================================Get Medical Services With Costs=============================
+
+        [AllowAnonymous]
+        [HttpGet("[action]/{ListId}/{RankId}")]
+
+        public IActionResult GetMedicalServicesCosts([FromRoute] int ListId, [FromRoute] int RankId)
+        {
+
+            var output = (
+                        
+                         from ms in _db.ServicesLists
+                         join c in _db.MedicalServices on ms.ServId equals c.Id
+                         join l in _db.PricesLists on ms.ListId equals l.Id
+                         join u in _db.Users on ms.UserId equals u.Id
+                         where ms.ListId == ListId
+
+                         let rank = (from r in _db.HospitalRanks
+                                     where r.Id == RankId
+                                     select r).First()
+                        
+                         select new
+                         {
+                            id = ms.Id,
+                            listName = l.ListName,
+                            servArName = c.ServArName,
+                            servEnName = c.ServEnName,
+                            servPrice = Convert.ToString(
+                                Convert.ToDouble(ms.ServPrice) * (1 - Convert.ToDouble(rank.RankPer) / 100.0)
+                            ), 
+                           // Assign null if rank is missing
+                            phoneNumber = u.PhoneNumber,
+                            userDate = ms.UserDate
+                         }
+                             ).OrderBy(x => x.servArName).ToList();
+
+
+            return Ok(output);
+
+            //  return Ok(_db.Countries.ToList());
+
+        }
+
+
 
 
         //=================================UPDATE Medical Services===============================

@@ -21,6 +21,7 @@ export class PriceslistsService {
 
   private medbaseUrlGet: string = "/api/Priceslists/GetMedicalServices";
   private medByListbaseUrlGet: string = "/api/Priceslists/GetMedicalServicesByListId/";
+  private medCostByListbaseUrlGet: string = "/api/Priceslists/GetMedicalServicesCosts/";
   private medbaseUrlAdd: string = "/api/Priceslists/AddMedicalServices";
   private medbaseUrlUpdate: string = "/api/Priceslists/UpdateMedicalServicesData";
   private medbaseUrlDelete: string = "/api/Priceslists/DeleteMedicalServicesData/";
@@ -100,12 +101,25 @@ export class PriceslistsService {
 
   //====================Medical services By List ID
 
-  GetMeedicalServicesByListID(listid: number): Observable<Medicalservices[]> {
+  //GetMeedicalServicesByListID(listid: number): Observable<Medicalservices[]> {
+  //  this.clearCache();
+
+  //  console.log(listid);
+  //  if (!this.medicalservice$) {
+  //    this.medicalservice$ = this.http.get<Medicalservices[]>(this.medByListbaseUrlGet + listid).pipe(shareReplay());
+  //  }
+
+  //  //console.log(this.medicalservice$);
+  //  return this.medicalservice$;
+
+  //}
+
+  GetMeedicalServicesCostsByListID(listid: number, hospitalRankId: number): Observable<Medicalservices[]> {
     this.clearCache();
 
     console.log(listid);
     if (!this.medicalservice$) {
-      this.medicalservice$ = this.http.get<Medicalservices[]>(this.medByListbaseUrlGet + listid).pipe(shareReplay());
+      this.medicalservice$ = this.http.get<Medicalservices[]>(this.medCostByListbaseUrlGet + listid + '/' + hospitalRankId).pipe(shareReplay());
     }
 
     //console.log(this.medicalservice$);

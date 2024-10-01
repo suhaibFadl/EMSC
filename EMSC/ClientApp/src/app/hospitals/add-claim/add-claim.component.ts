@@ -38,6 +38,7 @@ import { Serviceslists } from '../../interfaces/serviceslists';
 import { PriceslistsService } from '../../services/priceslists.service';
 import { ClaimsService } from '../../services/claims.service';
 import { Claimsservices } from '../../interfaces/claimsservices';
+import { CloseClaim } from '../../interfaces/closeClaim';
 
 export const MY_FORMATS = {
   parse: {
@@ -98,11 +99,12 @@ export class AddClaimComponent implements OnInit {
   UserId!: string;
   listid!: number;
   HospitalUserId!: string;
+  hospitalRankId!: number;
   sourceList: any[] = [];
   claimid!: string;
   claimtotal!: string;
   entrydate!: Date;
-
+  claimServicesList!: Claimsservices[];
 
   modalRef!: BsModalRef;
   @ViewChild('paginator2') paginator2!: MatPaginator;
@@ -111,6 +113,7 @@ export class AddClaimComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild('deleteTemplate') deletemodal!: TemplateRef<any>;
   @ViewChild('editTemplate') editmodal!: TemplateRef<any>;
+  @ViewChild('closeClaimTemplate') closeClaimModal!: TemplateRef<any>;
   @Input() matcher!: ErrorStateMatcher;
 
   displayedColumns: string[] = ['index', 'first', 'second', 'third', 'add'];
@@ -125,6 +128,7 @@ export class AddClaimComponent implements OnInit {
   AddForm!: FormGroup;
   deleteForm!: FormGroup;
   updateForm!: FormGroup;
+
   servId!: FormControl;
   ServArName!: FormControl;
   ServEnName!: FormControl;
@@ -140,6 +144,15 @@ export class AddClaimComponent implements OnInit {
   _Quantity!: FormControl;
   _ServDate!: FormControl;
   _Uid!: FormControl;
+
+  closeClaimForm!: FormGroup;
+  claimId!: FormControl;
+  billNo!: FormControl;
+  diagnosis!: FormControl;
+  notes!: FormControl;
+  claimType!: FormControl;
+  exitDate!: FormControl;
+
    
   modalMessage2!: string;
   modalMessage3!: string;
@@ -155,9 +168,8 @@ export class AddClaimComponent implements OnInit {
       this.passport = data[0].passportNo;
       this.indexno = data[0].letterIndexNO;
       this.fileno = data[0].fileNo;
-     
-
     });
+
   }
   GetClaimDetails() {
     let id = + this.route.snapshot.params['id'];
@@ -209,6 +221,12 @@ export class AddClaimComponent implements OnInit {
     this._Quantity = new FormControl('', [Validators.required, Validators.minLength(1)]);
     this._Uid = new FormControl('', [Validators.required, Validators.minLength(1)]);
 
+    this.claimId = new FormControl('', Validators.required);
+    this.billNo = new FormControl('', Validators.required);
+    this.claimType = new FormControl('', Validators.required);
+    this.notes = new FormControl('', Validators.required);
+    this.diagnosis = new FormControl('', Validators.required);
+    this.exitDate = new FormControl('', Validators.required);
 
     this.AddForm = this.fb.group(
       {
@@ -223,14 +241,14 @@ export class AddClaimComponent implements OnInit {
 
     this.updateForm = this.fb.group(
       {
-        '_servId': this._servId,
-        '_ServArName': this._ServArName,
-        '_ServEnName': this._ServEnName,
-        '_ServDate': this._ServDate,
-        '_Quantity': this._Quantity,
-        '_Price': this._ServPrice,
-        '_hospUserId': this.UserId,
-        '_Uid': this._Uid,
+        'servId': this._servId,
+        'ServArName': this._ServArName,
+        'ServEnName': this._ServEnName,
+        'ServDate': this._ServDate,
+        'Quantity': this._Quantity,
+        'Price': this._ServPrice,
+        'hospUserId': this.UserId,
+        'Uid': this._Uid,
       });
 
 
@@ -240,8 +258,19 @@ export class AddClaimComponent implements OnInit {
         
       });
      
+    this.closeClaimForm = this.fb.group(
+      {
+        'id': this.claimId,
+        'billNo': this.billNo,
+        //'claimType': this.claimType,
+        'notes': this.notes,
+        'diagnosis': this.diagnosis,
+        'exitDate': this.exitDate,
+      });
+
 
     this.GetClaimServices();
+    console.log(this.DataSource);
   }
 
   GetAllServices() {
@@ -251,8 +280,9 @@ export class AddClaimComponent implements OnInit {
     console.log(this.HospitalUserId);
     this.hos.GetHospitalById(this.HospitalUserId).subscribe((data: any) => {
       this.listid = data[0].listId;
-    
-      this.ps.GetMeedicalServicesByListID(this.listid).subscribe((data: any) => {
+      this.hospitalRankId = data[0].rank
+      console.log(`here ${this.listid} :  ${this.hospitalRankId}`)
+      this.ps.GetMeedicalServicesCostsByListID(this.listid, this.hospitalRankId).subscribe((data: any) => {
         this.sourceList = data;
         this.sourceDataSource = new MatTableDataSource(data);
         this.sourceDataSource.paginator = this.paginator;
@@ -302,31 +332,68 @@ export class AddClaimComponent implements OnInit {
 
   }
 
-  onDeleteModal(c: Claimsservices) {
-    this.modalMessage3 = "هل أنت متأكد من حذف البيانات"
-    
-    this.Did.setValue(c.id);
-    this.deleteForm.setValue({
-      'id': this.Did.value
-    });
-    this.modalRef = this.modalService.show(this.deletemodal);
-  }
 
   onUpdateModal(editdata: Claimsservices): void {
-    console.log(editdata);
+    console.log(editdata.servDate);
+    const formattedDate = new Date(editdata.servDate).toISOString().split('T')[0]; 
     this.modalMessage = "الرجاء تعبئة جميع الحقول مطلوبة";
     this._Uid.setValue(editdata.id);
     this._servId.setValue(editdata.servId);
     this._ServArName.setValue(editdata.servArName);
     this._ServEnName.setValue(editdata.servEnName);
-    this._ServDate.setValue(editdata.servDate);
+    this._ServDate.setValue(formattedDate);
     this._Quantity.setValue(editdata.quantity);
-
-    console.log(this._ServDate.value);
     this._ServPrice.setValue(editdata.price);
-   
+    console.log(this._ServDate.value);
+
+    this.updateForm.setValue({
+      'Uid': this._Uid.value,
+      'servId': this._servId.value,
+      'ServArName': this._ServArName.value,
+      'ServEnName': this._ServEnName.value,
+      'ServDate': this._ServDate.value,
+      'Quantity': this._Quantity.value,
+      'Price': this._ServPrice.value,
+      'hospUserId': this.UserId,
+    });
+  
 
     this.modalRef = this.modalService.show(this.editmodal);
+  }
+
+
+  onUpdate() {
+    let newData = this.updateForm.value;
+
+    console.log(newData);
+
+
+    this.cl.UpdateServicesInClaims(newData.Uid, newData).subscribe(
+      (result: any) => {
+        console.log("Heeeeeere" + newData.Uid)
+        this.cl.clearCache();
+        this.GetClaimServices();
+        this.GetClaimDetails();
+        this.modalRef.hide();
+        this.updateForm.reset();
+        this.app.showToasterSuccess();
+      },
+      error => {
+        this.app.showToasterError();
+        console.log("Heeeeeere" + newData.Uid)
+      }
+    )
+
+  }
+
+  onDeleteModal(c: Claimsservices) {
+    this.modalMessage3 = "هل أنت متأكد من حذف البيانات"
+
+    this.Did.setValue(c.id);
+    this.deleteForm.setValue({
+      'id': this.Did.value
+    });
+    this.modalRef = this.modalService.show(this.deletemodal);
   }
 
   onDelete(): void {
@@ -343,18 +410,67 @@ export class AddClaimComponent implements OnInit {
     )
   }
 
-  onUpdate() {
+  
 
+  onCloseClaimModal(): void {
+ 
+    //const formattedDate = new Date(editdata.servDate).toISOString().split('T')[0];
+    this.modalMessage = "الرجاء تعبئة جميع الحقول مطلوبة";
+    this.claimId.setValue(this.claimid);
+    //this.exitDate.setValue(new Date());
+   
+  
+    console.log(this.claimid);
+    this.closeClaimForm.setValue({
+      'id': this.claimId.value,
+      'billNo': this.billNo.value,
+      //'claimType': this.claimType.value,
+      'notes': this.notes.value,
+      'diagnosis': this.diagnosis.value,
+      'exitDate': this.exitDate.value,
+    });
+
+
+    this.modalRef = this.modalService.show(this.closeClaimModal);
   }
 
+  onClaimClose() {
+    let newData: CloseClaim = this.closeClaimForm.value;
+    //newData.trId = this.
+    newData.billDate = new Date();
 
+
+    let entryDateFormatted = new Date(this.entrydate); 
+    let exitDateFormatted = new Date(newData.exitDate); 
+
+    newData.claimType = formatDate1(exitDateFormatted) == formatDate1(entryDateFormatted) ? 1 : 2;
+    console.log(newData);
+
+    this.cl.CloseClaim(newData).subscribe(
+      (result: any) => {
+        console.log("Heeeeeere" + newData.id)
+        this.cl.clearCache();
+        this.GetClaimServices();
+        this.GetClaimDetails();
+        this.modalRef.hide();
+        this.closeClaimForm.reset();
+        this.app.showToasterSuccess();
+      },
+      error => {
+        this.app.showToasterError();
+        console.log("Heeeeeere" + newData.id)
+      }
+    )
+
+  }
   GetClaimServices() {
     let id = + this.route.snapshot.params['id'];
     this.cl.GetClaimsServices(id.toString()).subscribe((data: any) => {
+      this.claimServicesList = data;
       this.DataSource = data;
       this.DataSource = new MatTableDataSource(data);
       this.DataSource.paginator = this.paginator2;
-      console.log(data);
+      //console.log(this);
 
     });
   }
@@ -365,3 +481,11 @@ export class AddClaimComponent implements OnInit {
 
 
 }
+
+
+const formatDate1 = (date: Date) => {
+  const year = date.getFullYear();
+  const month = ('0' + (date.getMonth() + 1)).slice(-2); // Zero pad the month
+  const day = ('0' + date.getDate()).slice(-2);          // Zero pad the day
+  return `${year}-${month}-${day}`;
+};

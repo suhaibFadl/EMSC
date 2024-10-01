@@ -320,6 +320,7 @@ namespace EMSC.Controllers
 
 
         }
+
         //=======================DELETE Service From Claims==========================================
         // [Authorize(Policy = "RequireEmployeeManagementRole")]
         [HttpDelete("[action]/{id}")]
@@ -388,10 +389,11 @@ namespace EMSC.Controllers
             var findclaim = _db.Claims.FirstOrDefault(c => c.Id == fromdata.Id);
 
             findclaim.ExitDate = fromdata.ExitDate;
-            findclaim.BillDate = fromdata.ExitDate;
+            findclaim.BillDate = fromdata.BillDate;
             findclaim.ClaimType = fromdata.ClaimType;
             findclaim.BillNo = fromdata.BillNo;
             findclaim.Diagnosis = fromdata.Diagnosis;
+            findclaim.Notes = fromdata.Notes;
              
 
             _db.Entry(findclaim).State = EntityState.Modified;
@@ -412,6 +414,14 @@ namespace EMSC.Controllers
         }
 
         //================================Get Claim Details=============================
+
+        [HttpGet("[action]/{id}")]
+
+        public IActionResult GetClaim([FromRoute] int id)
+        {
+            var claim = _db.Claims.FirstOrDefault(c => c.Id == id);
+            return Ok(claim);
+        }
 
         [AllowAnonymous]
         [HttpGet("[action]/{id}")]

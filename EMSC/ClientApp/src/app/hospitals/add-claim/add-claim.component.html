@@ -15,7 +15,6 @@
         <p style="font-size: 20px;"> رقم الجواز: {{passport}}</p>
         <p style="font-size: 20px;">  إشاري العلاج: {{indexno}}</p>
         <p style="font-size: 20px;"> رقم الملف:  {{fileno}}</p>
-
       </div>
 
     </mat-card-content>
@@ -25,6 +24,7 @@
         <p style="font-size: 20px;">رقم الفاتورة الآلي: {{claimid}} </p>
         <p style="font-size: 20px;">تاريخ الدخول: {{entrydate | date:"yyyy-MM-dd"}}</p>
         <p style="font-size: 20px;"> إجمالي الفاتورة: {{claimtotal}} دينار</p>
+        <button [disabled]="claimServicesList.length  < 1" class="btn btn-danger" (click)="onCloseClaimModal()">إغلاق الفاتورة</button>
         <p style="font-size: 20px;"> </p>
         <p style="font-size: 20px;"> </p>
 
@@ -364,16 +364,16 @@
             <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
               <mat-label>تاريخ الدخول للمصحة</mat-label>
               <input formControlName="OpenDate" type="date" id="OpenDate" matInput placeholder="تاريخ الدخول للمصحة">-->
-              <!--<mat-error *ngIf="EntryDate.hasError('EntryDate') && !Reply.hasError('required')">
-                الرجاء تعبئة الحقول المطلوبة
-              </mat-error>-->
-              <!--<mat-error>
+  <!--<mat-error *ngIf="EntryDate.hasError('EntryDate') && !Reply.hasError('required')">
+    الرجاء تعبئة الحقول المطلوبة
+  </mat-error>-->
+  <!--<mat-error>
                 الرجاء تعبئة الحقول المطلوبة
               </mat-error>
             </mat-form-field>
           </li>
 
-           
+
           <li class="list-group-item">
             <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
               <mat-label> إسم الجريح</mat-label>
@@ -419,11 +419,7 @@
 
 
   </ng-template>-->
-
-
-
   <!--        ==================================================-->
-  <!-- Reply MODAL START-->
   <ng-template #editTemplate>
     <div class="modal-header">
       <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
@@ -443,11 +439,11 @@
 
             <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
               <mat-label> إسم الخدمة بالعربية</mat-label>
-              <input formControlName="_ServArName" type="text" id="_ServArName" matInput placeholder="اسم الخدمة بالعربية" [errorStateMatcher]="matcher" readonly>
-              <mat-error *ngIf="_ServArName.hasError('_ServArName') && !_ServArName.hasError('required')">
+              <input formControlName="ServArName" type="text" id="_ServArName" matInput placeholder="اسم الخدمة بالعربية" [errorStateMatcher]="matcher" readonly>
+              <mat-error *ngIf="ServArName.hasError('ServArName') && !ServArName.hasError('required')">
                 الرجاء تعبئة الحقول المطلوبة
               </mat-error>
-              <mat-error *ngIf="_ServArName.hasError('required')">
+              <mat-error *ngIf="ServArName.hasError('required')">
                 الرجاء تعبئة الحقول المطلوبة
               </mat-error>
             </mat-form-field>
@@ -455,12 +451,13 @@
 
           <li class="list-group-item">
             <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+              <!-- Reply MODAL START-->
               <mat-label> إسم الخدمة بالانجليزية</mat-label>
-              <input formControlName="_ServEnName" type="text" id="_ServEnName" matInput placeholder="اسم الخدمة بالعربية" readonly>
-              <mat-error *ngIf="_ServEnName.hasError('_ServEnName') && !_ServEnName.hasError('required')">
+              <input formControlName="ServEnName" type="text" id="ServEnName" matInput placeholder="اسم الخدمة بالعربية" readonly>
+              <mat-error *ngIf="ServEnName.hasError('ServEnName') && !ServEnName.hasError('required')">
                 الرجاء تعبئة الحقول المطلوبة
               </mat-error>
-              <mat-error *ngIf="_ServEnName.hasError('required')">
+              <mat-error *ngIf="ServEnName.hasError('required')">
                 الرجاء تعبئة الحقول المطلوبة
               </mat-error>
             </mat-form-field>
@@ -469,11 +466,11 @@
           <li class="list-group-item">
             <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
               <mat-label>  سعر الخدمة</mat-label>
-              <input formControlName="_Price" type="text" id="_Price" matInput placeholder="سعر الخدمة" readonly>
-              <mat-error *ngIf="_ServPrice.hasError('_ServPrice') && !_ServPrice.hasError('required')">
+              <input formControlName="Price" type="text" id="_Price" matInput placeholder="سعر الخدمة" readonly>
+              <mat-error *ngIf="ServPrice.hasError('ServPrice') && !ServPrice.hasError('required')">
                 الرجاء تعبئة الحقول المطلوبة
               </mat-error>
-              <mat-error *ngIf="_ServPrice.hasError('required')">
+              <mat-error *ngIf="ServPrice.hasError('required')">
                 الرجاء تعبئة الحقول المطلوبة
               </mat-error>
             </mat-form-field>
@@ -482,11 +479,11 @@
           <li class="list-group-item">
             <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
               <mat-label>  تاريخ الخدمة</mat-label>
-              <input formControlName="_ServDate" type="date" id="_ServDate" matInput placeholder="تاريخ الخدمة">
-              <mat-error *ngIf="_ServDate.hasError('_ServDate') && !_ServDate.hasError('required')">
+              <input formControlName="ServDate" type="date" id="ServDate" matInput placeholder="تاريخ الخدمة">
+              <mat-error *ngIf="ServDate.hasError('ServDate') && !ServDate.hasError('required')">
                 الرجاء تعبئة الحقول المطلوبة
               </mat-error>
-              <mat-error *ngIf="_ServDate.hasError('required')">
+              <mat-error *ngIf="ServDate.hasError('required')">
                 الرجاء تعبئة الحقول المطلوبة
               </mat-error>
             </mat-form-field>
@@ -495,7 +492,7 @@
           <li class="list-group-item">
             <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
               <mat-label>  الكمية</mat-label>
-              <input formControlName="_Quantity" type="text" id="_Quantity" matInput placeholder="الكمية" readonly>
+              <input formControlName="Quantity" type="text" id="_Quantity" matInput placeholder="الكمية">
               <mat-error *ngIf="_Quantity.hasError('_Quantity') && !_Quantity.hasError('required')">
                 الرجاء تعبئة الحقول المطلوبة
               </mat-error>
@@ -506,7 +503,92 @@
           </li>
 
           <div class="modal-footer">
-            <button [disabled]="updateForm.invalid" (click)="onSubmit()" class="btn btn-primary mr-auto ">إرسال</button>
+            <button [disabled]="updateForm.invalid" (click)="onUpdate()" class="btn btn-primary mr-auto ">إرسال</button>
+            <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
+          </div>
+
+
+
+        </ul>
+
+      </form>
+
+    </div>
+  </ng-template>
+
+  <ng-template #closeClaimTemplate>
+    <div class="modal-header">
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title">إغلاق الفاتورة</h4>
+
+    </div>
+    <div class="modal-body text-center">
+      <p class="list-group-item active text-center text-uppercase">{{modalMessage}}</p>
+      <form [formGroup]="closeClaimForm">
+        <ul class="list-group">
+
+
+
+          <li class="list-group-item">
+
+            <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+              <mat-label> رقم الفاتورة</mat-label>
+              <input formControlName="billNo" type="text" id="billNo" matInput placeholder="رقم الفاتورة" [errorStateMatcher]="matcher">
+              <mat-error *ngIf="billNo.hasError('billNo') && !billNo.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <mat-error *ngIf="billNo.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+            </mat-form-field>
+          </li>
+
+
+          <li class="list-group-item">
+            <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+              <mat-label>  تاريخ الخروج</mat-label>
+              <input formControlName="exitDate" type="date" id="exitDate" matInput placeholder="تاريخ الخروج">
+              <mat-error *ngIf="exitDate.hasError('exitDate') && !exitDate.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <mat-error *ngIf="exitDate.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+            </mat-form-field>
+          </li>
+
+          <li class="list-group-item">
+            <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+              <mat-label>  تقرير الحالة </mat-label>
+              <input formControlName="diagnosis" type="text" id="diagnosis" matInput placeholder="تقرير الحالة">
+              <mat-error *ngIf="diagnosis.hasError('diagnosis') && !diagnosis.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <mat-error *ngIf="diagnosis.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+            </mat-form-field>
+          </li>
+
+
+
+          <li class="list-group-item">
+            <mat-form-field class="example-full-width mat-form-field-infix" appearance="fill">
+              <mat-label>  ملحوظة </mat-label>
+              <input formControlName="notes" type="text" id="notes" matInput placeholder="notes">
+              <mat-error *ngIf="notes.hasError('notes') && !notes.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+              <mat-error *ngIf="notes.hasError('required')">
+                الرجاء تعبئة الحقول المطلوبة
+              </mat-error>
+            </mat-form-field>
+          </li>
+
+          <div class="modal-footer">
+            <button [disabled]="closeClaimForm.invalid" (click)="onClaimClose()" class="btn btn-primary mr-auto ">إرسال</button>
             <button class="btn btn-primary" (click)="modalRef.hide()">إلغاء</button>
           </div>
 

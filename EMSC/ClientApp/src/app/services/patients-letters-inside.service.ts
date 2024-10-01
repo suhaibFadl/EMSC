@@ -20,6 +20,7 @@ export class PatientsLettersInsideService {
   private baseUrlGetPatientsTransactionsInsideByUserId: string = "/api/PatientsLettersInside/GetPatientsTransactionsInsideByUserId/";
   private baseUrlDeletePatientTransactionsInside: string = "/api/PatientsLettersInside/DeletePatientTransactionsInside/";
   private baseUrlUpdatePatientTransactionInside: string = "/api/PatientsLettersInside/UpdatePatientTransactionInside/";
+  private baseUrlUpdatePatientTransactionInsideStatus: string = "/api/PatientsLettersInside/UpdatePatientTransactionInsideStatus/";
   private baseUrlGetAllP_TransactionsInsideForManagement: string = "/api/PatientsLettersInside/GetAllP_TransactionsInsideForManagement";
   private baseUrlGetPatientsTransactionsInsideByPatientId: string = "/api/PatientsLettersInside/GetPatientsTransactionsInsideByPatientId/";
 
@@ -137,7 +138,11 @@ export class PatientsLettersInsideService {
 
   }
 
-  
+  //===================================Update Patient Transaction Inside Status==============================
+  //UpdatePatientTransactionInsideStatus(id: number, status: number){
+  //  return this.http.put(this.baseUrlUpdatePatientTransactionInsideStatus + id + '/' + status);
+  //}
+
   //===================================================================================
 
   DeleteFile(id: string): Observable<any> {

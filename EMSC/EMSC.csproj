@@ -76,6 +76,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Remove="clientapp\src\app\interfaces\closeClaim.ts" />
     <TypeScriptCompile Remove="clientapp\src\app\interfaces\hospital-ranks.ts" />
   </ItemGroup>
 

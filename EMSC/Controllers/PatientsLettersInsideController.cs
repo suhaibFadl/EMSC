@@ -178,6 +178,28 @@ namespace EMSC.Controllers
         }
 
 
+        [HttpPut("[action]/{id}/{status}")]
+        public async Task<IActionResult> UpdatePatientTransactionInsideStatus([FromRoute] int id, [FromRoute] int status)
+        {
+            var findPatient = _db.PatientsTransactionsInside.FirstOrDefault(p => p.Id == id);
+            //var findHospId = _db.PatientHosps.FirstOrDefault(h => h.PatientId == id);
+
+            if (findPatient == null)
+            {
+                return NotFound();
+            }
+
+
+           // findPatient.Attach = formdata.Attach;
+            findPatient.FileStatus = status;
+            _db.Entry(findPatient).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+
+
+            return Ok(new JsonResult("The Patient with id " + id + " is updated"));
+        }
+
+
 
         //=======================================================================
 
@@ -1095,7 +1117,7 @@ namespace EMSC.Controllers
                               pt.MedicalDiagnosis,
                               b.BranchName,
                               pt.UserDate,
-                              ph.FileNo
+                              ph.FileNo,
 
 
                           }

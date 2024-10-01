@@ -7,6 +7,7 @@ import { Claimsservices } from '../interfaces/claimsservices';
 import { Claim } from '../interfaces/claim';
 import { PTransInside } from '../interfaces/p-trans-inside';
 import { Patienthosp } from '../interfaces/patienthosp';
+import { CloseClaim } from '../interfaces/closeClaim';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,10 @@ export class ClaimsService {
 
   private baseUrlGet: string = "/api/Claims/GetClaimServices/";
   private baseUrlAdd: string = "/api/Claims/AddServicesToCLaims/";
+  private baseUrlUpdate: string = "/api/Claims/UpdateServicesInClaims/";
   private baseUrlGetClaim: string = "/api/Claims/GetClaimDetails/";
   private baseUrlDeletePatientData: string = "/api/Claims/DeleteServicesFromClaims/";
+  private baseUrlCloseClaim: string = "/api/Claims/CloseClaims/";
 
   private baseUrlGetPatientHospitalFileId: string = "/api/Claims/GetPatientHospitalFileId";
 
@@ -41,6 +44,10 @@ export class ClaimsService {
     return this.http.post<Claimsservices>(this.baseUrlAdd + id, fromdata);
   }
 
+  UpdateServicesInClaims(id: number, fromdata: Claimsservices): Observable<Claimsservices> {
+    return this.http.put<Claimsservices>(this.baseUrlUpdate + id, fromdata);
+  }
+
 
   GetClaimDetails(id: string): Observable<Claim[]> {
 
@@ -53,6 +60,17 @@ export class ClaimsService {
     return this.cl$;
   }
 
+  //GetClaimDetails(id: string, rankId: string): Observable<Claim[]> {
+
+  //  this.clearCache();
+
+
+  //  if (!this.cs$) {
+  //    this.cl$ = this.http.get<Claim[]>(this.baseUrlGetClaim + id + `/${rankId}`).pipe(shareReplay());
+  //  }
+  //  return this.cl$;
+  //}
+
 
   DeleteClaimService(id: number): Observable<any> {
     return this.http.delete(this.baseUrlDeletePatientData + id);
@@ -63,6 +81,11 @@ export class ClaimsService {
     console.log(`${this.baseUrlGetPatientHospitalFileId} / ${patientId} / ${hospitalId}`);
     return this.http.get<Patienthosp | null>(`${ this.baseUrlGetPatientHospitalFileId }/${ patientId }/${ hospitalId }`);
   }
+
+  CloseClaim(fromdata: CloseClaim): Observable<CloseClaim> {
+    return this.http.put<CloseClaim>(this.baseUrlCloseClaim, fromdata);
+  }
+
   // Clear Cache
   clearCache() {
     this.cs$ = null as any;
